@@ -23,8 +23,8 @@ class SvgViewer extends StatelessWidget {
     return SvgPicture.asset(
       svgPath,
       color: color,
-      height: height ?? 20,
-      width: width ?? 20,
+      height: height ?? 18,
+      width: width ?? 18,
     );
   }
 }
@@ -55,6 +55,7 @@ class MyTextField extends StatelessWidget {
   final FieldValidator? validator;
   final TextInputType? keyboardType;
   final bool isDigitsOnly;
+  final Color textColor;
   final bool? obsecureText;
   final Widget? suffixIconWidet;
   TextDirection? textDirection;
@@ -62,6 +63,7 @@ class MyTextField extends StatelessWidget {
   MyTextField(
       {Key? key,
       this.textDirection,
+      this.textColor = AppColor.blackColor,
       this.obsecureText,
       this.fillColor,
       this.labelText,
@@ -105,7 +107,8 @@ class MyTextField extends StatelessWidget {
       ),
       child: TextFormField(
         obscureText: obsecureText ?? false,
-
+        style:
+            AppTextStyles.textStyleNormalBodySmall.copyWith(color: textColor),
         controller: controller ?? TextEditingController(),
         initialValue: text,
         inputFormatters:
@@ -123,12 +126,18 @@ class MyTextField extends StatelessWidget {
           labelText: labelText,
           hintText: hintText,
           filled: fillColor != null,
-          hintStyle: TextStyle(color: hintColor),
-          labelStyle: TextStyle(color: labelColor),
+          hintStyle:
+              AppTextStyles.textStyleNormalBodySmall.copyWith(color: hintColor),
+          labelStyle: AppTextStyles.textStyleNormalBodySmall
+              .copyWith(color: labelColor),
           prefixIcon: (prefixIcon != null)
               ? Padding(
                   padding: EdgeInsets.all(contentPadding ?? 100.w),
-                  child: SvgViewer(svgPath: prefixIcon!),
+                  child: SvgViewer(
+                    svgPath: prefixIcon!,
+                    width: 14,
+                    height: 14,
+                  ),
                 )
               : null,
           suffixIcon: sufixLabel != null
@@ -462,7 +471,7 @@ class _ExpandAbleTileState extends State<ExpandAbleTile> {
                   child: widget.expandedWidgetChild ??
                       Text(
                         widget.model.message ?? "",
-                        style: AppTextStyles.textStyleNormalBodyMedium
+                        style: AppTextStyles.textStyleNormalBodySmall
                             .copyWith(color: AppColor.whiteColor),
                       ),
                 )

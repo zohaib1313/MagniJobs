@@ -3,6 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
+import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
+import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../../routes.dart';
 import '../../styles.dart';
@@ -28,7 +30,7 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
           ),
       child: Scaffold(
         body: Container(
-          padding: EdgeInsets.only(left: 200.w, right: 200.w, top: 100.h),
+          padding: EdgeInsets.only(left: 100.w, right: 100.w, top: 100.h),
           color: AppColor.primaryBlueColor,
           child: Column(
             children: [
@@ -76,55 +78,35 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                       Text(
                                         ".1 Job Posting",
                                         style: AppTextStyles
-                                            .textStyleNormalBodyMedium
+                                            .textStyleNormalBodySmall
                                             .copyWith(
                                                 color: AppColor.whiteColor),
                                       ),
                                       Text(
                                         ".1 Job Posting",
                                         style: AppTextStyles
-                                            .textStyleNormalBodyMedium
+                                            .textStyleNormalBodySmall
                                             .copyWith(
                                                 color: AppColor.whiteColor),
                                       ),
                                       Text(
                                         ".1 Job Posting",
                                         style: AppTextStyles
-                                            .textStyleNormalBodyMedium
+                                            .textStyleNormalBodySmall
                                             .copyWith(
                                                 color: AppColor.whiteColor),
                                       ),
                                       Text(
                                         ".1 Job Posting",
                                         style: AppTextStyles
-                                            .textStyleNormalBodyMedium
+                                            .textStyleNormalBodySmall
                                             .copyWith(
                                                 color: AppColor.whiteColor),
                                       ),
                                       space,
-                                      InkWell(
-                                        onTap: () {
-                                          setState(() {});
-                                        },
-                                        child: Container(
-                                          padding: EdgeInsets.all(8.r),
-                                          decoration: BoxDecoration(
-                                            color: AppColor.whiteColor,
-                                            borderRadius:
-                                                BorderRadius.circular(4),
-                                          ),
-                                          child: true
-                                              ? const Icon(
-                                                  Icons.check,
-                                                  size: 15.0,
-                                                  color: Colors.black,
-                                                )
-                                              : Icon(
-                                                  null,
-                                                  size: 30.0,
-                                                ),
-                                        ),
-                                      ),
+                                      mySwitch(
+                                          message: "Selected Package",
+                                          onTap: () {}),
                                     ],
                                   ),
                                 ],
@@ -141,8 +123,119 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                   "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
                               isExpanded: false)),
                       space,
+                      ExpandAbleTile(
+                          model: ExpandableTileModel(
+                              title: "Essential Member",
+                              message:
+                                  "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                              isExpanded: false)),
                       space,
                       space,
+                      ExpandAbleTile(
+                          model: ExpandableTileModel(
+                              title: "Premiere Member",
+                              message:
+                                  "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                              isExpanded: false)),
+                      space,
+                      Text(
+                        "Disclaimers",
+                        style: AppTextStyles.textStyleBoldTitleLarge
+                            .copyWith(color: AppColor.whiteColor),
+                      ),
+                      space,
+                      ExpandAbleTile(
+                        model: ExpandableTileModel(
+                            title: "Terms & Conditions", isExpanded: false),
+                        expandedWidgetChild: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(bottom: 8.0),
+                              child: Row(
+                                children: [
+                                  Flexible(
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "Your submission of information, Including personal information is governed by the terms of our privacy policy as updated from time to time, and any additional privacy notice issued by your employer. We grant you a non-exclusive, non-transferable",
+                                          style: AppTextStyles
+                                              .textStyleNormalBodySmall
+                                              .copyWith(
+                                                  color: AppColor.whiteColor),
+                                        ),
+                                        space,
+                                        InkWell(
+                                          onTap: () {
+                                            setState(() {});
+                                          },
+                                          child: Row(
+                                            children: [
+                                              Container(
+                                                padding: EdgeInsets.all(8.r),
+                                                decoration: BoxDecoration(
+                                                  color: AppColor.whiteColor,
+                                                  borderRadius:
+                                                      BorderRadius.circular(4),
+                                                ),
+                                                child: true
+                                                    ? const Icon(
+                                                        Icons.check,
+                                                        size: 15.0,
+                                                        color: Colors.black,
+                                                      )
+                                                    : Icon(
+                                                        null,
+                                                        size: 30.0,
+                                                      ),
+                                              ),
+                                              SizedBox(
+                                                width: 50.w,
+                                              ),
+                                              Text(
+                                                "Selected Package ",
+                                                style: AppTextStyles
+                                                    .textStyleNormalBodySmall
+                                                    .copyWith(
+                                                        color: AppColor
+                                                            .whiteColor),
+                                              )
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )
+                          ],
+                        ),
+                      ),
+                      space,
+                      ExpandAbleTile(
+                          model: ExpandableTileModel(
+                              title: "Non-Disclosure Agreement",
+                              message:
+                                  "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                              isExpanded: false)),
+                      space,
+                      ExpandAbleTile(
+                          model: ExpandableTileModel(
+                              title: "No Refund Policy",
+                              message:
+                                  "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                              isExpanded: false)),
+                      space,
+                      ExpandAbleTile(
+                          model: ExpandableTileModel(
+                              title: "Other Disclaimers",
+                              message:
+                                  "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                              isExpanded: false)),
                       space,
                       space,
                       space,
@@ -157,10 +250,10 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                   textColor: AppColor.primaryBlueDarkColor,
                   color: AppColor.whiteColor,
                   onTap: () {
-                    Navigator.of(myContext!).pushNamed(PackagesScreen.id);
+                    Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
                   },
                 ),
-              )
+              ),
             ],
           ),
         ),

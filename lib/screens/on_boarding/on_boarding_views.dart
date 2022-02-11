@@ -20,7 +20,7 @@ class _OnBoardingOurCompanyInfoState extends State<OnBoardingOurCompanyInfo> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(left: 200.w, right: 200.w, top: 100.h),
+        padding: EdgeInsets.only(left: 100.w, right: 100.w, top: 100.h),
         color: AppColor.primaryBlueColor,
         child: Column(
           children: [
@@ -80,7 +80,7 @@ class _OnBoardingForClientsState extends State<OnBoardingForClients> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(left: 200.w, right: 200.w, top: 100.h),
+        padding: EdgeInsets.only(left: 100.w, right: 100.w, top: 100.h),
         color: AppColor.primaryBlueColor,
         child: Column(
           children: [
@@ -161,7 +161,7 @@ class _OnBoardingForApplicantState extends State<OnBoardingForApplicant> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        padding: EdgeInsets.only(left: 200.w, right: 200.w, top: 100.h),
+        padding: EdgeInsets.only(left: 100.w, right: 100.w, top: 100.h),
         color: AppColor.primaryBlueColor,
         child: Column(
           children: [

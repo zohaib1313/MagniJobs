@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
@@ -26,5 +27,45 @@ myAppBar({String? title, Color backGroundColor = AppColor.whiteColor}) {
     ),
     backgroundColor: backGroundColor,
     title: Text(title ?? "", style: AppTextStyles.textStyleBoldTitleLarge),
+  );
+}
+
+mySwitch(
+    {onTap,
+    Color? fillColor,
+    Color? checkColor,
+    required String message,
+    Color? messageColor}) {
+  return InkWell(
+    onTap: onTap,
+    child: Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(8.r),
+          decoration: BoxDecoration(
+            color: fillColor ?? AppColor.whiteColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: true
+              ? Icon(
+                  Icons.check,
+                  size: 15.0,
+                  color: checkColor ?? Colors.black,
+                )
+              : Icon(
+                  null,
+                  size: 30.0,
+                ),
+        ),
+        SizedBox(
+          width: 50.w,
+        ),
+        Text(
+          message,
+          style: AppTextStyles.textStyleNormalBodySmall
+              .copyWith(color: messageColor ?? AppColor.whiteColor),
+        )
+      ],
+    ),
   );
 }

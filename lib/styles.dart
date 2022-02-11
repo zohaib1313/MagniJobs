@@ -33,6 +33,8 @@ class AppTextStyles {
       _fontBold.copyWith(fontSize: 22);
   static final TextStyle textStyleBoldSubTitleLarge =
       _fontBold.copyWith(fontSize: 20);
+  static final TextStyle textStyleNormalLargeTitle =
+      _fontNormal.copyWith(fontSize: 20);
   static final TextStyle textStyleBoldBodyMedium =
       _fontBold.copyWith(fontSize: 16);
   static final TextStyle textStyleNormalBodyMedium =
