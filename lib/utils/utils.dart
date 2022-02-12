@@ -15,10 +15,14 @@ String formatAmount(String? amount) {
   return NumberFormat("#,##0.0", "en_US").format(double.parse(amount ?? "0.0"));
 }
 
-myAppBar({String? title, Color backGroundColor = AppColor.whiteColor}) {
+myAppBar(
+    {String? title,
+    Color backGroundColor = AppColor.whiteColor,
+    List<Widget>? actions}) {
   return AppBar(
     centerTitle: true,
     elevation: 0,
+    actions: actions ?? [],
     leading: IconButton(
       icon: SvgViewer(
         svgPath: "assets/icons/back_arrow_ic.svg",

@@ -201,6 +201,7 @@ class Button extends StatelessWidget {
   final Widget? prefixIcon;
   final Widget? postFixIcon;
   final double? height;
+  final double? cornerRadius;
   final TextStyle? textStyle;
   final double? leftPadding;
   final double? rightPading;
@@ -214,6 +215,7 @@ class Button extends StatelessWidget {
       this.padding,
       this.color,
       this.textColor,
+      this.cornerRadius,
       this.borderColor,
       this.textStyle,
       this.width,
@@ -241,7 +243,8 @@ class Button extends StatelessWidget {
                   : Border.all(
                       color: borderColor!,
                     ),
-              borderRadius: BorderRadius.all(Radius.circular(50.r)),
+              borderRadius:
+                  BorderRadius.all(Radius.circular(cornerRadius ?? 50.r)),
               color: color ?? AppColor.primaryBlueColor),
           child: Center(
               child: Row(
@@ -322,6 +325,8 @@ class _MyDropDownState extends State<MyDropDown> {
       ),
       child: DropdownButtonFormField(
         icon: SvgViewer(
+            height: 12,
+            width: 12,
             svgPath: widget.suffixIcon ?? 'assets/icons/ic_arrow_down.svg'),
         isExpanded: true,
         validator: widget.validator,

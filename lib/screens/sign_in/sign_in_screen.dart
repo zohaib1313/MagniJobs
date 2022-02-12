@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+
+import '../../routes.dart';
 
 class SigInScreen extends StatefulWidget {
   SigInScreen({Key? key}) : super(key: key);
@@ -125,7 +128,8 @@ class _SigInScreenState extends State<SigInScreen> {
                               textColor: AppColor.whiteColor,
                               color: AppColor.primaryBlueDarkColor,
                               onTap: () {
-                                //    Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
+                                Navigator.of(myContext!)
+                                    .pushNamed(VerifyNumberScreen.id);
                               },
                             ),
                             space,
