@@ -8,6 +8,8 @@ import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../../routes.dart';
+import '../attendie_profile_screen.dart';
+import '../tutor_sign_up_screen.dart';
 
 class ChooseSignInScreen extends StatefulWidget {
   ChooseSignInScreen({Key? key}) : super(key: key);
@@ -209,10 +211,16 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                               style: AppTextStyles.textStyleBoldBodySmall,
                             ),
                           ),
-                          Text(
-                            " Sign up!",
-                            style: AppTextStyles.textStyleBoldBodySmall
-                                .copyWith(color: AppColor.primaryBlueColor),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (contxt) => TutorSignUpScreen()));
+                            },
+                            child: Text(
+                              " Sign up!",
+                              style: AppTextStyles.textStyleBoldBodySmall
+                                  .copyWith(color: AppColor.primaryBlueColor),
+                            ),
                           )
                         ],
                       ),
@@ -234,8 +242,33 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                       Button(
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(myContext!).push(MaterialPageRoute(
+                              builder: (contxt) => AttendieProfileScreen()));
+                        },
                       ),
+                      space,
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              "Don’t have not an account?",
+                              style: AppTextStyles.textStyleBoldBodySmall,
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Text(
+                              " Sign up!",
+                              style: AppTextStyles.textStyleBoldBodySmall
+                                  .copyWith(color: AppColor.primaryBlueColor),
+                            ),
+                          )
+                        ],
+                      ),
+                      space,
                       space,
                     ],
                   ),

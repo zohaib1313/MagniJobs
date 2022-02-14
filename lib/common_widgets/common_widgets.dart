@@ -127,7 +127,7 @@ class MyTextField extends StatelessWidget {
           hintText: hintText,
           filled: fillColor != null,
           hintStyle:
-              AppTextStyles.textStyleNormalBodySmall.copyWith(color: hintColor),
+              AppTextStyles.textStyleBoldBodySmall.copyWith(color: hintColor),
           labelStyle: AppTextStyles.textStyleNormalBodySmall
               .copyWith(color: labelColor),
           prefixIcon: (prefixIcon != null)
@@ -291,6 +291,7 @@ class MyDropDown extends StatefulWidget {
   final FormFieldValidator<dynamic>? validator;
   final List<DropdownMenuItem<Object>>? itemFuntion;
   bool isDense;
+  bool isItalicHint;
 
   MyDropDown(
       {this.fillColor,
@@ -309,7 +310,8 @@ class MyDropDown extends StatefulWidget {
       this.rightPadding,
       this.validator,
       this.itemFuntion,
-      this.isDense = true});
+      this.isDense = true,
+      this.isItalicHint = false});
 
   @override
   State<MyDropDown> createState() => _MyDropDownState();
@@ -337,6 +339,9 @@ class _MyDropDownState extends State<MyDropDown> {
         decoration: InputDecoration(
             labelText: widget.labelText,
             hintText: widget.hintText,
+            hintStyle: AppTextStyles.textStyleBoldBodySmall.copyWith(
+                fontStyle:
+                    widget.isItalicHint ? FontStyle.italic : FontStyle.normal),
             prefixIcon: (widget.prefixIcon != null)
                 ? Padding(
                     padding: EdgeInsets.all(100.w),
@@ -377,8 +382,10 @@ class _MyDropDownState extends State<MyDropDown> {
         isDense: widget.isDense,
         hint: Text(
           widget.hintText ?? "",
-          style: AppTextStyles.textStyleBoldBodySmall
-              .copyWith(color: widget.hintColor),
+          style: AppTextStyles.textStyleBoldBodySmall.copyWith(
+              color: widget.hintColor,
+              fontStyle:
+                  widget.isItalicHint ? FontStyle.italic : FontStyle.normal),
         ),
         items: widget.items != null
             ? widget.items?.map((dynamic value) {

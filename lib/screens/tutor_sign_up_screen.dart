@@ -4,21 +4,21 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../routes.dart';
-import 'employee_portal_screen.dart';
 
-class ApplicantSignUp extends StatefulWidget {
-  ApplicantSignUp({Key? key}) : super(key: key);
-  static const id = "ApplicantSignUp";
+class TutorSignUpScreen extends StatefulWidget {
+  TutorSignUpScreen({Key? key}) : super(key: key);
+  static const id = "TutorSignUpScreen";
 
   @override
-  _ApplicantSignUpState createState() => _ApplicantSignUpState();
+  _TutorSignUpScreenState createState() => _TutorSignUpScreenState();
 }
 
-class _ApplicantSignUpState extends State<ApplicantSignUp> {
+class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
   final space = SizedBox(height: 20.h);
 
   @override
@@ -32,7 +32,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Applicant Sign Up"),
+          appBar: myAppBar(title: "Tutor Sign Up"),
           backgroundColor: AppColor.whiteColor,
           body: Column(
             children: [
@@ -52,17 +52,23 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                         space,
                         MyTextField(
                           fillColor: AppColor.alphaGrey,
+                          hintText: "Company Name (Optional)",
+                        ),
+                        space,
+                        MyTextField(
+                          fillColor: AppColor.alphaGrey,
+                          hintText: "Address",
+                        ),
+                        space,
+                        MyTextField(
+                          fillColor: AppColor.alphaGrey,
                           hintText: "Email Address",
                         ),
+                        space,
                         space,
                         MyTextField(
                           fillColor: AppColor.alphaGrey,
                           hintText: "Confirm Email Address",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Confirm Personal Email",
                         ),
                         space,
                         MyTextField(
@@ -158,7 +164,8 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                   buttonText: "Register",
                   textColor: AppColor.whiteColor,
                   onTap: () {
-                    Navigator.of(myContext!).pushNamed(EmployeePortalScreen.id);
+                    Navigator.of(myContext!).push(MaterialPageRoute(
+                        builder: (context) => TutorProfileScreen()));
                   },
                 ),
               )

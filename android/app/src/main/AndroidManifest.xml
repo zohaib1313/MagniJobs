@@ -1,8 +1,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="powerbpo.tech.magnijobs_rnr">
    <application
-        android:label="magnijobs_rnr"
-        android:name="${applicationName}"
+        android:label="Mangni Jobs"
+        android:name="io.flutter.app.FlutterApplication"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

@@ -3,21 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
-class CountryAndJobScreen extends StatefulWidget {
-  CountryAndJobScreen({Key? key}) : super(key: key);
-  static const id = "CountryAndJobScreen";
+class JobPostedEmployeeScreen extends StatefulWidget {
+  JobPostedEmployeeScreen({Key? key}) : super(key: key);
+  static const id = "JobPostedEmployeeScreen";
 
   @override
-  _CountryAndJobScreenState createState() => _CountryAndJobScreenState();
+  _JobPostedEmployeeScreenState createState() =>
+      _JobPostedEmployeeScreenState();
 }
 
-class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
+class _JobPostedEmployeeScreenState extends State<JobPostedEmployeeScreen> {
   final space = SizedBox(height: 20.h);
 
   @override
@@ -31,7 +33,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Company & Job", actions: [
+          appBar: myAppBar(title: "Jobs Posted", actions: [
             const Padding(
               padding: EdgeInsets.all(18.0),
               child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
@@ -54,11 +56,11 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
               ),
               child: Column(
                 children: [
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget()
+                  getJobPostedCompanyWidget(),
+                  getJobPostedCompanyWidget(),
+                  getJobPostedCompanyWidget(),
+                  getJobPostedCompanyWidget(),
+                  getJobPostedCompanyWidget()
                 ],
               ),
             ),
@@ -68,7 +70,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
     );
   }
 
-  getJobSeekerWidget() {
+  getJobPostedCompanyWidget() {
     return Container(
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
@@ -80,12 +82,12 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            "Job Seeker",
+            "Company",
             style: AppTextStyles.textStyleBoldBodySmall,
           ),
           space,
           Text(
-            "Rebecca James",
+            "CARE247SOLUTIONS",
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.textStyleBoldSubTitleLarge
                 .copyWith(color: AppColor.primaryBlueColor),
@@ -100,17 +102,16 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                   children: [
                     SizedBox(height: 10.h),
                     rowInformation(
+                        icon: "assets/icons/ic_file.svg",
+                        text: "Registered Nurse"),
+                    SizedBox(height: 10.h),
+                    rowInformation(
                         icon: "assets/icons/ic_location.svg",
-                        text: "Bexel United Kingdom"),
+                        text: "Bexel, United Kingdom"),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_timer.svg", text: "29 Years"),
-                    SizedBox(height: 10.h),
-                    rowInformation(
-                        icon: "assets/icons/ic_person.svg", text: "British"),
-                    SizedBox(height: 10.h),
-                    rowInformation(
-                        icon: "assets/icons/ic_gender.svg", text: "Female"),
+                        icon: "assets/icons/ic_location.svg",
+                        text: "\$250k /year"),
                   ],
                 ),
               ),
@@ -137,7 +138,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Job Seeker",
+                                        "",
                                         style: AppTextStyles
                                             .textStyleNormalBodyMedium,
                                       ),
@@ -153,52 +154,42 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                     ],
                                   ),
                                   space,
-                                  Text("Rebecca James",
-                                      style: AppTextStyles
-                                          .textStyleBoldSubTitleLarge
-                                          .copyWith(
-                                              color:
-                                                  AppColor.primaryBlueColor)),
-                                  space,
                                   space,
                                   Expanded(
                                       child: SingleChildScrollView(
                                     physics: const BouncingScrollPhysics(),
                                     child: Column(
                                       children: [
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
+                                        ExpandAbleTile(
+                                            model: ExpandableTileModel(
+                                                title: "Qualifications",
+                                                message:
+                                                    "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                                isExpanded: false)),
+                                        space,
+                                        ExpandAbleTile(
+                                            model: ExpandableTileModel(
+                                                title: "Job Description",
+                                                message:
+                                                    "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                                isExpanded: false)),
                                         space,
                                         space,
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                flex: 3,
-                                                child: rowInformation(
-                                                    icon:
-                                                        "assets/icons/ic_timer.svg",
-                                                    text: "29 years")),
-                                            Expanded(
-                                              child: Button(
-                                                cornerRadius: 25.r,
-                                                padding: 18.h,
-                                                buttonText: "Chat",
-                                                textColor: AppColor.whiteColor,
-                                                onTap: () {
-                                                  Navigator.of(myContext!).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChatScreen()));
-                                                },
-                                              ),
-                                            ),
-                                          ],
+                                        Button(
+                                          width: 180.h,
+                                          height: 75.h,
+                                          cornerRadius: 25.r,
+                                          leftPadding: 0,
+                                          rightPading: 0,
+                                          padding: 18.h,
+                                          buttonText: "Apply",
+                                          textColor: AppColor.whiteColor,
+                                          onTap: () {
+                                            Navigator.of(myContext!).push(
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatScreen()));
+                                          },
                                         ),
                                         space,
                                         space,
@@ -213,11 +204,11 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                     space,
                     Button(
                       padding: 18.h,
-                      buttonText: "Chat",
+                      buttonText: "Apply",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        Navigator.of(myContext!).push(MaterialPageRoute(
-                            builder: (context) => ChatScreen()));
+                        /* Navigator.of(myContext!).push(MaterialPageRoute(
+                            builder: (context) => ChatScreen()));*/
                       },
                     ),
                   ],
@@ -237,31 +228,6 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
         SizedBox(width: 50.w),
         Flexible(
             child: Text(text, style: AppTextStyles.textStyleNormalBodyMedium)),
-      ],
-    );
-  }
-
-  getBottomSheetRowInfo() {
-    return Column(
-      children: [
-        space,
-        Row(
-          children: [
-            const Expanded(
-              flex: 2,
-              child: Text("Martial Status"),
-            ),
-            Expanded(
-              flex: 3,
-              child: Button(
-                cornerRadius: 25.r,
-                padding: 18.h,
-                buttonText: "Single",
-                textColor: AppColor.whiteColor,
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }
