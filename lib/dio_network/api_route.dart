@@ -23,83 +23,12 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.post,
         );
-
-      case APIType.searchCustomer:
+      case APIType.register_employer:
         return RequestOptions(
-          path: ApiConstants.searchCustomer,
-          headers: headers,
-          queryParameters: body,
-          method: APIMethod.get,
-        );
-      case APIType.addCustomer:
-        return RequestOptions(
-          path: ApiConstants.addCustomer,
+          path: ApiConstants.register_employer,
           headers: headers,
           data: body,
           method: APIMethod.post,
-        );
-      case APIType.searchMerchantInvoices:
-        return RequestOptions(
-          path: ApiConstants.searchMerchantInvoices,
-          headers: headers,
-          queryParameters: body,
-          method: APIMethod.get,
-        );
-      case APIType.getInvoiceDetails:
-        return RequestOptions(
-          path: ApiConstants.getInvoiceDetails,
-          headers: headers,
-          queryParameters: body,
-          method: APIMethod.get,
-        );
-      case APIType.getProductDetails:
-        return RequestOptions(
-          path: ApiConstants.getProductDetails,
-          headers: headers,
-          queryParameters: body,
-          method: APIMethod.get,
-        );
-      case APIType.getPaymentMethods:
-        return RequestOptions(
-          path: ApiConstants.getPaymentMethods,
-          headers: headers,
-          data: body,
-          method: APIMethod.get,
-        );
-      case APIType.getNotificationMethods:
-        return RequestOptions(
-          path: ApiConstants.getNotificationMethods,
-          headers: headers,
-          data: body,
-          method: APIMethod.get,
-        );
-      case APIType.getSalesTarget:
-        return RequestOptions(
-          path: ApiConstants.getSalesTarget,
-          headers: headers,
-          data: body,
-          method: APIMethod.get,
-        );
-      case APIType.getBankAccountsList:
-        return RequestOptions(
-          path: ApiConstants.getBankAccountsList,
-          headers: headers,
-          data: body,
-          method: APIMethod.get,
-        );
-      case APIType.createInvoice:
-        return RequestOptions(
-          path: ApiConstants.createInvoice,
-          headers: headers,
-          data: body,
-          method: APIMethod.post,
-        );
-      case APIType.sendNotifications:
-        return RequestOptions(
-          path: ApiConstants.sendNotifications,
-          headers: headers,
-          queryParameters: body,
-          method: APIMethod.get,
         );
       default:
         return RequestOptions(

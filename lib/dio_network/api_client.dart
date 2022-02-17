@@ -24,33 +24,13 @@ class APIClient implements BaseAPIClient {
   String contentType;
   bool isDialoigOpen;
 
-  init() async {
-    // String sha256  = 'KEZJOdneURbhMeANe+HVaw0mcmPp6zKFKr6jHc85o0E=';
-    // print("loading certificate");
-    // try {
-    //   ByteData bytes =
-    //       await rootBundle.load('assets/certification/salammobile-sa.pem');
-    //   print("certificate bites= ${bytes}");
-    //   (instance!.httpClientAdapter as DefaultHttpClientAdapter)
-    //       .onHttpClientCreate = (client) {
-    //     print("certificate added");
-    //     SecurityContext sc = SecurityContext();
-    //     sc.setTrustedCertificatesBytes(bytes.buffer.asUint8List());
-    //     HttpClient httpClient = HttpClient(context: sc);
-    //     return httpClient;
-    //   };
-    // } catch (e) {
-    //   print("Exceptionaa ${e}");
-    // }
-  }
-
   APIClient(
       {this.isCache = true,
       this.baseUrl = ApiConstants.baseUrl,
       this.isDialoigOpen = true,
       this.contentType = 'application/json'}) {
     instance = Dio();
-    init();
+
     if (instance != null) {
       instance!.interceptors.add(LogInterceptor());
       if (isCache) {
@@ -112,8 +92,16 @@ class APIClient implements BaseAPIClient {
     int statusCode = response.statusCode!;
 
     switch (statusCode) {
+      case 422:
+        final errorResponse = ErrorResponse.fromJson(responseData);
+        throw errorResponse;
+
       case 200:
-      case 304:
+        if (responseData["errors"] != null) {
+          final errorResponse = ErrorResponse.fromJson(responseData);
+          throw errorResponse;
+        }
+
         var finalResponse =
             ResponseWrapper.init(create: create, json: responseData);
         if (finalResponse.error != null) {

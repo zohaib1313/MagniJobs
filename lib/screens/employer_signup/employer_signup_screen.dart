@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/routes.dart';
-import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
+import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
+import 'package:provider/provider.dart';
+
+import '../../routes.dart';
 
 class EmployerSignUpScreen extends StatefulWidget {
   EmployerSignUpScreen({Key? key}) : super(key: key);
@@ -17,6 +21,7 @@ class EmployerSignUpScreen extends StatefulWidget {
 
 class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<EmployerSignUpViewModel>(myContext!);
 
   @override
   Widget build(BuildContext context) {
@@ -27,89 +32,253 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
           systemNavigationBarColor:
               AppColor.whiteColor //or the color you prefer
           ),
-      child: SafeArea(
-        child: Scaffold(
-          appBar: myAppBar(title: "Employer Sign Up"),
-          backgroundColor: AppColor.whiteColor,
-          body: Column(
-            children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
-                  child: Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Name",
+      child: WillPopScope(
+        onWillPop: () {
+          view.resetState();
+          Navigator.of(context).pop();
+          return Future.value(true);
+        },
+        child: SafeArea(
+          child: Scaffold(
+            appBar: myAppBar(
+                title: "Employer Sign Up",
+                onTap: () {
+                  view.resetState();
+                  Navigator.of(context).pop();
+                }),
+            backgroundColor: AppColor.whiteColor,
+            body: Column(
+              children: [
+                Expanded(
+                  child: SingleChildScrollView(
+                    physics: BouncingScrollPhysics(),
+                    child: Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Form(
+                        key: view.formKey,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "First Name",
+                              labelText: "First Name",
+                              controller: view.firstnameContoller,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Last Name",
+                              labelText: "Last Name",
+                              controller: view.lastNameController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Email",
+                              labelText: "Email",
+                              controller: view.emailController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Mobile",
+                              labelText: "Mobile",
+                              controller: view.mobileController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Address",
+                              labelText: "Address",
+                              controller: view.addressController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Location",
+                              labelText: "Location",
+                              controller: view.locationController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Company Name",
+                              labelText: "Company Name",
+                              controller: view.companyNameController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Company Contact",
+                              labelText: "Company Contact",
+                              controller: view.contactNumberController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Company Mail",
+                              labelText: "Company Mail",
+                              controller: view.contactEmailController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Martial Status",
+                              labelText: "Martial Status",
+                              controller: view.martialStatusController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Website",
+                              labelText: "Website",
+                              controller: view.webSiteController,
+                              /*  validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },*/
+                            ),
+                            space,
+                            MyTextField(
+                              obsecureText: view.hidePassword,
+                              controller: view.passwordController,
+                              suffixIconWidet: GestureDetector(
+                                  onTap: () {
+                                    view.hidePassword = !view.hidePassword;
+                                  },
+                                  child: Icon(view.hidePassword
+                                      ? Icons.remove_red_eye_rounded
+                                      : Icons.visibility_off_outlined)),
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Password",
+                              labelText: "Password",
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            MyTextField(
+                              obsecureText: view.hidePassword2,
+                              controller: view.confirmPasswordController,
+                              suffixIconWidet: GestureDetector(
+                                  onTap: () {
+                                    view.hidePassword2 = !view.hidePassword2;
+                                  },
+                                  child: Icon(view.hidePassword2
+                                      ? Icons.remove_red_eye_rounded
+                                      : Icons.visibility_off_outlined)),
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Confirm Password",
+                              labelText: "Confirm Password",
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                            space,
+                            space,
+                            space,
+                            space,
+                          ],
                         ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Company Name",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Address",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Contact Number",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Company Email",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Personal Email",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Confirm Personal Email",
-                        ),
-                        space,
-                        MyTextField(
-                          obsecureText: true,
-                          suffixIcon: "assets/icons/eye_open_ic.svg",
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Password",
-                        ),
-                        space,
-                        MyTextField(
-                          suffixIcon: "assets/icons/eye_open_ic.svg",
-                          obsecureText: true,
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Confirm Password",
-                        ),
-                        space,
-                        space,
-                        space,
-                        space,
-                      ],
+                      ),
                     ),
                   ),
                 ),
-              ),
-              Padding(
-                padding: EdgeInsets.all(100.r),
-                child: Button(
-                  buttonText: "Register",
-                  textColor: AppColor.whiteColor,
-                  onTap: () {
-                    Navigator.of(myContext!).pushNamed(PackagesScreen.id);
-                  },
-                ),
-              )
-            ],
+                Padding(
+                  padding: EdgeInsets.all(100.r),
+                  child: Button(
+                    buttonText: "Register",
+                    textColor: AppColor.whiteColor,
+                    onTap: () {
+                      if (view.formKey.currentState!.validate()) {
+                        view.registerUser(completion: () {
+                          AppPopUps.showConfirmDialog(
+                              title: "User Created",
+                              message:
+                                  "User Created Successfully Go to Login Page",
+                              onSubmit: () {
+                                view.resetState();
+                                Navigator.of(myContext!).pushReplacementNamed(
+                                    ChooseSignInScreen.id);
+                              });
+                        });
+                      }
+                    },
+                  ),
+                )
+              ],
+            ),
           ),
         ),
       ),

@@ -235,7 +235,7 @@ class AppPopUps {
     oneButtonPop(
         title: errorType == ErrorType.ERROR ? title : 'Warning',
         subTitle: error,
-        iconPath: 'assets/icons/icon-offer.svg',
+        iconPath: 'assets/icons/ic_history.svg',
         buttonText: 'Ok',
         buttonColor: AppColor.greenColor,
         onButtonPress: onButtonPressed);

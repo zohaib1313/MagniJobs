@@ -18,7 +18,8 @@ String formatAmount(String? amount) {
 myAppBar(
     {String? title,
     Color backGroundColor = AppColor.whiteColor,
-    List<Widget>? actions}) {
+    List<Widget>? actions,
+    onTap}) {
   return AppBar(
     centerTitle: true,
     elevation: 0,
@@ -27,7 +28,7 @@ myAppBar(
       icon: SvgViewer(
         svgPath: "assets/icons/back_arrow_ic.svg",
       ),
-      onPressed: () => Navigator.of(myContext!).pop(),
+      onPressed: onTap ?? () => Navigator.of(myContext!).pop(),
     ),
     backgroundColor: backGroundColor,
     title: Text(title ?? "", style: AppTextStyles.textStyleBoldTitleLarge),
@@ -37,6 +38,7 @@ myAppBar(
 mySwitch(
     {onTap,
     Color? fillColor,
+    bool isActive = false,
     Color? checkColor,
     required String message,
     Color? messageColor}) {
@@ -50,16 +52,11 @@ mySwitch(
             color: fillColor ?? AppColor.whiteColor,
             borderRadius: BorderRadius.circular(4),
           ),
-          child: true
-              ? Icon(
-                  Icons.check,
-                  size: 15.0,
-                  color: checkColor ?? Colors.black,
-                )
-              : Icon(
-                  null,
-                  size: 30.0,
-                ),
+          child: Icon(
+            Icons.check,
+            size: 15.0,
+            color: isActive ? (checkColor ?? Colors.black) : fillColor,
+          ),
         ),
         SizedBox(
           width: 50.w,

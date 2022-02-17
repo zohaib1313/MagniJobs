@@ -23,11 +23,7 @@ class ResponseWrapper<T> extends GenericObject<T> {
   factory ResponseWrapper.init(
       {Create<Decodable>? create, Map<String, dynamic>? json}) {
     final wrapper = ResponseWrapper<T>(create: create);
-    print("generic object ${wrapper.response}");
-
     wrapper.response = wrapper.genericObject(json);
-    print("generic object ${wrapper.response}");
-
     if (wrapper.response is APIResponse) {
       var finalResponse = wrapper.response as APIResponse;
       if (finalResponse.status != true) {
@@ -41,7 +37,7 @@ class ResponseWrapper<T> extends GenericObject<T> {
 class APIResponse<T> extends GenericObject<T>
     implements Decodable<APIResponse<T>> {
   String? responseMessage;
-  bool? status;
+  bool? status = false;
   T? data;
   bool decoding = true;
 
@@ -91,7 +87,11 @@ class ErrorResponse implements Exception {
   ErrorResponse({this.message});
 
   factory ErrorResponse.fromJson(Map<String, dynamic> json) {
-    return ErrorResponse(message: json['message'] ?? 'Something went wrong');
+    return ErrorResponse(
+        message: json['message'] ??
+            json['errors'][0] ??
+            json["error"] ??
+            'Something went wrong');
   }
 
   @override

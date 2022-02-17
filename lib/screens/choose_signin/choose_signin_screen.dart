@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dart';
+import 'package:magnijobs_rnr/screens/sign_in/sign_in_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
@@ -72,8 +73,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!)
-                              .pushNamed(EmployerSignUpScreen.id);
+                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
                         },
                       ),
                       space,
@@ -87,10 +87,16 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                               style: AppTextStyles.textStyleBoldBodySmall,
                             ),
                           ),
-                          Text(
-                            " Sign up!",
-                            style: AppTextStyles.textStyleBoldBodySmall
-                                .copyWith(color: AppColor.primaryBlueColor),
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.of(myContext!)
+                                  .pushNamed(EmployerSignUpScreen.id);
+                            },
+                            child: Text(
+                              " Sign up!",
+                              style: AppTextStyles.textStyleBoldBodySmall
+                                  .copyWith(color: AppColor.primaryBlueColor),
+                            ),
                           )
                         ],
                       ),
@@ -128,7 +134,9 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                       Button(
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                        },
                       ),
                       space,
                       Row(
@@ -198,7 +206,9 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                       Button(
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
-                        onTap: () {},
+                        onTap: () {
+                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                        },
                       ),
                       space,
                       Row(
@@ -243,8 +253,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).push(MaterialPageRoute(
-                              builder: (contxt) => AttendieProfileScreen()));
+                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
                         },
                       ),
                       space,
@@ -259,7 +268,11 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {},
+                            onTap: () {
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (contxt) =>
+                                      AttendieProfileScreen()));
+                            },
                             child: Text(
                               " Sign up!",
                               style: AppTextStyles.textStyleBoldBodySmall

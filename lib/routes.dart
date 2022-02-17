@@ -13,6 +13,8 @@ import 'package:magnijobs_rnr/screens/sign_in/sign_in_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
 import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
+import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
+import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -39,4 +41,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
 final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<SplashScreenViewModel>(
       create: (_) => SplashScreenViewModel()),
+  ChangeNotifierProvider<SignInViewModel>(create: (_) => SignInViewModel()),
+  ChangeNotifierProvider<EmployerSignUpViewModel>(
+      create: (_) => EmployerSignUpViewModel()),
 ];
