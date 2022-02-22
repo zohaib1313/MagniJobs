@@ -1,13 +1,13 @@
 import 'package:magnijobs_rnr/dio_network/decodable.dart';
 
-class SignInModel extends Decodable {
+class GetMyProfile implements Decodable {
   bool? status;
   String? message;
   Data? data;
 
-  SignInModel({this.status, this.message, this.data});
+  GetMyProfile({this.status, this.message, this.data});
 
-  SignInModel.fromJson(Map<String, dynamic> json) {
+  GetMyProfile.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -24,36 +24,15 @@ class SignInModel extends Decodable {
   }
 
   @override
-  decode(data) {
-    status = data['status'];
-    message = data['message'];
-    data = data['data'] != null ? Data.fromJson(data['data']) : null;
+  decode(json) {
+    status = json['status'];
+    message = json['message'];
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
     return this;
   }
 }
 
 class Data {
-  String? token;
-  User? user;
-
-  Data({this.token, this.user});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    token = json['token'];
-    user = json['user'] != null ? new User.fromJson(json['user']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['token'] = this.token;
-    if (this.user != null) {
-      data['user'] = this.user!.toJson();
-    }
-    return data;
-  }
-}
-
-class User {
   int? id;
   String? name;
   String? firstName;
@@ -62,7 +41,7 @@ class User {
   String? mobile;
   Null? emailVerifiedAt;
   String? utype;
-  String? otp;
+  Null? otp;
   int? verified;
   Null? phoneVerifiedAt;
   Null? verification;
@@ -70,7 +49,7 @@ class User {
   String? updatedAt;
   Null? deletedAt;
 
-  User(
+  Data(
       {this.id,
       this.name,
       this.firstName,
@@ -87,7 +66,7 @@ class User {
       this.updatedAt,
       this.deletedAt});
 
-  User.fromJson(Map<String, dynamic> json) {
+  Data.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
     firstName = json['first_name'];

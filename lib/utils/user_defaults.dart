@@ -72,7 +72,8 @@ class UserDefaults {
   static SignInModel? getUserSession() {
     SignInModel? user;
     if (sharedPreferences!.getString('userData') != null) {
-      Map json = jsonDecode(sharedPreferences!.getString('userData')!);
+      Map<String, dynamic> json =
+          jsonDecode(sharedPreferences!.getString('userData')!);
       user = SignInModel.fromJson(json);
       printWrapped(user.toString());
     }

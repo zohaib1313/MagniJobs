@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
@@ -178,10 +179,13 @@ class _SigInScreenState extends State<SigInScreen> {
                                     // Navigator.of(myContext!)
                                     //     .pushNamed(VerifyNumberScreen.id);
                                     if (view.formKey.currentState!.validate()) {
-                                      view.singInUser(completion: () {
+                                      view.signInUser(completion: () {
                                         printWrapped('****Signed in*****');
-                                        /* Navigator.of(myContext!)
-                                            .pushReplacementNamed(MainScreen.id);*/
+                                        Navigator.of(context)
+                                            .push(MaterialPageRoute(
+                                          builder: (context) =>
+                                              VerifyNumberScreen(),
+                                        ));
                                       });
                                     }
                                   },

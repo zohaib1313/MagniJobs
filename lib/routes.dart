@@ -16,6 +16,7 @@ import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
+import 'package:magnijobs_rnr/view_models/verify_number_view_model.dart';
 import 'package:provider/provider.dart';
 
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
@@ -44,4 +45,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<SignInViewModel>(create: (_) => SignInViewModel()),
   ChangeNotifierProvider<EmployerSignUpViewModel>(
       create: (_) => EmployerSignUpViewModel()),
+  ChangeNotifierProvider<VerifyNumberViewModel>(
+      create: (_) => VerifyNumberViewModel()),
 ];

@@ -1,13 +1,13 @@
 import 'package:magnijobs_rnr/dio_network/decodable.dart';
 
-class SignInModel extends Decodable {
+class CheckMyPhoneNumber extends Decodable {
   bool? status;
   String? message;
   Data? data;
 
-  SignInModel({this.status, this.message, this.data});
+  CheckMyPhoneNumber({this.status, this.message, this.data});
 
-  SignInModel.fromJson(Map<String, dynamic> json) {
+  CheckMyPhoneNumber.fromJson(Map<String, dynamic> json) {
     status = json['status'];
     message = json['message'];
     data = json['data'] != null ? new Data.fromJson(json['data']) : null;
@@ -27,25 +27,22 @@ class SignInModel extends Decodable {
   decode(data) {
     status = data['status'];
     message = data['message'];
-    data = data['data'] != null ? Data.fromJson(data['data']) : null;
+    data = data['data'] != null ? new Data.fromJson(data['data']) : null;
     return this;
   }
 }
 
 class Data {
-  String? token;
   User? user;
 
-  Data({this.token, this.user});
+  Data({this.user});
 
   Data.fromJson(Map<String, dynamic> json) {
-    token = json['token'];
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['token'] = this.token;
     if (this.user != null) {
       data['user'] = this.user!.toJson();
     }

@@ -6,6 +6,9 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
+import 'package:magnijobs_rnr/view_models/verify_number_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../routes.dart';
 
@@ -24,6 +27,8 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var view = Provider.of<VerifyNumberViewModel>(myContext!);
+
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColor.whiteColor,
@@ -67,7 +72,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                           ),
                           child: isVerificationSent
                               ? getViewToSent()
-                              : getViewSent()),
+                              : getViewSent(view, context)),
                     ],
                   ),
                 ],
@@ -79,7 +84,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
     );
   }
 
-  getViewSent() {
+  getViewSent(VerifyNumberViewModel view, context) {
     return Column(
       children: [
         space,
@@ -91,6 +96,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
         ),
         space,
         MyTextField(
+          controller: view.phonenumberController,
           leftPadding: 0,
           rightPadding: 0,
           hintText: "Enter Phone Number",
@@ -107,6 +113,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           onTap: () {
             setState(() {
               isVerificationSent = true;
+              view.checkmynumber();
             });
           },
         ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
+import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/signin_model.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
@@ -30,24 +31,25 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  singInUser({completion}) async {
+  signInUser({completion}) async {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
       "email": userNameController.text,
       "password": userPasswordController.text,
     };
+
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
         .request(
             route: APIRoute(
-              APIType.login,
+              APIType.loginUser,
               body: body,
             ),
             create: () => SignInModel(),
-            apiFunction: singInUser)
+            apiFunction: signInUser)
         .then((response) {
       AppPopUps().dissmissDialog();
-      UserDefaults.saveUserSession(response.response!);
+      UserDefaults.saveUserSession(SignInModel());
       resetState();
       completion();
     }).catchError((error) {
@@ -62,6 +64,38 @@ class SignInViewModel extends ChangeNotifier {
       return Future.value(null);
     });
   }
+  // singInUser({completion}) async {
+  //   AppPopUps().showProgressDialog(context: myContext);
+  //   Map<String, dynamic> body = {
+  //     "email": userNameController.text,
+  //     "password": userPasswordController.text,
+  //   };
+  //   var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+  //   client
+  //       .request(
+  //           route: APIRoute(
+  //             APIType.login,
+  //             body: body,
+  //           ),
+  //           create: () => SignInModel(),
+  //           apiFunction: singInUser)
+  //       .then((response) {
+  //     AppPopUps().dissmissDialog();
+  //     UserDefaults.saveUserSession(response.response!);
+  //     resetState();
+  //     completion();
+  //   }).catchError((error) {
+  //     print("error=  ${error.toString()}");
+  //     AppPopUps().dissmissDialog();
+  //     AppPopUps().showErrorPopUp(
+  //         title: 'Error',
+  //         error: error.toString(),
+  //         onButtonPressed: () {
+  //           Navigator.of(myContext!).pop();
+  //         });
+  //     return Future.value(null);
+  //   });
+  // }
 
   resetState() {
     userNameController.clear();

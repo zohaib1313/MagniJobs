@@ -72,7 +72,7 @@ class EmployerSignUpViewModel extends ChangeNotifier {
     client
         .request(
             route: APIRoute(
-              APIType.register_employer,
+              APIType.register_new_employer,
               body: body,
             ),
             create: () => EmployerSignUpModel(),
