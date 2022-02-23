@@ -6,6 +6,7 @@ import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/check_phone_no.dart';
 import 'package:magnijobs_rnr/models/verify_my_number.dart';
+import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../routes.dart';
 
@@ -42,10 +43,10 @@ class VerifyNumberViewModel extends ChangeNotifier {
         },
         body: body,
       ),
-      create: () =>
-          APIResponse<CheckMyPhoneNumber>(create: () => CheckMyPhoneNumber()),
+      create: () => APIResponse<User>(create: () => User()),
     )
         .then((response) {
+      printWrapped(response.response!.data.toString());
       AppPopUps().dissmissDialog();
       resetState();
       completion();
@@ -64,9 +65,7 @@ class VerifyNumberViewModel extends ChangeNotifier {
 
   verifymynumber({completion}) async {
     AppPopUps().showProgressDialog(context: myContext);
-    Map<String, dynamic> body = {
-      "first_name": phonenumberController.text,
-    };
+    Map<String, dynamic> body = {};
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
         .request(

@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
+import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:provider/provider.dart';
 

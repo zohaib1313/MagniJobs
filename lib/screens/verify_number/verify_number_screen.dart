@@ -112,7 +112,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           onTap: () {
             setState(() {
               isVerificationSent = true;
-              view.checkmynumber();
+              view.checkmynumber(completion: () {});
             });
           },
         ),

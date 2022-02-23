@@ -1,21 +1,7 @@
 import 'package:magnijobs_rnr/dio_network/decodable.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
-class CheckMyPhoneNumber implements Decodable {
-  User? user;
-
-  CheckMyPhoneNumber({this.user});
-
-  @override
-  decode(data) {
-    printWrapped("decodeee.....");
-    printWrapped(data.toString());
-    user = data['user'];
-    return this;
-  }
-}
-
-class User {
+class User implements Decodable {
   int? id;
   String? name;
   String? firstName;
@@ -89,5 +75,29 @@ class User {
     data['updated_at'] = this.updatedAt;
     //data['deleted_at'] = this.deletedAt;
     return data;
+  }
+
+  @override
+  decode(data) {
+    printWrapped("decodeee.....");
+    printWrapped(data['user'].toString());
+    var json = data['user'];
+
+    id = json['id'];
+    name = json['name'];
+    firstName = json['first_name'];
+    lastName = json['last_name'];
+    email = json['email'];
+    mobile = json['mobile'];
+    //emailVerifiedAt = json['email_verified_at'];
+    utype = json['utype'];
+    otp = json['otp'];
+    verified = json['verified'];
+    //phoneVerifiedAt = json['phone_verified_at'];
+    //verification = json['verification'];
+    createdAt = json['created_at'];
+    updatedAt = json['updated_at'];
+    //deletedAt = json['deleted_at'];
+    return this;
   }
 }
