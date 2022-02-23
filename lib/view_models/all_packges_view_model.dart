@@ -8,7 +8,7 @@ import 'package:magnijobs_rnr/models/get_all_packges.dart';
 
 import '../routes.dart';
 
-class PackagesViewModel extends ChangeNotifier {
+class AllPackagesViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
   bool _rememberMe = false;

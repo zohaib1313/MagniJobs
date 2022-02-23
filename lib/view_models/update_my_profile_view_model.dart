@@ -1,31 +1,43 @@
+import 'package:flutter/cupertino.dart';
 import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/number_symbols_data.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
-import 'package:magnijobs_rnr/models/employer_model.dart';
-import 'package:magnijobs_rnr/models/register_new_tutor.dart';
+import 'package:magnijobs_rnr/models/register_new_applicant.dart';
 import 'package:path/path.dart';
 
 import '../routes.dart';
 
-class TutorSignUpViewModel extends ChangeNotifier {
+class UpdateMyProfileViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
+
   File? nationalIdImage;
+
   TextEditingController firstnameContoller = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
-  TextEditingController confirmPasswordController = TextEditingController();
+
   TextEditingController addressController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  TextEditingController companyNameController = TextEditingController();
-  TextEditingController webSiteController = TextEditingController();
+  TextEditingController dobController = TextEditingController();
+  TextEditingController nationalityController = TextEditingController();
+  TextEditingController genderController = TextEditingController();
+  TextEditingController martialStatusController = TextEditingController();
+
+  TextEditingController schoolController = TextEditingController();
+  TextEditingController workExperienceController = TextEditingController();
+  TextEditingController certificationController = TextEditingController();
+
+  TextEditingController examsController = TextEditingController();
+  TextEditingController preferredlocationController = TextEditingController();
+  TextEditingController licenseController = TextEditingController();
+
   bool _hidePassword = true;
 
   bool get hidePassword => _hidePassword;
@@ -67,37 +79,36 @@ class TutorSignUpViewModel extends ChangeNotifier {
     }
   }
 
-  registerTutor({completion}) async {
+  registerApplicant({completion}) async {
     AppPopUps().showProgressDialog(context: myContext);
     FormData body = FormData.fromMap({
       "first_name": firstnameContoller.text,
       "last_name": lastNameController.text,
       "email": emailController.text,
       "mobile": mobileController.text,
-      "password": passwordController.text,
-      "password_confirmation": confirmPasswordController.text,
-      "utype": "Tutor",
-      "status": 0,
       "address": addressController.text,
       "location": locationController.text,
-      "company": companyNameController.text,
-      "id_card": await MultipartFile.fromFile(
-        nationalIdImage!.path,
-        filename: basename(nationalIdImage!.path),
-      ),
-      //  "contact_number": contactNumberController.text,
-      // "contact_email": contactEmailController.text,
-      //  "marital_status": martialStatusController.text,
+      "dob": dobController.text,
+      "nationality": nationalityController.text,
+      "gender": genderController.text,
+      "marital_status": martialStatusController.text,
+      "school": schoolController,
+      "work_experience": workExperienceController,
+      "certifications": certificationController.text,
+      "exams": examsController.text,
+      "license": licenseController.text,
+      "preferred_location": preferredlocationController.text,
     });
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
         .request(
-            route: APIRoute(
-              APIType.register_new_tutor,
-              body: body,
-            ),
-            create: () => RegisterNewTutor(),
-            apiFunction: registerTutor)
+      route: APIRoute(
+        APIType.register_new_employer,
+        body: body,
+      ),
+      create: () => RegisterNewApplicant(),
+      // apiFunction: registerApplicant()
+    )
         .then((response) {
       AppPopUps().dissmissDialog();
 
@@ -121,11 +132,20 @@ class TutorSignUpViewModel extends ChangeNotifier {
     lastNameController = TextEditingController();
     emailController = TextEditingController();
     mobileController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
+
     addressController = TextEditingController();
     locationController = TextEditingController();
-    companyNameController = TextEditingController();
-    webSiteController = TextEditingController();
+    dobController = TextEditingController();
+    nationalityController = TextEditingController();
+    genderController = TextEditingController();
+    martialStatusController = TextEditingController();
+
+    schoolController = TextEditingController();
+    workExperienceController = TextEditingController();
+    certificationController = TextEditingController();
+
+    examsController = TextEditingController();
+    preferredlocationController = TextEditingController();
+    licenseController = TextEditingController();
   }
 }

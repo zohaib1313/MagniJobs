@@ -33,7 +33,7 @@ class APIRoute implements APIRouteConfigurable {
         );
       case APIType.check_my_phone_number:
         return RequestOptions(
-          path: ApiConstants.check_my_phone_number,
+          path: "",
           headers: headers,
           data: body,
           method: APIMethod.get,

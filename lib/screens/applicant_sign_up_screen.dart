@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../routes.dart';
 import 'employee_portal_screen.dart';
@@ -20,6 +23,8 @@ class ApplicantSignUp extends StatefulWidget {
 
 class _ApplicantSignUpState extends State<ApplicantSignUp> {
   final space = SizedBox(height: 20.h);
+
+  var view = Provider.of<ApplicantSignUpViewModel>(myContext!);
 
   @override
   Widget build(BuildContext context) {
@@ -41,113 +46,280 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                   physics: BouncingScrollPhysics(),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Full Name",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Email Address",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Confirm Email Address",
-                        ),
-                        space,
-                        MyTextField(
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Confirm Personal Email",
-                        ),
-                        space,
-                        MyTextField(
-                          obsecureText: false,
-                          suffixIcon: "assets/icons/eye_open_ic.svg",
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Password",
-                        ),
-                        space,
-                        MyTextField(
-                          suffixIcon: "assets/icons/eye_open_ic.svg",
-                          obsecureText: true,
-                          fillColor: AppColor.alphaGrey,
-                          hintText: "Confirm Password",
-                        ),
-                        space,
-                        space,
-                        Padding(
-                          padding: EdgeInsets.all(100.w),
-                          child: DottedBorder(
-                            color: AppColor.greyColor,
-                            dashPattern: [10, 10],
-                            strokeWidth: 1,
-                            child: Container(
-                              padding: EdgeInsets.all(80.r),
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(40.r),
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  SvgViewer(
-                                    svgPath: 'assets/icons/ic_copy.svg',
-                                    width: 200.w,
-                                    height: 200.w,
-                                  ),
-                                  SizedBox(
-                                    width: 50.w,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Text(
-                                          "Upload ID",
-                                          style: AppTextStyles
-                                              .textStyleNormalBodyMedium,
-                                        ),
-                                        Text(
-                                          "doc, dox, pdf",
-                                          style: AppTextStyles
-                                              .textStyleNormalBodyMedium
-                                              .copyWith(
-                                                  color: AppColor.greyColor),
-                                        ),
-                                      ],
+                    child: Form(
+                      key: view.formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "First Name",
+                            controller: view.firstnameContoller,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Last Name",
+                            controller: view.lastNameController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Email Address",
+                            controller: view.emailController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Mobile number",
+                            controller: view.mobileController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          space,
+                          MyTextField(
+                            suffixIconWidet: GestureDetector(
+                                onTap: () {
+                                  view.hidePassword = !view.hidePassword;
+                                },
+                                child: Icon(view.hidePassword
+                                    ? Icons.remove_red_eye_rounded
+                                    : Icons.visibility_off_outlined)),
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Password",
+                            obsecureText: view.hidePassword,
+                            controller: view.passwordController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            suffixIconWidet: GestureDetector(
+                                onTap: () {
+                                  view.hidePassword2 = !view.hidePassword2;
+                                },
+                                child: Icon(view.hidePassword
+                                    ? Icons.remove_red_eye_rounded
+                                    : Icons.visibility_off_outlined)),
+                            obsecureText: view.hidePassword2,
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Confirm Password",
+                            controller: view.confirmPasswordController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Address",
+                            controller: view.addressController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Location",
+                            controller: view.locationController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Date of Birth",
+                            controller: view.dobController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Nationality",
+                            controller: view.nationalityController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Comapany name",
+                            controller: view.companynameController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Contact number",
+                            controller: view.contactnumberController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Contact email",
+                            controller: view.contactemailController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Gender",
+                            controller: view.genderController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Material status",
+                            controller: view.martialStatusController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          space,
+                          Padding(
+                            padding: EdgeInsets.all(100.w),
+                            child: DottedBorder(
+                              color: AppColor.greyColor,
+                              dashPattern: [10, 10],
+                              strokeWidth: 1,
+                              child: Container(
+                                padding: EdgeInsets.all(80.r),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(40.r),
+                                ),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    SvgViewer(
+                                      svgPath: 'assets/icons/ic_copy.svg',
+                                      width: 200.w,
+                                      height: 200.w,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 50.w,
-                                  ),
-                                  Expanded(
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      children: [
-                                        Button(
-                                          buttonText: "Choose",
-                                          textColor: AppColor.whiteColor,
-                                        )
-                                      ],
+                                    SizedBox(
+                                      width: 50.w,
                                     ),
-                                  )
-                                ],
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Upload ID",
+                                            style: AppTextStyles
+                                                .textStyleNormalBodyMedium,
+                                          ),
+                                          Text(
+                                            "doc, dox, pdf",
+                                            style: AppTextStyles
+                                                .textStyleNormalBodyMedium
+                                                .copyWith(
+                                                    color: AppColor.greyColor),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 50.w,
+                                    ),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        children: [
+                                          Button(
+                                            buttonText: "Choose",
+                                            textColor: AppColor.whiteColor,
+                                            onTap: () {
+                                              view.getFile();
+                                            },
+                                          )
+                                        ],
+                                      ),
+                                    )
+                                  ],
+                                ),
                               ),
                             ),
-                          ),
-                        )
-                      ],
+                          )
+                        ],
+                      ),
                     ),
                   ),
                 ),
@@ -158,7 +330,19 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                   buttonText: "Register",
                   textColor: AppColor.whiteColor,
                   onTap: () {
+                    // if (view.formKey.currentState!.validate()) {
+                    //   if (view.nationalIdImage != null) {
+                    //     view.registerApplicant(completion: () {
+                    //       printWrapped('****Signed in*****');
                     Navigator.of(myContext!).pushNamed(EmployeePortalScreen.id);
+                    //   });
+                    // } else {
+                    //   AppPopUps.displayTextInputDialog(
+                    //       title: "validation",
+                    //       message: "Select File",
+                    //       hint: "Select Image");
+                    // }
+                    // }
                   },
                 ),
               )

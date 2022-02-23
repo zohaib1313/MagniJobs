@@ -28,15 +28,23 @@ class VerifyNumberViewModel extends ChangeNotifier {
     print("method is called");
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
-      "first_name": phonenumberController.text,
+      "": phonenumberController.text,
     };
-    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+
+    String url =
+        ApiConstants.baseUrl + "check-number/${phonenumberController.text}";
+
+    var client = APIClient(isCache: false, baseUrl: url);
     client
         .request(
-      route: APIRoute(APIType.check_my_phone_number,
-          routeParams: phonenumberController.text
-          //  body: body,
-          ),
+      route: APIRoute(
+        APIType.check_my_phone_number,
+        // headers: {
+        //   "Authorization":
+        //       "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTI1MzM0N2Y2ODFmNTRlZTdhZDBkZjYzNmQxMmQzZmQ2ZjcwMTgwNDJiNjE5OTVlZGVhZjZkZWNjOWU3YzEzZjU1NGI5YzBjYmE5MDI1ZjkiLCJpYXQiOjE2NDQ4NTU0MjguMDA4NjA0LCJuYmYiOjE2NDQ4NTU0MjguMDA4NjA2LCJleHAiOjE2NjA0OTM4MjguMDAwNzc0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.mwSj2JzSnws9nmSXQssN8DeLOCash-HMMZVy4xc5BnkVM2R1XQfAi9s5eZ_bowcNEafrIpwZwvRnMDtydYtI_-VyyzBXeuK4Hlw4Mdq1H0Aiboe_8_qeEYKSUFAixpJfjwHUTGYmUG3nRvHqDlKV35IbuG2etbdJFn0XHcxwRcHPPQgwKsMSAt0ly3EKUojgeHGm0RkWb1zJ1ZeTYBHENsCmq3fG4p8IYr6cewK7iF7SdrnFAxxc2TcVPir3Jtzsn7VRNwZYKOmVr0G0HMtQLvfRwKqL_CD_W9jT7QgCFbXKOV719pVx8Ev5uRN7ficPXhjK-bGzlofvEAHJGt2XKWSXLGn3xeTrFZX2JnLn_flLZR4RXNpYeohFsSJbCDBn4i8PZC12FaIlR5TSt99VLL9lvFL6HwI39_z9wyfXFuZ-uV7b__nAxRboK3vGx2co9kLNgp2oIHhtS4WP4CJTVls42Z5zSgd0qlloVz6LIA0JQu9WdU7esXTqnbhX6I1_7cNNB2Jw93wj5f6aBm7HwnAVDyuJivF4Zp3I9S1tYN_Ex3KGT6hVXhkzUMrTul3VsacXig9CpuD8fUa_9AY_T5NgyNPgNK8PCZxvB76A3Mc-bCiDmPBKSuoOAoLyTvxIcO9aq_RO2yI6T5fQ87XBTGVZ-Rw0F7nbcUWF5qlsBco"
+        // },
+        //   body: body,
+      ),
       create: () => CheckMyPhoneNumber(),
     )
         //     apiFunction: checkmynumber())
@@ -71,7 +79,7 @@ class VerifyNumberViewModel extends ChangeNotifier {
               body: body,
             ),
             create: () => VerifyMyPhoneNumber(),
-            apiFunction: checkmynumber())
+            apiFunction: verifymynumber())
         .then((response) {
       AppPopUps().dissmissDialog();
 

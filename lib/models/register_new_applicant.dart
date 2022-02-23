@@ -24,10 +24,10 @@ class RegisterNewApplicant implements Decodable {
   }
 
   @override
-  decode(json) {
-    status = json['status'];
-    message = json['message'];
-    data = json['data'];
+  decode(data) {
+    status = data['status'];
+    message = data['message'];
+    data = data['data'];
     return this;
   }
 }
