@@ -1,3 +1,5 @@
+import 'package:magnijobs_rnr/utils/utils.dart';
+
 import 'decodable.dart';
 
 typedef Create<T> = T Function();
@@ -23,6 +25,7 @@ class ResponseWrapper<T> extends GenericObject<T> {
   factory ResponseWrapper.init(
       {Create<Decodable>? create, Map<String, dynamic>? json}) {
     final wrapper = ResponseWrapper<T>(create: create);
+    printWrapped(wrapper.response.toString());
     wrapper.response = wrapper.genericObject(json);
     if (wrapper.response is APIResponse) {
       var finalResponse = wrapper.response as APIResponse;

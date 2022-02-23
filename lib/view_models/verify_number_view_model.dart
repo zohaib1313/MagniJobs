@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
+import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/check_phone_no.dart';
 import 'package:magnijobs_rnr/models/verify_my_number.dart';
@@ -41,12 +42,11 @@ class VerifyNumberViewModel extends ChangeNotifier {
         },
         body: body,
       ),
-      create: () => CheckMyPhoneNumber(),
+      create: () =>
+          APIResponse<CheckMyPhoneNumber>(create: () => CheckMyPhoneNumber()),
     )
-        //     apiFunction: checkmynumber())
         .then((response) {
       AppPopUps().dissmissDialog();
-
       resetState();
       completion();
     }).catchError((error) {
