@@ -6,7 +6,6 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
-import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/verify_number_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -170,9 +169,9 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
               child: CountdownTimer(
                 endTime: endTime,
                 onEnd: () {
-                  setState(() {
+                  /*  setState(() {
                     isVerificationSent = false;
-                  });
+                  });*/
                 },
                 widgetBuilder: (context, time) {
                   if (time == null) {}

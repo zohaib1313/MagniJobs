@@ -8,7 +8,7 @@ import 'package:magnijobs_rnr/models/employer_model.dart';
 import '../routes.dart';
 
 class EmployerSignUpViewModel extends ChangeNotifier {
-  final formKey = GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();
 
   TextEditingController firstnameContoller = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -96,6 +96,7 @@ class EmployerSignUpViewModel extends ChangeNotifier {
   }
 
   resetState() {
+    formKey = GlobalKey<FormState>();
     firstnameContoller = TextEditingController();
     lastNameController = TextEditingController();
     emailController = TextEditingController();
