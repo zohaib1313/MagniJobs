@@ -6,6 +6,8 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../routes.dart';
 
@@ -168,7 +170,12 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(JobPostScreen.id);
+                          Provider.of<JobPostViewModel>(myContext!,
+                                  listen: false)
+                              .getAllCompanies(completion: () {
+                            Navigator.of(myContext!)
+                                .pushNamed(JobPostScreen.id);
+                          });
                         },
                       ),
                       space,

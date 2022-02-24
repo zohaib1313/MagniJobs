@@ -3,9 +3,10 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
+import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -261,6 +262,12 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                     buttonText: "Register",
                     textColor: AppColor.whiteColor,
                     onTap: () {
+                      Provider.of<AllPackagesViewModel>(myContext!,
+                              listen: false)
+                          .getAllPackages(completion: () {
+                        Navigator.of(myContext!)
+                            .pushReplacementNamed(PackagesScreen.id);
+                      });
                       if (view.formKey.currentState!.validate()) {
                         view.registerUser(completion: () {
                           AppPopUps.showConfirmDialog(
@@ -269,8 +276,12 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                                   "User Created Successfully Go to Login Page",
                               onSubmit: () {
                                 view.resetState();
-                                Navigator.of(myContext!).pushReplacementNamed(
-                                    ChooseSignInScreen.id);
+                                Provider.of<AllPackagesViewModel>(myContext!,
+                                        listen: false)
+                                    .getAllPackages(completion: () {
+                                  Navigator.of(myContext!)
+                                      .pushReplacementNamed(PackagesScreen.id);
+                                });
                               });
                         });
                       }

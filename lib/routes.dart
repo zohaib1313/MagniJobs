@@ -1,5 +1,4 @@
 import 'package:flutter/cupertino.dart';
-import 'package:magnijobs_rnr/models/update_job_post.dart';
 import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
 import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
@@ -20,6 +19,7 @@ import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model.dart';
+import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
@@ -105,4 +105,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => UploadMyCovidCertificateViewModel()),
   ChangeNotifierProvider<AssignApplicantToEmployeeViewModel>(
       create: (_) => AssignApplicantToEmployeeViewModel()),
+  ChangeNotifierProvider<CountryAndJobViewModel>(
+      create: (_) => CountryAndJobViewModel()),
 ];

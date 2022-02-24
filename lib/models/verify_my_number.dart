@@ -1,49 +1,27 @@
 import 'package:magnijobs_rnr/dio_network/decodable.dart';
 
-class VerifyMyPhoneNumber extends Decodable {
-  bool? status;
-  String? message;
-  Data? data;
+import 'check_phone_no.dart';
 
-  VerifyMyPhoneNumber({this.status, this.message, this.data});
+class VerifyMyPhoneNumberModel implements Decodable {
+  User? user;
 
-  VerifyMyPhoneNumber.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+  VerifyMyPhoneNumberModel({this.user});
+
+  VerifyMyPhoneNumberModel.fromJson(Map<String, dynamic> json) {
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
+    if (this.user != null) {
+      data['user'] = this.user!.toJson();
     }
     return data;
   }
 
   @override
-  decode(data) {
-    status = data['status'];
-    message = data['message'];
-    data = data['data'] != null ? new Data.fromJson(data['data']) : null;
+  decode(json) {
+    user = json['user'] != null ? new User.fromJson(json['user']) : null;
     return this;
-  }
-}
-
-class Data {
-  List<String>? otp;
-
-  Data({this.otp});
-
-  Data.fromJson(Map<String, dynamic> json) {
-    otp = json['otp'].cast<String>();
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['otp'] = this.otp;
-    return data;
   }
 }

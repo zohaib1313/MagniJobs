@@ -44,6 +44,7 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                       space,
                       MyTextField(
                         hintText: "Card Number",
+                        labelColor: AppColor.whiteColor,
                         unfocusBorderColor: AppColor.primaryBlueDarkColor,
                         textColor: AppColor.whiteColor,
                         hintColor: AppColor.whiteColor,
@@ -55,6 +56,7 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                         unfocusBorderColor: AppColor.primaryBlueDarkColor,
                         textColor: AppColor.whiteColor,
                         hintColor: AppColor.whiteColor,
+                        labelColor: AppColor.whiteColor,
                         fillColor: AppColor.primaryBlueDarkColor,
                       ),
                       space,
@@ -62,6 +64,7 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                         hintText: "Name Used On Card",
                         unfocusBorderColor: AppColor.primaryBlueDarkColor,
                         textColor: AppColor.whiteColor,
+                        labelColor: AppColor.whiteColor,
                         hintColor: AppColor.whiteColor,
                         fillColor: AppColor.primaryBlueDarkColor,
                       ),
@@ -95,7 +98,9 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                   buttonText: "Go Back",
                   textColor: AppColor.primaryBlueDarkColor,
                   color: AppColor.whiteColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(myContext!).pop();
+                  },
                 ),
               ),
               Padding(

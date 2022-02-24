@@ -3,11 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
+import 'package:provider/provider.dart';
 
 class CountryAndJobScreen extends StatefulWidget {
   CountryAndJobScreen({Key? key}) : super(key: key);
@@ -19,6 +22,7 @@ class CountryAndJobScreen extends StatefulWidget {
 
 class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<CountryAndJobViewModel>(myContext!, listen: false);
 
   @override
   Widget build(BuildContext context) {
@@ -38,29 +42,27 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              //  height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.only(
-                left: 50.w,
-                right: 50.w,
-              ),
-              decoration: BoxDecoration(
-                color: AppColor.alphaGrey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.r),
-                    topRight: Radius.circular(40.r)),
-              ),
-              child: Column(
-                children: [
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget()
-                ],
-              ),
+          body: Container(
+            //  height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.only(
+              left: 50.w,
+              right: 50.w,
+            ),
+            decoration: BoxDecoration(
+              color: AppColor.alphaGrey,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.r),
+                  topRight: Radius.circular(40.r)),
+            ),
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              // itemCount: 3,
+              itemCount: view.countryAndJobModel?.candidates?.length ?? 0,
+              itemBuilder: (context, index) {
+                return getJobSeekerWidget(
+                    view.countryAndJobModel!.candidates![index]);
+              },
             ),
           ),
         ),
@@ -68,7 +70,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
     );
   }
 
-  getJobSeekerWidget() {
+  getJobSeekerWidget(Candidates candidates) {
     return Container(
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
@@ -85,7 +87,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           ),
           space,
           Text(
-            "Rebecca James",
+            candidates.firstName ?? "",
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.textStyleBoldSubTitleLarge
                 .copyWith(color: AppColor.primaryBlueColor),
@@ -101,16 +103,19 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_location.svg",
-                        text: "Bexel United Kingdom"),
+                        text: candidates.location ?? ""),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_timer.svg", text: "29 Years"),
+                        icon: "assets/icons/ic_timer.svg",
+                        text: candidates.dob ?? ""),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_person.svg", text: "British"),
+                        icon: "assets/icons/ic_person.svg",
+                        text: candidates.nationality ?? ""),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_gender.svg", text: "Female"),
+                        icon: "assets/icons/ic_gender.svg",
+                        text: candidates.gender ?? ""),
                   ],
                 ),
               ),

@@ -1,43 +1,11 @@
 import 'package:magnijobs_rnr/dio_network/decodable.dart';
 
-class GetAllPackges implements Decodable {
-  bool? status;
-  String? message;
-  Data? data;
-
-  GetAllPackges({this.status, this.message, this.data});
-
-  GetAllPackges.fromJson(Map<String, dynamic> json) {
-    status = json['status'];
-    message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['status'] = this.status;
-    data['message'] = this.message;
-    if (this.data != null) {
-      data['data'] = this.data!.toJson();
-    }
-    return data;
-  }
-
-  @override
-  decode(json) {
-    status = json['status'];
-    message = json['message'];
-    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
-    return this;
-  }
-}
-
-class Data {
+class PackagesModel implements Decodable {
   List<Packages>? packages;
 
-  Data({this.packages});
+  PackagesModel({this.packages});
 
-  Data.fromJson(Map<String, dynamic> json) {
+  PackagesModel.fromJson(Map<String, dynamic> json) {
     if (json['packages'] != null) {
       packages = <Packages>[];
       json['packages'].forEach((v) {
@@ -52,6 +20,17 @@ class Data {
       data['packages'] = this.packages!.map((v) => v.toJson()).toList();
     }
     return data;
+  }
+
+  @override
+  decode(json) {
+    if (json['packages'] != null) {
+      packages = <Packages>[];
+      json['packages'].forEach((v) {
+        packages!.add(new Packages.fromJson(v));
+      });
+    }
+    return this;
   }
 }
 

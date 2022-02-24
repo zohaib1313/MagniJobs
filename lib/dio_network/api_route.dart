@@ -42,6 +42,7 @@ class APIRoute implements APIRouteConfigurable {
         return RequestOptions(
           path: ApiConstants.verify_my_phone_number,
           headers: headers,
+          //  contentType: ContentType.parse(value),
           data: body,
           method: APIMethod.post,
         );

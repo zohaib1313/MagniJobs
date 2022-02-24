@@ -4,9 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/all_employers_model.dart';
 import 'package:magnijobs_rnr/screens/country_and_job/country_and_job_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -93,17 +95,28 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                   .copyWith(color: AppColor.blackColor),
                             ),
                             space,
-                            space,
-                            MyTextField(
+                            MyDropDown(
                               leftPadding: 0,
                               rightPadding: 0,
-                              fillColor: AppColor.whiteColor,
+                              onChange: (value) {
+                                view.selectedCompanyId = value.id.toString();
+                              },
                               hintText: "Company Name",
-                              controller: view.companynameContoller,
-                              validator: (string) {
-                                if (string == null || string.isEmpty) {
-                                  return 'Enter Value';
-                                }
+                              labelText: "",
+                              labelColor: AppColor.redColor,
+                              borderColor: AppColor.alphaGrey,
+                              fillColor: AppColor.whiteColor,
+                              suffixIcon: "assets/icons/drop_down_ic.svg",
+                              itemFuntion: view.employersModel!.employers!
+                                  .map((Employers value) {
+                                return DropdownMenuItem<Employers>(
+                                  value: value,
+                                  child: Text(
+                                    value.companyName ?? "",
+                                  ),
+                                );
+                              }).toList(),
+                              validator: (item) {
                                 return null;
                               },
                             ),
@@ -140,6 +153,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                               leftPadding: 0,
                               rightPadding: 0,
                               fillColor: AppColor.whiteColor,
+                              keyboardType: TextInputType.number,
                               hintText: "Salary",
                               controller: view.salaryController,
                               validator: (string) {
@@ -169,6 +183,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                               rightPadding: 0,
                               fillColor: AppColor.whiteColor,
                               hintText: "Job Description",
+                              labelText: "Job Description",
                               controller: view.jobdiscriptionController,
                               validator: (string) {
                                 if (string == null || string.isEmpty) {
@@ -190,18 +205,28 @@ class _JobPostScreenState extends State<JobPostScreen> {
                         buttonText: "Submit",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          // if (view.formKey.currentState!.validate()) {
-                          //   view.postJob(completion: () {
-                          //     AppPopUps.showConfirmDialog(
-                          //         title: "Job Created",
-                          //         message: "Job Created Successfully",
-                          //         onSubmit: () {
-                          //           view.resetState();
-                          Navigator.of(myContext!)
-                              .pushReplacementNamed(CountryAndJobScreen.id);
-                          //         });
-                          //   });
-                          // }
+                          if (view.formKey.currentState!.validate()) {
+                            if ((view.selectedCompanyId ?? "").isNotEmpty) {
+                              view.postJob(
+                                completion: () {
+                                  AppPopUps.showAlertDialog(
+                                    message: "Job Created Successfully",
+                                    onSubmit: () {
+                                      view.resetState();
+                                      Provider.of<CountryAndJobViewModel>(
+                                              myContext!,
+                                              listen: false)
+                                          .getAllCandidates(completion: () {
+                                        Navigator.of(myContext!)
+                                            .pushReplacementNamed(
+                                                CountryAndJobScreen.id);
+                                      });
+                                    },
+                                  );
+                                },
+                              );
+                            }
+                          }
                         },
                       ),
                       space,

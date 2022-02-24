@@ -123,7 +123,7 @@ class MyTextField extends StatelessWidget {
         decoration: InputDecoration(
           contentPadding: EdgeInsets.all(contentPadding ?? 25.h),
           fillColor: fillColor,
-          labelText: labelText,
+          labelText: hintText ?? "",
           hintText: hintText,
           filled: fillColor != null,
           hintStyle:

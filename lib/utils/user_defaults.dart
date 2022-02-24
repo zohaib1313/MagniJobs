@@ -64,7 +64,7 @@ class UserDefaults {
     String user = json.encode(signInModel.toJson());
     getPref().then((value) => value..setString('userData', user));
     if (kDebugMode) {
-      printWrapped("user session saved");
+      printWrapped("user session saved ${user}");
       printWrapped(user.toString());
     }
   }

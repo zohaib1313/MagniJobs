@@ -9,9 +9,9 @@ abstract class GenericObject<T> {
 
   GenericObject({this.create});
 
-  T genericObject(dynamic data) {
+  T genericObject(dynamic json) {
     final item = create!();
-    return item.decode(data);
+    return item.decode(json);
   }
 }
 
