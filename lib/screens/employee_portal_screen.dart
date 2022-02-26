@@ -6,10 +6,13 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
+import 'package:provider/provider.dart';
 
 class EmployeePortalScreen extends StatefulWidget {
-  EmployeePortalScreen({Key? key}) : super(key: key);
+  const EmployeePortalScreen({Key? key}) : super(key: key);
   static const id = "EmployeePortalScreen";
 
   @override
@@ -38,7 +41,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
           ]),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Container(
               //  height: MediaQuery.of(context).size.height,
               padding: EdgeInsets.only(
@@ -59,7 +62,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Rebeca James",
+                        UserDefaults.getUserSession()?.user?.name ?? "",
                         style: AppTextStyles.textStyleBoldSubTitleLarge,
                       ),
                       SizedBox(
@@ -87,7 +90,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                   ),
                   space,
                   Text(
-                    "Registered Nurse",
+                    UserDefaults.getUserSession()?.user?.utype ?? "",
                     style: AppTextStyles.textStyleNormalBodySmall
                         .copyWith(color: AppColor.greyColor),
                   ),
@@ -98,6 +101,9 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     buttonText: "Update Profile",
                     textColor: AppColor.whiteColor,
                     onTap: () {
+                      Provider.of<UpdateMyProfileViewModel>(myContext!,
+                              listen: false)
+                          .resetState();
                       Navigator.of(myContext!).push(MaterialPageRoute(
                           builder: (context) => UpdateProfileScreen()));
                     },

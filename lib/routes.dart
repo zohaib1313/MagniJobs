@@ -9,12 +9,9 @@ import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dar
 import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
-import 'package:magnijobs_rnr/screens/sign_in/sign_in_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
 import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
-import 'package:magnijobs_rnr/view_models/all_candidate_view_model.dart';
-import 'package:magnijobs_rnr/view_models/all_employers_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
@@ -22,10 +19,10 @@ import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
+import 'package:magnijobs_rnr/view_models/forgot_password_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/jobseeker_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/logout_view_model.dart';
-import 'package:magnijobs_rnr/view_models/my_jobs_as_employer_view_model.dart';
 import 'package:magnijobs_rnr/view_models/my_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
@@ -50,7 +47,6 @@ final Map<String, Widget Function(BuildContext)> routes = {
   EmployerSignUpScreen.id: (context) => EmployerSignUpScreen(),
   PackagesScreen.id: (context) => PackagesScreen(),
   AddPaymentScreen.id: (context) => AddPaymentScreen(),
-  SigInScreen.id: (context) => SigInScreen(),
   VerifyNumberScreen.id: (context) => VerifyNumberScreen(),
   CompanyProfileScreen.id: (context) => CompanyProfileScreen(),
   JobPostScreen.id: (context) => JobPostScreen(),
@@ -64,11 +60,8 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<SplashScreenViewModel>(
       create: (_) => SplashScreenViewModel()),
   ChangeNotifierProvider<SignInViewModel>(create: (_) => SignInViewModel()),
-  ChangeNotifierProvider<AllJobsViewModel>(create: (_) => AllJobsViewModel()),
   ChangeNotifierProvider<VerifyNumberViewModel>(
       create: (_) => VerifyNumberViewModel()),
-  ChangeNotifierProvider<AllEmployerViewModel>(
-      create: (_) => AllEmployerViewModel()),
   ChangeNotifierProvider<AllPackagesViewModel>(
       create: (_) => AllPackagesViewModel()),
   ChangeNotifierProvider<MyProfileViewModel>(
@@ -82,8 +75,7 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => UpdateJobPostViewModel()),
   ChangeNotifierProvider<DeleteJobPostViewModel>(
       create: (_) => DeleteJobPostViewModel()),
-  ChangeNotifierProvider<MyJobsAsEmployerViewModel>(
-      create: (_) => MyJobsAsEmployerViewModel()),
+  ChangeNotifierProvider<AllJobsViewModel>(create: (_) => AllJobsViewModel()),
   ChangeNotifierProvider<ApplicantSignUpViewModel>(
       create: (_) => ApplicantSignUpViewModel()),
   ChangeNotifierProvider<EmployerSignUpViewModel>(
@@ -91,8 +83,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<TutorSignUpViewModel>(
       create: (_) => TutorSignUpViewModel()),
   ChangeNotifierProvider<LogoutViewModel>(create: (_) => LogoutViewModel()),
-  ChangeNotifierProvider<AllCandidateViewModel>(
-      create: (_) => AllCandidateViewModel()),
   ChangeNotifierProvider<UploadMyResumesViewModel>(
       create: (_) => UploadMyResumesViewModel()),
   ChangeNotifierProvider<UploadMyNurseCertificateViewModel>(
@@ -107,4 +97,7 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => AssignApplicantToEmployeeViewModel()),
   ChangeNotifierProvider<CountryAndJobViewModel>(
       create: (_) => CountryAndJobViewModel()),
+  ChangeNotifierProvider<AllJobsViewModel>(create: (_) => AllJobsViewModel()),
+  ChangeNotifierProvider<ForgotPasswordViewModel>(
+      create: (_) => ForgotPasswordViewModel()),
 ];

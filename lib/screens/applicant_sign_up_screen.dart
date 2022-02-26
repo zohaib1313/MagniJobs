@@ -11,7 +11,6 @@ import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../routes.dart';
-import 'employee_portal_screen.dart';
 
 class ApplicantSignUp extends StatefulWidget {
   ApplicantSignUp({Key? key}) : super(key: key);
@@ -63,6 +62,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                               return null;
                             },
                           ),
+                          space,
                           MyTextField(
                             fillColor: AppColor.alphaGrey,
                             hintText: "Last Name",
@@ -91,47 +91,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             fillColor: AppColor.alphaGrey,
                             hintText: "Mobile number",
                             controller: view.mobileController,
-                            validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
-                              return null;
-                            },
-                          ),
-                          space,
-                          space,
-                          MyTextField(
-                            suffixIconWidet: GestureDetector(
-                                onTap: () {
-                                  view.hidePassword = !view.hidePassword;
-                                },
-                                child: Icon(view.hidePassword
-                                    ? Icons.remove_red_eye_rounded
-                                    : Icons.visibility_off_outlined)),
-                            fillColor: AppColor.alphaGrey,
-                            hintText: "Password",
-                            obsecureText: view.hidePassword,
-                            controller: view.passwordController,
-                            validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
-                              return null;
-                            },
-                          ),
-                          space,
-                          MyTextField(
-                            suffixIconWidet: GestureDetector(
-                                onTap: () {
-                                  view.hidePassword2 = !view.hidePassword2;
-                                },
-                                child: Icon(view.hidePassword
-                                    ? Icons.remove_red_eye_rounded
-                                    : Icons.visibility_off_outlined)),
-                            obsecureText: view.hidePassword2,
-                            fillColor: AppColor.alphaGrey,
-                            hintText: "Confirm Password",
-                            controller: view.confirmPasswordController,
                             validator: (string) {
                               if (string == null || string.isEmpty) {
                                 return 'Enter Value';
@@ -187,9 +146,10 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                               return null;
                             },
                           ),
+                          space,
                           MyTextField(
                             fillColor: AppColor.alphaGrey,
-                            hintText: "Comapany name",
+                            hintText: "Company name",
                             controller: view.companynameController,
                             validator: (string) {
                               if (string == null || string.isEmpty) {
@@ -223,10 +183,81 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             },
                           ),
                           space,
-                          MyTextField(
-                            fillColor: AppColor.alphaGrey,
+                          MyDropDown(
+                            onChange: (value) {
+                              view.genderController.text = value;
+                            },
                             hintText: "Gender",
-                            controller: view.genderController,
+                            labelText: "",
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.alphaGrey,
+                            suffixIcon: 'assets/icons/drop_down_ic.svg',
+                            itemFuntion: [
+                              DropdownMenuItem(
+                                value: "Male",
+                                child: Text(
+                                  "Male",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: "Female",
+                                child: Text(
+                                  "Female",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
+                              ),
+                            ],
+                            validator: (string) {
+                              return null;
+                            },
+                          ),
+                          space,
+                          space,
+                          MyDropDown(
+                            onChange: (value) {
+                              view.martialStatusController.text = value;
+                            },
+                            hintText: "Material status",
+                            labelText: "",
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.alphaGrey,
+                            suffixIcon: 'assets/icons/drop_down_ic.svg',
+                            itemFuntion: [
+                              DropdownMenuItem(
+                                value: "Single",
+                                child: Text(
+                                  "Single",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: "Married",
+                                child: Text(
+                                  "Married",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
+                              ),
+                            ],
+                            validator: (string) {
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            suffixIconWidet: GestureDetector(
+                                onTap: () {
+                                  view.hidePassword = !view.hidePassword;
+                                },
+                                child: Icon(view.hidePassword
+                                    ? Icons.remove_red_eye_rounded
+                                    : Icons.visibility_off_outlined)),
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Password",
+                            obsecureText: view.hidePassword,
+                            controller: view.passwordController,
                             validator: (string) {
                               if (string == null || string.isEmpty) {
                                 return 'Enter Value';
@@ -236,9 +267,17 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                           ),
                           space,
                           MyTextField(
+                            suffixIconWidet: GestureDetector(
+                                onTap: () {
+                                  view.hidePassword2 = !view.hidePassword2;
+                                },
+                                child: Icon(view.hidePassword
+                                    ? Icons.remove_red_eye_rounded
+                                    : Icons.visibility_off_outlined)),
+                            obsecureText: view.hidePassword2,
                             fillColor: AppColor.alphaGrey,
-                            hintText: "Material status",
-                            controller: view.martialStatusController,
+                            hintText: "Confirm Password",
+                            controller: view.confirmPasswordController,
                             validator: (string) {
                               if (string == null || string.isEmpty) {
                                 return 'Enter Value';
@@ -284,7 +323,10 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                                 .textStyleNormalBodyMedium,
                                           ),
                                           Text(
-                                            "doc, dox, pdf",
+                                            view.nationalIdImage?.path
+                                                    .split('/')
+                                                    .last ??
+                                                "doc, dox, pdf",
                                             style: AppTextStyles
                                                 .textStyleNormalBodyMedium
                                                 .copyWith(
@@ -330,19 +372,18 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                   buttonText: "Register",
                   textColor: AppColor.whiteColor,
                   onTap: () {
-                    // if (view.formKey.currentState!.validate()) {
-                    //   if (view.nationalIdImage != null) {
-                    //     view.registerApplicant(completion: () {
-                    //       printWrapped('****Signed in*****');
-                    Navigator.of(myContext!).pushNamed(EmployeePortalScreen.id);
-                    //   });
-                    // } else {
-                    //   AppPopUps.displayTextInputDialog(
-                    //       title: "validation",
-                    //       message: "Select File",
-                    //       hint: "Select Image");
-                    // }
-                    // }
+                    if (view.formKey.currentState!.validate()) {
+                      if (view.nationalIdImage != null) {
+                        view.registerApplicant(completion: () {
+                          AppPopUps.showAlertDialog(
+                              message: "User created Successfully");
+                        });
+                      } else {
+                        AppPopUps.showAlertDialog(
+                          message: "Select File",
+                        );
+                      }
+                    }
                   },
                 ),
               )

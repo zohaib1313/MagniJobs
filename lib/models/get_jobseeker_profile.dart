@@ -64,15 +64,15 @@ class User {
   String? lastName;
   String? email;
   String? mobile;
-  Null? emailVerifiedAt;
+  String? emailVerifiedAt;
   String? utype;
-  Null? otp;
+  String? otp;
   int? verified;
-  Null? phoneVerifiedAt;
-  Null? verification;
+  String? phoneVerifiedAt;
+  String? verification;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   User(
       {this.id,
@@ -139,22 +139,22 @@ class Candidate {
   String? nationality;
   String? gender;
   String? maritalStatus;
-  Null? school;
-  Null? workExperience;
-  Null? certifications;
-  Null? exams;
-  Null? license;
-  Null? preferredLocation;
-  Null? uploadedDocs;
-  Null? resume;
-  Null? nurseCertificate;
-  Null? nationalId;
-  Null? businessRegistration;
-  Null? covidCert;
-  Null? potentialEmployer;
+  String? school;
+  String? workExperience;
+  String? certifications;
+  String? exams;
+  String? license;
+  String? preferredLocation;
+  String? uploadedDocs;
+  String? resume;
+  String? nurseCertificate;
+  String? nationalId;
+  String? businessRegistration;
+  String? covidCert;
+  String? potentialEmployer;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
 
   Candidate(
       {this.id,

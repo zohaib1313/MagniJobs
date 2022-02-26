@@ -5,11 +5,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/verify_number_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
+import '../employee_portal_screen.dart';
 
 class VerifyNumberScreen extends StatefulWidget {
   VerifyNumberScreen({Key? key}) : super(key: key);
@@ -76,7 +78,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                           ),
                           child: view.isVerificationSent
                               ? getViewSent()
-                              : getViewTooSent(view, context)),
+                              : getViewToSent(view, context)),
                     ],
                   ),
                 ],
@@ -88,7 +90,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
     );
   }
 
-  getViewTooSent(VerifyNumberViewModel view, context) {
+  getViewToSent(VerifyNumberViewModel view, context) {
     return Column(
       children: [
         space,
@@ -115,8 +117,10 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           textColor: AppColor.whiteColor,
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
+            // gotoRelevantScreenOnUserType();
             view.checkMyNumber(completion: () {
               view.setIsVerificationSent(true);
+              setState(() {});
             });
           },
         ),
@@ -155,7 +159,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
             printWrapped("verifying...");
             if (view.otpCodeController.text.isNotEmpty) {
               view.verifyMyNumber(completion: () {
-                Navigator.of(myContext!).pushNamed(CompanyProfileScreen.id);
+                gotoRelevantScreenOnUserType();
               });
             }
           },
@@ -169,6 +173,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
               child: GestureDetector(
                 onTap: () {
                   view.checkMyNumber(completion: () {
+                    view.isVerificationSent = true;
                     endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
                     view.setTimeEnd(false);
                     setState(() {});
@@ -210,5 +215,27 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
         space,
       ],
     );
+  }
+
+  void gotoRelevantScreenOnUserType() {
+    String userType = UserDefaults?.getUserType() ?? "";
+    printWrapped(userType);
+    if (userType.isNotEmpty) {
+      switch (userType) {
+        case 'employer':
+          Navigator.of(myContext!)
+              .pushReplacementNamed(CompanyProfileScreen.id);
+
+          break;
+        case 'applicant':
+          Navigator.of(myContext!)
+              .pushReplacementNamed(EmployeePortalScreen.id);
+          break;
+        case 'tutor':
+          // Navigator.of(myContext!).pushReplacementNamed(EmployeePortalScreen.id);
+
+          break;
+      }
+    }
   }
 }

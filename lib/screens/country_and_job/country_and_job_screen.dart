@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/country_and_job_model.dart';
+import 'package:magnijobs_rnr/models/get_jobseeker_profile.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
@@ -130,89 +131,124 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                       buttonText: "VIEW",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        BottomSheets().showBottomSheet(
-                            context: context,
-                            child: Padding(
-                              padding: const EdgeInsets.all(18.0),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Row(
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Text(
-                                        "Job Seeker",
-                                        style: AppTextStyles
-                                            .textStyleNormalBodyMedium,
-                                      ),
-                                      GestureDetector(
-                                        onTap: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: const Icon(
-                                          Icons.cancel,
-                                          color: AppColor.blackColor,
-                                        ),
-                                      )
-                                    ],
-                                  ),
-                                  space,
-                                  Text("Rebecca James",
-                                      style: AppTextStyles
-                                          .textStyleBoldSubTitleLarge
-                                          .copyWith(
-                                              color:
-                                                  AppColor.primaryBlueColor)),
-                                  space,
-                                  space,
-                                  Expanded(
-                                      child: SingleChildScrollView(
-                                    physics: const BouncingScrollPhysics(),
+                        view.getJobSeekerProfile(
+                            id: candidates.id ?? 0,
+                            completion: (Candidate candidateSingle) {
+                              BottomSheets().showBottomSheet(
+                                  context: context,
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18.0),
                                     child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        space,
-                                        space,
                                         Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Expanded(
-                                                flex: 3,
-                                                child: rowInformation(
-                                                    icon:
-                                                        "assets/icons/ic_timer.svg",
-                                                    text: "29 years")),
-                                            Expanded(
-                                              child: Button(
-                                                cornerRadius: 25.r,
-                                                padding: 18.h,
-                                                buttonText: "Chat",
-                                                textColor: AppColor.whiteColor,
-                                                onTap: () {
-                                                  Navigator.of(myContext!).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChatScreen()));
-                                                },
-                                              ),
+                                            Text(
+                                              "Job Seeker",
+                                              style: AppTextStyles
+                                                  .textStyleNormalBodyMedium,
                                             ),
+                                            GestureDetector(
+                                              onTap: () {
+                                                Navigator.of(context).pop();
+                                              },
+                                              child: const Icon(
+                                                Icons.cancel,
+                                                color: AppColor.blackColor,
+                                              ),
+                                            )
                                           ],
                                         ),
                                         space,
+                                        Text(candidates.firstName ?? "",
+                                            style: AppTextStyles
+                                                .textStyleBoldSubTitleLarge
+                                                .copyWith(
+                                                    color: AppColor
+                                                        .primaryBlueColor)),
                                         space,
+                                        space,
+                                        Expanded(
+                                            child: SingleChildScrollView(
+                                          physics:
+                                              const BouncingScrollPhysics(),
+                                          child: Column(
+                                            children: [
+                                              getBottomSheetRowInfo(
+                                                  "Martial Status",
+                                                  candidateSingle
+                                                          .maritalStatus ??
+                                                      "-"),
+                                              /*      getBottomSheetRowInfo("Education",
+                                                  candidateSingle.c ?? ""),*/
+
+                                              getBottomSheetRowInfo(
+                                                  "Work Experience",
+                                                  candidateSingle
+                                                          .workExperience ??
+                                                      "-"),
+                                              getBottomSheetRowInfo(
+                                                  "Certificates",
+                                                  candidateSingle
+                                                          .certifications ??
+                                                      "-"),
+                                              getBottomSheetRowInfo("Exams",
+                                                  candidateSingle.exams ?? "-"),
+                                              getBottomSheetRowInfo(
+                                                  "Licenses",
+                                                  candidateSingle.license ??
+                                                      "-"),
+                                              getBottomSheetRowInfo(
+                                                  "Preferred Location",
+                                                  candidateSingle
+                                                          .preferredLocation ??
+                                                      "-"),
+                                              getBottomSheetRowInfo(
+                                                  "Uploaded Documents",
+                                                  candidateSingle
+                                                          .uploadedDocs ??
+                                                      "-"),
+                                              space,
+                                              space,
+                                              Row(
+                                                children: [
+                                                  /* Expanded(
+                                                      flex: 3,
+                                                      child: rowInformation(
+                                                          icon:
+                                                              "assets/icons/ic_timer.svg",
+                                                          text:
+                                                              "${candidateSingle.dob ?? "-"} ")),*/
+                                                  Expanded(
+                                                    child: Button(
+                                                      cornerRadius: 25.r,
+                                                      padding: 18.h,
+                                                      buttonText: "Chat",
+                                                      textColor:
+                                                          AppColor.whiteColor,
+                                                      onTap: () {
+                                                        Navigator.of(myContext!)
+                                                            .push(MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        ChatScreen()));
+                                                      },
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                              space,
+                                              space,
+                                            ],
+                                          ),
+                                        ))
                                       ],
                                     ),
-                                  ))
-                                ],
-                              ),
-                            ));
+                                  ));
+                            });
                       },
                     ),
                     space,
@@ -246,22 +282,22 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
     );
   }
 
-  getBottomSheetRowInfo() {
+  getBottomSheetRowInfo(String key, String value) {
     return Column(
       children: [
         space,
         Row(
           children: [
-            const Expanded(
+            Expanded(
               flex: 2,
-              child: Text("Martial Status"),
+              child: Text(key),
             ),
             Expanded(
               flex: 3,
               child: Button(
                 cornerRadius: 25.r,
                 padding: 18.h,
-                buttonText: "Single",
+                buttonText: value,
                 textColor: AppColor.whiteColor,
               ),
             ),

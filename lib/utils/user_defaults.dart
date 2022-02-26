@@ -60,13 +60,21 @@ class UserDefaults {
     return sharedPreferences.getInt(key) ?? defaultValue;
   }
 
-  static void saveUserSession(SignInModel signInModel) async {
+  //employer, applicant,tutor
+
+  static void saveUserSession(SignInModel signInModel, String type) async {
     String user = json.encode(signInModel.toJson());
-    getPref().then((value) => value..setString('userData', user));
+    getPref().then((value) => value
+      ..setString('userData', user)
+      ..setString('type', type));
     if (kDebugMode) {
       printWrapped("user session saved ${user}");
       printWrapped(user.toString());
     }
+  }
+
+  static String? getUserType() {
+    return sharedPreferences?.getString('type');
   }
 
   static SignInModel? getUserSession() {

@@ -3,9 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/screens/jobs_posted_employee_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
+import 'package:provider/provider.dart';
 
 import '../../routes.dart';
 
@@ -19,6 +20,7 @@ class UpdateProfileScreen extends StatefulWidget {
 
 class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<UpdateMyProfileViewModel>(myContext!);
 
   @override
   Widget build(BuildContext context) {
@@ -70,281 +72,144 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           topLeft: Radius.circular(40.r),
                           topRight: Radius.circular(40.r)),
                     ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        space,
-                        Text(
-                          "Profile Information",
-                          textAlign: TextAlign.center,
-                          style: AppTextStyles.textStyleBoldSubTitleLarge
-                              .copyWith(color: AppColor.blackColor),
-                        ),
-                        space,
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "Country",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
+                    child: Form(
+                      key: view.formKey,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          space,
+                          Text(
+                            "Profile Information",
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.textStyleBoldSubTitleLarge
+                                .copyWith(color: AppColor.blackColor),
+                          ),
+                          space,
+                          space,
+                          getInputItem(
+                              hint: "First name",
+                              validateDate: true,
+                              controller: view.firstnameContoller),
+                          getInputItem(
+                              hint: "Last name",
+                              validateDate: true,
+                              controller: view.lastNameController),
+                          getInputItem(
+                              hint: "Email",
+                              validateDate: true,
+                              controller: view.emailController),
+                          getInputItem(
+                              hint: "Mobile",
+                              validateDate: true,
+                              controller: view.mobileController),
+                          getInputItem(
+                              hint: "Address",
+                              validateDate: true,
+                              controller: view.addressController),
+                          getInputItem(
+                              hint: "Location",
+                              validateDate: true,
+                              controller: view.locationController),
+                          getInputItem(
+                              hint: "Date of birth",
+                              validateDate: true,
+                              controller: view.dobController),
+                          getInputItem(
+                              hint: "Nationality",
+                              validateDate: true,
+                              controller: view.nationalityController),
+                          space,
+                          MyDropDown(
+                            onChange: (value) {
+                              view.genderController.text = value;
+                            },
+                            hintText: "Gender",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.whiteColor,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: 'assets/icons/drop_down_ic.svg',
+                            itemFuntion: [
+                              DropdownMenuItem(
+                                value: "Single",
+                                child: Text(
+                                  "Single",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
                               ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
+                              DropdownMenuItem(
+                                value: "Married",
+                                child: Text(
+                                  "Married",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
                               ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "School Graduated",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
+                            ],
+                            validator: (string) {
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyDropDown(
+                            onChange: (value) {
+                              view.martialStatusController.text = value;
+                            },
+                            hintText: "Marital Status",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.whiteColor,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: 'assets/icons/drop_down_ic.svg',
+                            itemFuntion: [
+                              DropdownMenuItem(
+                                value: "Male",
+                                child: Text(
+                                  "Male",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
                               ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
+                              DropdownMenuItem(
+                                value: "Female",
+                                child: Text(
+                                  "Female",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
                               ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "Date Of Birth",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "Martial Status",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        MyTextField(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          hintText: "Work Experience",
-                          fillColor: AppColor.whiteColor,
-                          unfocusBorderColor: AppColor.whiteColor,
-                          labelColor: AppColor.alphaGrey.withOpacity(0.34),
-                          textColor: AppColor.blackColor,
-                          hintColor: AppColor.blackColor,
-                        ),
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "Exam Taken",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "Professional License",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "Certificates",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        MyDropDown(
-                          leftPadding: 0,
-                          rightPadding: 0,
-                          onChange: (value) {},
-                          hintText: "Preferred Location",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "A",
-                              child: Text(
-                                "A",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                            DropdownMenuItem(
-                              value: "B",
-                              child: Text(
-                                "B",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),
-                        space,
-                        space,
-                        space,
-                        space,
-                      ],
+                            ],
+                            validator: (string) {
+                              return null;
+                            },
+                          ),
+                          space,
+                          getInputItem(
+                              hint: "School",
+                              controller: view.schoolController),
+                          space,
+                          getInputItem(
+                              hint: "Work Experience",
+                              controller: view.workExperienceController),
+                          space,
+                          getInputItem(
+                              hint: "Certificates",
+                              controller: view.certificationController),
+                          space,
+                          getInputItem(
+                              hint: "Exams", controller: view.examsController),
+                          space,
+                          getInputItem(
+                              hint: "License",
+                              controller: view.licenseController),
+                          space,
+                          getInputItem(
+                              hint: "Preferred Location",
+                              controller: view.preferredlocationController),
+                          space,
+                        ],
+                      ),
                     ),
                   ),
                   space,
@@ -355,8 +220,9 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                     buttonText: "Submit",
                     textColor: AppColor.whiteColor,
                     onTap: () {
-                      Navigator.of(myContext!).push(MaterialPageRoute(
-                          builder: (context) => JobPostedEmployeeScreen()));
+                      if (view.formKey.currentState!.validate()) {
+                        view.updateProfile(onComplete: () {});
+                      }
                     },
                   ),
                   space,
@@ -369,6 +235,33 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
           ),
         ),
       ),
+    );
+  }
+
+  getInputItem(
+      {required String hint, required controller, bool validateDate = false}) {
+    return Column(
+      children: [
+        space,
+        MyTextField(
+          leftPadding: 0,
+          onChanged: (onChange) {},
+          controller: controller,
+          rightPadding: 0,
+          hintText: hint,
+          fillColor: AppColor.whiteColor,
+          unfocusBorderColor: AppColor.alphaGrey,
+          labelColor: AppColor.blackColor,
+          textColor: AppColor.blackColor,
+          hintColor: AppColor.blackColor,
+          validator: (s) {
+            if (s!.isEmpty && validateDate) {
+              return "enter $hint";
+            }
+            return null;
+          },
+        ),
+      ],
     );
   }
 }

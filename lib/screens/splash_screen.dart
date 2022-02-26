@@ -2,10 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
+import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../routes.dart';
-import 'on_boarding/onboardin_screen.dart';
+import 'company_profile/company_profile_screen.dart';
+import 'employee_portal_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const id = "splash_screen";
@@ -20,21 +24,36 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3),
-        () => {Navigator.pushReplacementNamed(myContext!, OnBoardingScreen.id)}
-        /*      {
+    Timer(
+        const Duration(seconds: 3),
+        () => {
               if (UserDefaults.getUserSession() != null)
-                {Navigator.pushReplacementNamed(myContext!, MainScreen.id)}
-              else
-                {Navigator.pushReplacementNamed(myContext!, SignInScreen.id)}
-            }*/
-
-        );
+                {gotoRelevantScreenOnUserType()}
+            });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void gotoRelevantScreenOnUserType() {
+    String userType = UserDefaults?.getUserType() ?? "";
+    printWrapped(userType);
+
+    if (userType.isNotEmpty) {
+      switch (userType) {
+        case 'employer':
+          Navigator.of(myContext!)
+              .pushReplacementNamed(CompanyProfileScreen.id);
+
+          break;
+        case 'applicant':
+          Navigator.of(myContext!)
+              .pushReplacementNamed(EmployeePortalScreen.id);
+          break;
+        case 'tutor':
+          // Navigator.of(myContext!).pushReplacementNamed(EmployeePortalScreen.id);
+          break;
+      }
+    } else {
+      Navigator.of(myContext!).pushReplacementNamed(OnBoardingScreen.id);
+    }
   }
 
   @override

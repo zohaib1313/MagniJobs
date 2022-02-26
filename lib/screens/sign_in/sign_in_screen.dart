@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/forgot_password_enter_mail_screen.dart';
+import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
+import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -11,8 +15,13 @@ import 'package:provider/provider.dart';
 import '../../routes.dart';
 
 class SigInScreen extends StatefulWidget {
-  SigInScreen({Key? key}) : super(key: key);
   static const id = "SigInScreen";
+  String userType = "";
+
+  SigInScreen({
+    Key? key,
+    required this.userType,
+  }) : super(key: key);
 
   @override
   _SigInScreenState createState() => _SigInScreenState();
@@ -160,10 +169,36 @@ class _SigInScreenState extends State<SigInScreen> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.end,
                                         children: [
-                                          Text(
-                                            "Forgot Password ?",
-                                            style: AppTextStyles
-                                                .textStyleNormalBodySmall,
+                                          GestureDetector(
+                                            onTap: () {
+                                              AppPopUps.displayTextInputDialog(
+                                                  title:
+                                                      "Enter mail where we will send OTP",
+                                                  message: "Send Otp",
+                                                  hint: "email",
+                                                  onSubmit: (String text) {
+                                                    if (text.isNotEmpty) {
+                                                      view.sendForgotPassword(
+                                                          completion: () {
+                                                            Navigator.of(
+                                                                    myContext!)
+                                                                .push(
+                                                              MaterialPageRoute(
+                                                                builder:
+                                                                    (context) =>
+                                                                        const ForgotPasswordEnterMailScreen(),
+                                                              ),
+                                                            );
+                                                          },
+                                                          mail: text);
+                                                    }
+                                                  });
+                                            },
+                                            child: Text(
+                                              "Forgot Password ?",
+                                              style: AppTextStyles
+                                                  .textStyleNormalBodySmall,
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -179,7 +214,8 @@ class _SigInScreenState extends State<SigInScreen> {
                                     // Navigator.of(myContext!)
                                     //     .pushNamed(VerifyNumberScreen.id);
                                     if (view.formKey.currentState!.validate()) {
-                                      view.signInUser(completion: () {
+                                      view.signInUser(widget.userType,
+                                          completion: () {
                                         printWrapped('****Signed in*****');
                                         Navigator.of(context)
                                             .push(MaterialPageRoute(
@@ -199,12 +235,18 @@ class _SigInScreenState extends State<SigInScreen> {
                                       style: AppTextStyles
                                           .textStyleNormalBodySmall,
                                     ),
-                                    Text(
-                                      "Sign Up!",
-                                      style: AppTextStyles
-                                          .textStyleNormalBodySmall
-                                          .copyWith(
-                                              color: AppColor.primaryBlueColor),
+                                    GestureDetector(
+                                      onTap: () {
+                                        gotoReleventSignup(widget.userType);
+                                      },
+                                      child: Text(
+                                        "Sign Up!",
+                                        style: AppTextStyles
+                                            .textStyleNormalBodySmall
+                                            .copyWith(
+                                                color:
+                                                    AppColor.primaryBlueColor),
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -223,5 +265,16 @@ class _SigInScreenState extends State<SigInScreen> {
         ),
       ),
     );
+  }
+
+  void gotoReleventSignup(String userType) {
+    switch (userType) {
+      case "employer":
+        Navigator.of(myContext!).pushNamed(EmployerSignUpScreen.id);
+        break;
+      case "applicant":
+        Navigator.of(myContext!).pushNamed(ApplicantSignUp.id);
+        break;
+    }
   }
 }

@@ -69,7 +69,7 @@ class APIRoute implements APIRouteConfigurable {
         );
       case APIType.get_jobseeker_profile:
         return RequestOptions(
-          path: ApiConstants.get_jobseeker_profile,
+          path: "",
           headers: headers,
           data: body,
           method: APIMethod.get,
@@ -182,6 +182,20 @@ class APIRoute implements APIRouteConfigurable {
       case APIType.assign_applicant_to_employee:
         return RequestOptions(
           path: ApiConstants.assign_applicant_to_employee,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.forgotPassword:
+        return RequestOptions(
+          path: ApiConstants.forgotPassword,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.sendMailForgotPassword:
+        return RequestOptions(
+          path: ApiConstants.sendMailForgotPassword,
           headers: headers,
           data: body,
           method: APIMethod.post,

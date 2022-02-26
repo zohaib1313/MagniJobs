@@ -3,12 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/all_jobs_model.dart';
+import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
+import 'package:provider/provider.dart';
 
 class JobPostedScreen extends StatefulWidget {
-  JobPostedScreen({Key? key}) : super(key: key);
   static const id = "JobPostedScreen";
+
+  JobPostedScreen({Key? key}) : super(key: key);
 
   @override
   _JobPostedScreenState createState() => _JobPostedScreenState();
@@ -16,6 +21,7 @@ class JobPostedScreen extends StatefulWidget {
 
 class _JobPostedScreenState extends State<JobPostedScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<AllJobsViewModel>(myContext!);
 
   @override
   Widget build(BuildContext context) {
@@ -55,13 +61,21 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                               child: Padding(
                                 padding: const EdgeInsets.only(
                                     top: 20, bottom: 20, left: 10, right: 10),
-                                child: Text(
-                                  "Recent",
-                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                child: GestureDetector(
+                                  onTap: () {
+                                    view.filterJobsOnDate();
+                                  },
+                                  child: Text(
+                                    "Recent",
+                                    style:
+                                        AppTextStyles.textStyleBoldBodyMedium,
+                                  ),
                                 ),
                               ),
                             ),
-                            const Icon(Icons.keyboard_arrow_down),
+                            Icon(view.isRecentFilterd
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down),
                           ],
                         ),
                       ),
@@ -74,22 +88,40 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                       Expanded(
                         child: Row(
                           children: [
-                            Row(
-                              children: const [
-                                Icon(
-                                  Icons.arrow_upward,
-                                  size: 20,
-                                ),
-                                Icon(
-                                  Icons.arrow_downward,
-                                  size: 20,
-                                ),
-                              ],
-                            ),
+                            view.isSortFiltered
+                                ? Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.arrow_upward,
+                                        size: 20,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_downward,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.arrow_downward,
+                                        size: 20,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_upward,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
                             Expanded(
-                              child: Text(
-                                "Sort",
-                                style: AppTextStyles.textStyleBoldBodyMedium,
+                              child: GestureDetector(
+                                onTap: () {
+                                  view.filterJobsOnSort();
+                                },
+                                child: Text(
+                                  "Sort",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
                               ),
                             ),
                           ],
@@ -119,19 +151,13 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                 ),
                 space,
                 Expanded(
-                  child: SingleChildScrollView(
-                    physics: BouncingScrollPhysics(),
-                    child: Column(
-                      children: [
-                        getRowJob(),
-                        getRowJob(),
-                        getRowJob(),
-                        getRowJob(),
-                        getRowJob(),
-                        getRowJob(),
-                      ],
-                    ),
-                  ),
+                  child: ListView.builder(
+                      physics: BouncingScrollPhysics(),
+                      itemCount: view.filteredJobsOnEmployerId.length,
+                      itemBuilder: (context, index) {
+                        return getRowJob(
+                            job: view.filteredJobsOnEmployerId[index]);
+                      }),
                 ),
               ],
             ),
@@ -141,7 +167,7 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
     );
   }
 
-  getRowJob() {
+  getRowJob({required Jobs job}) {
     return Container(
       margin: EdgeInsets.only(bottom: 20.h),
       padding: EdgeInsets.all(50.r),
@@ -156,8 +182,9 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
               flex: 2,
               child: CircleAvatar(
                 radius: 45,
+                backgroundColor: Colors.transparent,
                 child: Image.asset(
-                  "assets/images/app_logo_img.png",
+                  "assets/images/jobs_ic.png",
                 ),
               )),
           Expanded(
@@ -169,16 +196,16 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Certified Nursing Assistant",
-                      style: AppTextStyles.textStyleBoldSubTitleLarge,
+                      job.job ?? "",
+                      style: AppTextStyles.textStyleBoldBodyMedium,
                     ),
                     Text(
-                      "London, United Kingdom",
+                      job.location ?? "",
                       style: AppTextStyles.textStyleBoldBodyMedium
                           .copyWith(color: AppColor.primaryBlueColor),
                     ),
                     Text(
-                      "\$20k/ Year",
+                      "\€ ${job.salary ?? ""}/ Year",
                       style: AppTextStyles.textStyleBoldBodyMedium
                           .copyWith(color: AppColor.primaryBlueColor),
                     ),

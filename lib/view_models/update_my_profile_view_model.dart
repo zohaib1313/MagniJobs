@@ -1,15 +1,14 @@
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/number_symbols_data.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
+import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
-import 'package:magnijobs_rnr/models/register_new_applicant.dart';
-import 'package:path/path.dart';
 
 import '../routes.dart';
 
@@ -17,23 +16,19 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
   File? nationalIdImage;
-
   TextEditingController firstnameContoller = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-
   TextEditingController addressController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController nationalityController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController martialStatusController = TextEditingController();
-
   TextEditingController schoolController = TextEditingController();
   TextEditingController workExperienceController = TextEditingController();
   TextEditingController certificationController = TextEditingController();
-
   TextEditingController examsController = TextEditingController();
   TextEditingController preferredlocationController = TextEditingController();
   TextEditingController licenseController = TextEditingController();
@@ -79,7 +74,27 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
     }
   }
 
-  registerApplicant({completion}) async {
+  resetState() {
+    nationalIdImage = null;
+    firstnameContoller.clear();
+    lastNameController.clear();
+    emailController.clear();
+    mobileController.clear();
+    addressController.clear();
+    locationController.clear();
+    dobController.clear();
+    nationalityController.clear();
+    genderController.clear();
+    martialStatusController.clear();
+    schoolController.clear();
+    workExperienceController.clear();
+    certificationController.clear();
+    examsController.clear();
+    preferredlocationController.clear();
+    licenseController.clear();
+  }
+
+  void updateProfile({onComplete}) {
     AppPopUps().showProgressDialog(context: myContext);
     FormData body = FormData.fromMap({
       "first_name": firstnameContoller.text,
@@ -90,8 +105,10 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
       "location": locationController.text,
       "dob": dobController.text,
       "nationality": nationalityController.text,
-      "gender": genderController.text,
-      "marital_status": martialStatusController.text,
+      "gender": genderController.text.isEmpty ? "Male" : genderController.text,
+      "marital_status": martialStatusController.text.isEmpty
+          ? "Single"
+          : martialStatusController.text,
       "school": schoolController,
       "work_experience": workExperienceController,
       "certifications": certificationController.text,
@@ -103,17 +120,17 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
     client
         .request(
       route: APIRoute(
-        APIType.register_new_employer,
+        APIType.update_my_profile,
         body: body,
       ),
-      create: () => RegisterNewApplicant(),
+      create: () => APIResponse(),
       // apiFunction: registerApplicant()
     )
         .then((response) {
       AppPopUps().dissmissDialog();
 
       resetState();
-      completion();
+      onComplete();
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();
@@ -125,27 +142,5 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
-  }
-
-  resetState() {
-    firstnameContoller = TextEditingController();
-    lastNameController = TextEditingController();
-    emailController = TextEditingController();
-    mobileController = TextEditingController();
-
-    addressController = TextEditingController();
-    locationController = TextEditingController();
-    dobController = TextEditingController();
-    nationalityController = TextEditingController();
-    genderController = TextEditingController();
-    martialStatusController = TextEditingController();
-
-    schoolController = TextEditingController();
-    workExperienceController = TextEditingController();
-    certificationController = TextEditingController();
-
-    examsController = TextEditingController();
-    preferredlocationController = TextEditingController();
-    licenseController = TextEditingController();
   }
 }

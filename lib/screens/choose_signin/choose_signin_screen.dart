@@ -73,7 +73,13 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => SigInScreen(
+                                userType: "employer",
+                              ),
+                            ),
+                          );
                         },
                       ),
                       space,
@@ -135,7 +141,13 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => SigInScreen(
+                                userType: "applicant",
+                              ),
+                            ),
+                          );
                         },
                       ),
                       space,

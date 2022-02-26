@@ -23,6 +23,8 @@ enum APIType {
   upload_my_business_registration,
   upload_my_covid_certificate,
   assign_applicant_to_employee,
+  forgotPassword,
+  sendMailForgotPassword,
 }
 
 class ApiConstants {
@@ -51,4 +53,6 @@ class ApiConstants {
   static const upload_my_business_registration = "upload-business-reg";
   static const upload_my_covid_certificate = "upload-covid-cert";
   static const assign_applicant_to_employee = "assign-applicant";
+  static const forgotPassword = "password/reset";
+  static const sendMailForgotPassword = "password/email";
 }

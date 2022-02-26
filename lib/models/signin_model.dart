@@ -26,6 +26,11 @@ class SignInModel implements Decodable {
     user = json['user'] != null ? new User.fromJson(json['user']) : null;
     return this;
   }
+
+  @override
+  String toString() {
+    return 'SignInModel{token: $token, user: $user}';
+  }
 }
 
 class User {
@@ -98,5 +103,10 @@ class User {
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
     return data;
+  }
+
+  @override
+  String toString() {
+    return 'User{id: $id, name: $name, firstName: $firstName, lastName: $lastName, email: $email, mobile: $mobile, emailVerifiedAt: $emailVerifiedAt, utype: $utype, otp: $otp, verified: $verified, phoneVerifiedAt: $phoneVerifiedAt, verification: $verification, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt}';
   }
 }
