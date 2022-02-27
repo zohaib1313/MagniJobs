@@ -3,22 +3,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/all_jobs_model.dart';
+import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
-import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
+import 'package:provider/provider.dart';
 
-class CountryAndJobScreen extends StatefulWidget {
-  CountryAndJobScreen({Key? key}) : super(key: key);
-  static const id = "CountryAndJobScreen";
+class AllJobScreen extends StatefulWidget {
+  AllJobScreen({Key? key}) : super(key: key);
+  static const id = "AllJobScreen";
 
   @override
-  _CountryAndJobScreenState createState() => _CountryAndJobScreenState();
+  _AllJobScreenState createState() => _AllJobScreenState();
 }
 
-class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
+class _AllJobScreenState extends State<AllJobScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<AllJobsViewModel>(myContext!, listen: true);
 
   @override
   Widget build(BuildContext context) {
@@ -31,36 +35,53 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Company & Job", actions: [
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-            )
-          ]),
+          appBar: myAppBar(
+              context: context,
+              showSearch: !view.toogle,
+              toogled: view.toogle,
+              searchTextController: view.searchTextController,
+              onTapCloseSearch: () {
+                view.toogle = !view.toogle;
+                setState(() {});
+              },
+              title: "Jobs Posted",
+              actions: [
+                InkWell(
+                  onTap: () {
+                    if (!view.toogle) {
+                      view.doSearch();
+                    } else {
+                      view.toogle = !view.toogle;
+                      setState(() {});
+                    }
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(18.0),
+                    child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
+                  ),
+                )
+              ]),
           backgroundColor: AppColor.alphaGrey,
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              //  height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.only(
-                left: 50.w,
-                right: 50.w,
-              ),
-              decoration: BoxDecoration(
-                color: AppColor.alphaGrey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.r),
-                    topRight: Radius.circular(40.r)),
-              ),
-              child: Column(
-                children: [
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget()
-                ],
-              ),
+          body: Container(
+            //  height: MediaQuery.of(context).size.height,
+            padding: EdgeInsets.only(
+              left: 50.w,
+              right: 50.w,
+            ),
+            decoration: BoxDecoration(
+              color: AppColor.alphaGrey,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.r),
+                  topRight: Radius.circular(40.r)),
+            ),
+            child: ListView.builder(
+              physics: const BouncingScrollPhysics(),
+              shrinkWrap: true,
+              // itemCount: 3,
+              itemCount: view.alJobs.length,
+              itemBuilder: (context, index) {
+                return getJobInforCard(view.alJobs[index]);
+              },
             ),
           ),
         ),
@@ -68,7 +89,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
     );
   }
 
-  getJobSeekerWidget() {
+  getJobInforCard(Jobs job) {
     return Container(
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
@@ -80,12 +101,12 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            "Job Seeker",
+            "Company",
             style: AppTextStyles.textStyleBoldBodySmall,
           ),
           space,
           Text(
-            "Rebecca James",
+            job.poster ?? "",
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.textStyleBoldSubTitleLarge
                 .copyWith(color: AppColor.primaryBlueColor),
@@ -100,17 +121,15 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                   children: [
                     SizedBox(height: 10.h),
                     rowInformation(
+                        icon: "assets/icons/ic_file.svg", text: job.job ?? ""),
+                    SizedBox(height: 10.h),
+                    rowInformation(
                         icon: "assets/icons/ic_location.svg",
-                        text: "Bexel United Kingdom"),
+                        text: job.location ?? ""),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_timer.svg", text: "29 Years"),
-                    SizedBox(height: 10.h),
-                    rowInformation(
-                        icon: "assets/icons/ic_person.svg", text: "British"),
-                    SizedBox(height: 10.h),
-                    rowInformation(
-                        icon: "assets/icons/ic_gender.svg", text: "Female"),
+                        icon: "assets/icons/ic_currency.svg",
+                        text: (job.salary ?? "") + " / Year"),
                   ],
                 ),
               ),
@@ -137,7 +156,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                         MainAxisAlignment.spaceBetween,
                                     children: [
                                       Text(
-                                        "Job Seeker",
+                                        "",
                                         style: AppTextStyles
                                             .textStyleNormalBodyMedium,
                                       ),
@@ -153,57 +172,41 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                     ],
                                   ),
                                   space,
-                                  Text("Rebecca James",
-                                      style: AppTextStyles
-                                          .textStyleBoldSubTitleLarge
-                                          .copyWith(
-                                              color:
-                                                  AppColor.primaryBlueColor)),
-                                  space,
-                                  space,
                                   Expanded(
                                       child: SingleChildScrollView(
                                     physics: const BouncingScrollPhysics(),
-                                    child: Column(
-                                      children: [
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        space,
-                                        space,
-                                        Row(
-                                          children: [
-                                            Expanded(
-                                                flex: 3,
-                                                child: rowInformation(
-                                                    icon:
-                                                        "assets/icons/ic_timer.svg",
-                                                    text: "29 years")),
-                                            Expanded(
-                                              child: Button(
-                                                cornerRadius: 25.r,
-                                                padding: 18.h,
-                                                buttonText: "Chat",
-                                                textColor: AppColor.whiteColor,
-                                                onTap: () {
-                                                  Navigator.of(myContext!).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChatScreen()));
-                                                },
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                        space,
-                                        space,
-                                      ],
-                                    ),
+                                    child: Column(children: [
+                                      space,
+                                      ExpandAbleTile(
+                                          model: ExpandableTileModel(
+                                              title: "Qualifications",
+                                              message: job.qualification ?? "",
+                                              isExpanded: false)),
+                                      space,
+                                      space,
+                                      ExpandAbleTile(
+                                          model: ExpandableTileModel(
+                                              title: "Description",
+                                              message: job.jobDescription ?? "",
+                                              isExpanded: false)),
+                                      space,
+                                      space,
+                                      space,
+                                      Button(
+                                        padding: 18.h,
+                                        leftPadding: 400.w,
+                                        rightPading: 400.w,
+                                        buttonText: "Apply",
+                                        textColor: AppColor.whiteColor,
+                                        onTap: () {
+                                          view.applyForJob(
+                                              id: job.id ?? 0,
+                                              completion: () {});
+                                        },
+                                      ),
+                                      space,
+                                      space,
+                                    ]),
                                   ))
                                 ],
                               ),
@@ -213,11 +216,10 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                     space,
                     Button(
                       padding: 18.h,
-                      buttonText: "Chat",
+                      buttonText: "Apply",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        Navigator.of(myContext!).push(MaterialPageRoute(
-                            builder: (context) => ChatScreen()));
+                        view.applyForJob(id: job.id ?? 0, completion: () {});
                       },
                     ),
                   ],
@@ -233,7 +235,10 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
   rowInformation({required String icon, required String text}) {
     return Row(
       children: [
-        SvgViewer(svgPath: icon),
+        SvgViewer(
+          svgPath: icon,
+          color: AppColor.primaryBlueColor,
+        ),
         SizedBox(width: 50.w),
         Flexible(
             child: Text(text, style: AppTextStyles.textStyleNormalBodyMedium)),
@@ -241,22 +246,22 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
     );
   }
 
-  getBottomSheetRowInfo() {
+  getBottomSheetRowInfo(String key, String value) {
     return Column(
       children: [
         space,
         Row(
           children: [
-            const Expanded(
+            Expanded(
               flex: 2,
-              child: Text("Martial Status"),
+              child: Text(key),
             ),
             Expanded(
               flex: 3,
               child: Button(
                 cornerRadius: 25.r,
                 padding: 18.h,
-                buttonText: "Single",
+                buttonText: value,
                 textColor: AppColor.whiteColor,
               ),
             ),

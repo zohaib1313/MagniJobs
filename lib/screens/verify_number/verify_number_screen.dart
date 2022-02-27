@@ -117,7 +117,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           textColor: AppColor.whiteColor,
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
-            // gotoRelevantScreenOnUserType();
+            //gotoRelevantScreenOnUserType();
             view.checkMyNumber(completion: () {
               view.setIsVerificationSent(true);
               setState(() {});

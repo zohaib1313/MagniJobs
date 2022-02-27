@@ -8,8 +8,13 @@ import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
+import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
 import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
 import 'package:provider/provider.dart';
+
+import 'all_jobs_screen.dart';
+import 'choose_signin/choose_signin_screen.dart';
 
 class EmployeePortalScreen extends StatefulWidget {
   const EmployeePortalScreen({Key? key}) : super(key: key);
@@ -21,7 +26,7 @@ class EmployeePortalScreen extends StatefulWidget {
 
 class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
   final space = SizedBox(height: 20.h);
-
+  var view = Provider.of<EmployerPortalViewModel>(myContext!, listen: false);
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -34,9 +39,18 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: myAppBar(title: "Employee Portal", actions: [
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
+            InkWell(
+              onTap: () {
+                view.logout(onComplete: () {
+                  UserDefaults().clearAll();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => ChooseSignInScreen()));
+                });
+              },
+              child: const Padding(
+                padding: EdgeInsets.all(18.0),
+                child: SvgViewer(svgPath: "assets/icons/ic_logout.svg"),
+              ),
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
@@ -189,6 +203,13 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     rightPading: 200.w,
                     buttonText: "Browse Jobs Posted",
                     textColor: AppColor.whiteColor,
+                    onTap: () {
+                      Provider.of<AllJobsViewModel>(myContext!, listen: false)
+                          .getAllJobs(completion: (allJobs) {
+                        Navigator.of(context).push(MaterialPageRoute(
+                            builder: (context) => AllJobScreen()));
+                      });
+                    },
                   ),
                   space,
                 ],

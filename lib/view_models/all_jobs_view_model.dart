@@ -19,6 +19,19 @@ class AllJobsViewModel extends ChangeNotifier {
   List<Jobs> filteredJobsOnEmployerId = [];
   bool isRecentFilterd = false;
   bool isSortFiltered = false;
+  List<Jobs> searchedList = [];
+
+  bool _toogle = false;
+
+  bool get toogle => _toogle;
+
+  TextEditingController searchTextController = TextEditingController();
+
+  set toogle(bool value) {
+    _toogle = value;
+    notifyListeners();
+  }
+
   void getFilterJobsOnEmployerId({completion, required String id}) {
     filteredJobsOnEmployerId.clear();
     for (var job in alJobs) {
@@ -82,5 +95,50 @@ class AllJobsViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
+  }
+
+  void applyForJob({required int id, required completion}) {
+    AppPopUps().showProgressDialog(context: myContext);
+    Map<String, dynamic> body = {
+      "job_id": id,
+    };
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.applyForJob,
+              body: body,
+            ),
+            create: () => APIResponse(decoding: false),
+            apiFunction: applyForJob)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      completion();
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
+  }
+
+  void doSearch() {
+    searchedList.clear();
+    for (var element in alJobs) {
+      if (searchTextController.text
+              .toLowerCase()
+              .contains(element.employer ?? "".toLowerCase()) ||
+          searchTextController.text
+              .toLowerCase()
+              .contains(element.job ?? "".toLowerCase()) ||
+          searchTextController.text
+              .toLowerCase()
+              .contains(element.jobDescription ?? "".toLowerCase())) {}
+    }
   }
 }

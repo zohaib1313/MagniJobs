@@ -29,6 +29,11 @@ class _SplashScreenState extends State<SplashScreen> {
         () => {
               if (UserDefaults.getUserSession() != null)
                 {gotoRelevantScreenOnUserType()}
+              else
+                {
+                  Navigator.of(myContext!)
+                      .pushReplacementNamed(OnBoardingScreen.id)
+                }
             });
   }
 

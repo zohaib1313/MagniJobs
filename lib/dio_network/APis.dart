@@ -25,6 +25,7 @@ enum APIType {
   assign_applicant_to_employee,
   forgotPassword,
   sendMailForgotPassword,
+  applyForJob,
 }
 
 class ApiConstants {
@@ -55,4 +56,5 @@ class ApiConstants {
   static const assign_applicant_to_employee = "assign-applicant";
   static const forgotPassword = "password/reset";
   static const sendMailForgotPassword = "password/email";
+  static const applyForJob = "apply-job";
 }

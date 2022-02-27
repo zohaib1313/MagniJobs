@@ -37,7 +37,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
           appBar: myAppBar(title: "Welcome"),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,

@@ -200,6 +200,13 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.post,
         );
+      case APIType.applyForJob:
+        return RequestOptions(
+          path: ApiConstants.applyForJob,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
       default:
         return RequestOptions(
           path: ApiConstants.loginUser,

@@ -34,10 +34,10 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: myAppBar(title: "Edit Profile", actions: [
-            const Padding(
+            /*   const Padding(
               padding: EdgeInsets.all(18.0),
               child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-            )
+            )*/
           ]),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(

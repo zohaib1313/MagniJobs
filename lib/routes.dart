@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
+import 'package:magnijobs_rnr/screens/all_jobs_screen.dart';
 import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
-import 'package:magnijobs_rnr/screens/country_and_job/country_and_job_screen.dart';
 import 'package:magnijobs_rnr/screens/employee_portal_screen.dart';
 import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dart';
 import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
@@ -18,6 +18,7 @@ import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
+import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
 import 'package:magnijobs_rnr/view_models/forgot_password_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
@@ -50,7 +51,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   VerifyNumberScreen.id: (context) => VerifyNumberScreen(),
   CompanyProfileScreen.id: (context) => CompanyProfileScreen(),
   JobPostScreen.id: (context) => JobPostScreen(),
-  CountryAndJobScreen.id: (context) => CountryAndJobScreen(),
+  AllJobScreen.id: (context) => AllJobScreen(),
   ApplicantSignUp.id: (context) => ApplicantSignUp(),
   EmployeePortalScreen.id: (context) => EmployeePortalScreen(),
   UpdateProfileScreen.id: (context) => UpdateProfileScreen(),
@@ -100,4 +101,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<AllJobsViewModel>(create: (_) => AllJobsViewModel()),
   ChangeNotifierProvider<ForgotPasswordViewModel>(
       create: (_) => ForgotPasswordViewModel()),
+  ChangeNotifierProvider<EmployerPortalViewModel>(
+      create: (_) => EmployerPortalViewModel()),
 ];

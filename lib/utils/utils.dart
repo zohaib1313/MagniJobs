@@ -19,19 +19,59 @@ myAppBar(
     {String? title,
     Color backGroundColor = AppColor.whiteColor,
     List<Widget>? actions,
+    bool showSearch = false,
+    BuildContext? context,
+    bool toogled = false,
+    TextEditingController? searchTextController,
+    onTapCloseSearch,
     onTap}) {
   return AppBar(
     centerTitle: true,
     elevation: 0,
     actions: actions ?? [],
     leading: IconButton(
-      icon: SvgViewer(
+      icon: const SvgViewer(
         svgPath: "assets/icons/back_arrow_ic.svg",
       ),
-      onPressed: onTap ?? () => Navigator.of(myContext!).pop(),
+      onPressed: onTap ?? () => Navigator.of(context ?? myContext!).pop(),
     ),
     backgroundColor: backGroundColor,
-    title: Text(title ?? "", style: AppTextStyles.textStyleBoldTitleLarge),
+    title: showSearch
+        ? AnimatedContainer(
+            width: toogled
+                ? 0
+                : MediaQuery.of(context ?? myContext!).size.width * 0.5,
+            transform: Matrix4.translationValues(
+                toogled
+                    ? MediaQuery.of(context ?? myContext!).size.width * 0.5
+                    : 0,
+                0,
+                0),
+            duration: const Duration(seconds: 1),
+            height: kToolbarHeight * 0.8,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(15.0),
+              border: Border.all(
+                width: 1,
+                color: Colors.grey[600]!,
+              ),
+            ),
+            child: TextField(
+              controller: searchTextController ?? TextEditingController(),
+              textInputAction: TextInputAction.search,
+              decoration: InputDecoration(
+                  prefixIcon: AnimatedOpacity(
+                      duration: const Duration(seconds: 1),
+                      opacity: toogled ? 0 : 1,
+                      child: IconButton(
+                        icon: const Icon(Icons.arrow_back_ios),
+                        onPressed: onTapCloseSearch,
+                      )),
+                  border: InputBorder.none),
+            ),
+          )
+        : Text(title ?? "", style: AppTextStyles.textStyleBoldTitleLarge),
   );
 }
 
