@@ -53,7 +53,6 @@ class SignInViewModel extends ChangeNotifier {
       resetState();
       completion();
     }).catchError((error) {
-      print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();
       AppPopUps().showErrorPopUp(
           title: 'Error',

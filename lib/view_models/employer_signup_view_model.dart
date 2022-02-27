@@ -97,18 +97,18 @@ class EmployerSignUpViewModel extends ChangeNotifier {
 
   resetState() {
     formKey = GlobalKey<FormState>();
-    firstnameContoller = TextEditingController();
-    lastNameController = TextEditingController();
-    emailController = TextEditingController();
-    mobileController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
-    addressController = TextEditingController();
-    locationController = TextEditingController();
-    companyNameController = TextEditingController();
-    contactNumberController = TextEditingController();
-    contactEmailController = TextEditingController();
-    martialStatusController = TextEditingController();
-    webSiteController = TextEditingController();
+    firstnameContoller.clear();
+    lastNameController.clear();
+    emailController.clear();
+    mobileController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    addressController.clear();
+    locationController.clear();
+    companyNameController.clear();
+    contactNumberController.clear();
+    contactEmailController.clear();
+    martialStatusController.clear();
+    webSiteController.clear();
   }
 }

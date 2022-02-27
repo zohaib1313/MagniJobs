@@ -77,6 +77,14 @@ class UserDefaults {
     return sharedPreferences?.getString('type');
   }
 
+  static bool? getIsPhoneVerified() {
+    return sharedPreferences?.getBool('userVerified');
+  }
+
+  static setPhoneVerified(bool value) {
+    return sharedPreferences?.setBool('userVerified', value);
+  }
+
   static SignInModel? getUserSession() {
     SignInModel? user;
     if (sharedPreferences!.getString('userData') != null) {

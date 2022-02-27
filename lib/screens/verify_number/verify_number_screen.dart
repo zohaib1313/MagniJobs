@@ -4,6 +4,7 @@ import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -225,14 +226,13 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
         case 'employer':
           Navigator.of(myContext!)
               .pushReplacementNamed(CompanyProfileScreen.id);
-
           break;
         case 'applicant':
           Navigator.of(myContext!)
               .pushReplacementNamed(EmployeePortalScreen.id);
           break;
         case 'tutor':
-          // Navigator.of(myContext!).pushReplacementNamed(EmployeePortalScreen.id);
+          Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
 
           break;
       }

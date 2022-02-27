@@ -6,6 +6,7 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/forgot_password_enter_mail_screen.dart';
 import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -274,6 +275,9 @@ class _SigInScreenState extends State<SigInScreen> {
         break;
       case "applicant":
         Navigator.of(myContext!).pushNamed(ApplicantSignUp.id);
+        break;
+      case "tutor":
+        Navigator.of(myContext!).pushNamed(TutorSignUpScreen.id);
         break;
     }
   }

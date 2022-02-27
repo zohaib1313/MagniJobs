@@ -5,13 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
 import 'package:provider/provider.dart';
-
-import '../routes.dart';
 
 class TutorSignUpScreen extends StatefulWidget {
   TutorSignUpScreen({Key? key}) : super(key: key);
@@ -23,6 +20,7 @@ class TutorSignUpScreen extends StatefulWidget {
 
 class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
   final space = SizedBox(height: 20.h);
+
   @override
   Widget build(BuildContext context) {
     var view = Provider.of<TutorSignUpViewModel>(context);
@@ -62,6 +60,7 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                               return null;
                             },
                           ),
+                          space,
                           MyTextField(
                             fillColor: AppColor.alphaGrey,
                             hintText: "Last Name",
@@ -98,6 +97,41 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                             },
                           ),
                           space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Address",
+                            controller: view.addressController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Location",
+                            controller: view.locationController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                          space,
+                          MyTextField(
+                            fillColor: AppColor.alphaGrey,
+                            hintText: "Company",
+                            controller: view.companyNameController,
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
                           space,
                           MyTextField(
                             suffixIconWidet: GestureDetector(
@@ -131,30 +165,6 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                             fillColor: AppColor.alphaGrey,
                             hintText: "Confirm Password",
                             controller: view.confirmPasswordController,
-                            validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
-                              return null;
-                            },
-                          ),
-                          space,
-                          MyTextField(
-                            fillColor: AppColor.alphaGrey,
-                            hintText: "Address",
-                            controller: view.addressController,
-                            validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
-                              return null;
-                            },
-                          ),
-                          space,
-                          MyTextField(
-                            fillColor: AppColor.alphaGrey,
-                            hintText: "Location",
-                            controller: view.locationController,
                             validator: (string) {
                               if (string == null || string.isEmpty) {
                                 return 'Enter Value';
@@ -200,7 +210,10 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                                                 .textStyleNormalBodyMedium,
                                           ),
                                           Text(
-                                            "doc, dox, pdf",
+                                            view.nationalIdImage?.path
+                                                    .split('/')
+                                                    .last ??
+                                                "doc, dox, pdf",
                                             style: AppTextStyles
                                                 .textStyleNormalBodyMedium
                                                 .copyWith(
@@ -248,11 +261,14 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                   onTap: () {
                     if (view.formKey.currentState!.validate()) {
                       if (view.nationalIdImage != null) {
-                        view.registerTutor(completion: () {
-                          printWrapped('****Signed in*****');
-                          Navigator.of(myContext!).push(MaterialPageRoute(
-                              builder: (context) => TutorProfileScreen()));
-                        });
+                        view.registerTutor(
+                          completion: () {
+                            /*  Navigator.of(myContext!).push(MaterialPageRoute(
+                                builder: (context) => TutorProfileScreen()));*/
+                            AppPopUps.showAlertDialog(
+                                message: "User created Successfully");
+                          },
+                        );
                       } else {
                         AppPopUps.displayTextInputDialog(
                             title: "validation",

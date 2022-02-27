@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -39,8 +40,11 @@ class _SplashScreenState extends State<SplashScreen> {
 
   void gotoRelevantScreenOnUserType() {
     String userType = UserDefaults?.getUserType() ?? "";
-    printWrapped(userType);
 
+    bool isPhoneVerified = UserDefaults?.getIsPhoneVerified() ?? false;
+    printWrapped(userType);
+    //todo
+    // && isPhoneVerified
     if (userType.isNotEmpty) {
       switch (userType) {
         case 'employer':
@@ -53,7 +57,7 @@ class _SplashScreenState extends State<SplashScreen> {
               .pushReplacementNamed(EmployeePortalScreen.id);
           break;
         case 'tutor':
-          // Navigator.of(myContext!).pushReplacementNamed(EmployeePortalScreen.id);
+          Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
           break;
       }
     } else {

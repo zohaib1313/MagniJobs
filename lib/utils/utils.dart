@@ -22,6 +22,7 @@ myAppBar(
     bool showSearch = false,
     BuildContext? context,
     bool toogled = false,
+    bool goBack = true,
     TextEditingController? searchTextController,
     onTapCloseSearch,
     onTap}) {
@@ -29,12 +30,14 @@ myAppBar(
     centerTitle: true,
     elevation: 0,
     actions: actions ?? [],
-    leading: IconButton(
-      icon: const SvgViewer(
-        svgPath: "assets/icons/back_arrow_ic.svg",
-      ),
-      onPressed: onTap ?? () => Navigator.of(context ?? myContext!).pop(),
-    ),
+    leading: goBack
+        ? IconButton(
+            icon: const SvgViewer(
+              svgPath: "assets/icons/back_arrow_ic.svg",
+            ),
+            onPressed: onTap ?? () => Navigator.of(context ?? myContext!).pop(),
+          )
+        : null,
     backgroundColor: backGroundColor,
     title: showSearch
         ? AnimatedContainer(

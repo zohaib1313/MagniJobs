@@ -34,7 +34,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Welcome"),
+          appBar: myAppBar(title: "Welcome", goBack: false),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
             physics: const BouncingScrollPhysics(),
@@ -219,7 +219,13 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => SigInScreen(
+                                userType: "tutor",
+                              ),
+                            ),
+                          );
                         },
                       ),
                       space,

@@ -10,6 +10,8 @@ import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
@@ -53,8 +55,10 @@ final Map<String, Widget Function(BuildContext)> routes = {
   JobPostScreen.id: (context) => JobPostScreen(),
   AllJobScreen.id: (context) => AllJobScreen(),
   ApplicantSignUp.id: (context) => ApplicantSignUp(),
-  EmployeePortalScreen.id: (context) => EmployeePortalScreen(),
+  EmployeePortalScreen.id: (context) => const EmployeePortalScreen(),
   UpdateProfileScreen.id: (context) => UpdateProfileScreen(),
+  TutorSignUpScreen.id: (context) => TutorSignUpScreen(),
+  TutorProfileScreen.id: (context) => TutorProfileScreen(),
 };
 
 final List<ChangeNotifierProvider<dynamic>> multiProviders = [
