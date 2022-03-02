@@ -10,6 +10,7 @@ import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
+import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -27,6 +28,7 @@ class EmployeePortalScreen extends StatefulWidget {
 class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
   final space = SizedBox(height: 20.h);
   var view = Provider.of<EmployerPortalViewModel>(myContext!, listen: false);
+
   @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
@@ -41,7 +43,8 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
           appBar: myAppBar(title: "Employee Portal", actions: [
             InkWell(
               onTap: () {
-                view.logout(onComplete: () {
+                Provider.of<ProfileSettingViewModel>(myContext!, listen: false)
+                    .logout(onComplete: () {
                   UserDefaults().clearAll();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => ChooseSignInScreen()));

@@ -49,9 +49,11 @@ class SignInViewModel extends ChangeNotifier {
             apiFunction: signInUser)
         .then((response) {
       AppPopUps().dissmissDialog();
-      UserDefaults.saveUserSession(response.response!.data!, type);
-      resetState();
-      completion();
+
+      if (response.response?.data?.token != null) {
+        UserDefaults.setApiToken(response.response?.data?.token ?? '');
+        completion(response.response?.data);
+      }
     }).catchError((error) {
       AppPopUps().dissmissDialog();
       AppPopUps().showErrorPopUp(

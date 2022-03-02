@@ -21,6 +21,7 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   HttpOverrides.global = MyHttpOverrides();
   await UserDefaults.getPref();
+
   runApp(const MyApp());
 }
 

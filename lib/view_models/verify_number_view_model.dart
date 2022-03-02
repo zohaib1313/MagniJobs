@@ -6,7 +6,6 @@ import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/check_phone_no.dart';
 import 'package:magnijobs_rnr/models/verify_my_number.dart';
-import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../routes.dart';
@@ -86,7 +85,6 @@ class VerifyNumberViewModel extends ChangeNotifier {
             create: () => VerifyMyPhoneNumberModel(),
             apiFunction: verifyMyNumber)
         .then((response) {
-      UserDefaults.setPhoneVerified(true);
       AppPopUps().dissmissDialog();
       resetState();
       completion();

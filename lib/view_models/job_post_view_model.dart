@@ -10,12 +10,21 @@ import 'package:magnijobs_rnr/routes.dart';
 
 class JobPostViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
+  String _selectedCountryId = '';
+
+  String get selectedCountryId => _selectedCountryId;
+
+  set selectedCountryId(String value) {
+    _selectedCountryId = value;
+  }
 
   TextEditingController jobController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController salaryController = TextEditingController();
   TextEditingController qualificationController = TextEditingController();
   TextEditingController jobdiscriptionController = TextEditingController();
+  TextEditingController dueDateController = TextEditingController();
+
   AllEmployersModel? employersModel;
   bool _rememberMe = false;
 
@@ -33,10 +42,12 @@ class JobPostViewModel extends ChangeNotifier {
     Map<String, dynamic> body = {
       "job": jobController.text,
       "location": locationController.text,
+      'country': selectedCountryId,
       "salary": salaryController.text,
       "company": selectedCompanyId ?? "",
       "qualification": qualificationController.text,
       "job_description": jobdiscriptionController.text,
+      'due_date': dueDateController.text,
     };
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -63,14 +74,6 @@ class JobPostViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
-  }
-
-  resetState() {
-    jobController.clear();
-    locationController.clear();
-    salaryController.clear();
-    qualificationController.clear();
-    jobdiscriptionController.clear();
   }
 
   void getAllCompanies({completion}) {
@@ -102,5 +105,15 @@ class JobPostViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
+  }
+
+  resetState() {
+    selectedCountryId = '';
+    jobController.clear();
+    locationController.clear();
+    salaryController.clear();
+    qualificationController.clear();
+    dueDateController.clear();
+    jobdiscriptionController.clear();
   }
 }

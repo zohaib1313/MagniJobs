@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
@@ -10,8 +11,11 @@ import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
 class CountryAndJobScreen extends StatefulWidget {
-  CountryAndJobScreen({Key? key}) : super(key: key);
+  CountryAndJobModel countryAndJobModel;
+
   static const id = "CountryAndJobScreen";
+
+  CountryAndJobScreen({required this.countryAndJobModel});
 
   @override
   _CountryAndJobScreenState createState() => _CountryAndJobScreenState();
@@ -31,38 +35,43 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Company & Job", actions: [
+          appBar: myAppBar(title: "Country & Job", actions: [
             const Padding(
               padding: EdgeInsets.all(18.0),
               child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
-          body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
-            child: Container(
-              //  height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.only(
-                left: 50.w,
-                right: 50.w,
-              ),
-              decoration: BoxDecoration(
-                color: AppColor.alphaGrey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.r),
-                    topRight: Radius.circular(40.r)),
-              ),
-              child: Column(
-                children: [
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget(),
-                  getJobSeekerWidget()
-                ],
-              ),
-            ),
-          ),
+          body: /*(widget.countryAndJobModel.candidates?.length ?? 0)*/ 1 != 0
+              ? SingleChildScrollView(
+                  physics: BouncingScrollPhysics(),
+                  child: Container(
+                      //  height: MediaQuery.of(context).size.height,
+                      padding: EdgeInsets.only(
+                        left: 50.w,
+                        right: 50.w,
+                      ),
+                      decoration: BoxDecoration(
+                        color: AppColor.alphaGrey,
+                        borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(40.r),
+                            topRight: Radius.circular(40.r)),
+                      ),
+                      child: ListView.builder(
+                          itemCount:
+                              1 /*widget.countryAndJobModel.candidates?.length ?? 0*/,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          itemBuilder: (context, index) {
+                            return getJobSeekerWidget();
+                          })),
+                )
+              : Center(
+                  child: Text(
+                    'No Candidate',
+                    style: AppTextStyles.textStyleBoldBodyMedium,
+                  ),
+                ),
         ),
       ),
     );

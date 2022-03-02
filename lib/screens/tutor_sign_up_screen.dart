@@ -262,9 +262,7 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                     if (view.formKey.currentState!.validate()) {
                       if (view.nationalIdImage != null) {
                         view.registerTutor(
-                          completion: () {
-                            /*  Navigator.of(myContext!).push(MaterialPageRoute(
-                                builder: (context) => TutorProfileScreen()));*/
+                          completion: () async {
                             AppPopUps.showAlertDialog(
                                 message: "User created Successfully");
                           },

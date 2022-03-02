@@ -35,9 +35,9 @@ class AllJobsViewModel extends ChangeNotifier {
   void getFilterJobsOnEmployerId({completion, required String id}) {
     filteredJobsOnEmployerId.clear();
     for (var job in alJobs) {
-      if ((job.employer ?? "") == id) {
-        filteredJobsOnEmployerId.add(job);
-      }
+      // if ((job.employer ?? "") == id) {
+      filteredJobsOnEmployerId.add(job);
+      // }
     }
     completion(filteredJobsOnEmployerId);
   }

@@ -207,6 +207,13 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.post,
         );
+      case APIType.all_countries:
+        return RequestOptions(
+          path: ApiConstants.all_countries,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
       default:
         return RequestOptions(
           path: ApiConstants.loginUser,

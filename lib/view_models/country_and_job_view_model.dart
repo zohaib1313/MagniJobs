@@ -31,7 +31,7 @@ class CountryAndJobViewModel extends ChangeNotifier {
       printWrapped(countryAndJobModel.toString());
       AppPopUps().dissmissDialog();
       resetState();
-      completion();
+      completion(countryAndJobModel);
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();

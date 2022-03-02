@@ -111,7 +111,13 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                   textColor: AppColor.primaryBlueDarkColor,
                   color: AppColor.whiteColor,
                   onTap: () {
-                    Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                    Navigator.of(myContext!).push(
+                      MaterialPageRoute(
+                        builder: (context) => SigInScreen(
+                          userType: "employer",
+                        ),
+                      ),
+                    );
                   },
                 ),
               )

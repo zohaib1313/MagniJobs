@@ -179,15 +179,33 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               },
                             ),
                             space,
-                            MyTextField(
-                              fillColor: AppColor.alphaGrey,
+                            MyDropDown(
+                              onChange: (value) {
+                                view.martialStatusController.text = value ?? "";
+                              },
                               hintText: "Martial Status",
-                              labelText: "Martial Status",
-                              controller: view.martialStatusController,
+                              labelText: "",
+                              labelColor: AppColor.redColor,
+                              borderColor: AppColor.alphaGrey,
+                              fillColor: AppColor.alphaGrey,
+                              suffixIcon: "assets/icons/drop_down_ic.svg",
+                              itemFuntion: [
+                                DropdownMenuItem(
+                                  value: "Married",
+                                  child: Text(
+                                    "Married",
+                                    style: AppTextStyles.textStyleBoldBodySmall,
+                                  ),
+                                ),
+                                DropdownMenuItem(
+                                  value: "Single",
+                                  child: Text(
+                                    "Single",
+                                    style: AppTextStyles.textStyleBoldBodySmall,
+                                  ),
+                                ),
+                              ],
                               validator: (string) {
-                                if (string == null || string.isEmpty) {
-                                  return 'Enter Value';
-                                }
                                 return null;
                               },
                             ),
@@ -261,19 +279,11 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                   child: Button(
                     buttonText: "Register",
                     textColor: AppColor.whiteColor,
-                    onTap: () {
-                      Provider.of<AllPackagesViewModel>(myContext!,
-                              listen: false)
-                          .getAllPackages(completion: () {
-                        Navigator.of(myContext!)
-                            .pushReplacementNamed(PackagesScreen.id);
-                      });
+                    onTap: () async {
                       if (view.formKey.currentState!.validate()) {
                         view.registerUser(completion: () {
-                          AppPopUps.showConfirmDialog(
-                              title: "User Created",
-                              message:
-                                  "User Created Successfully Go to Login Page",
+                          AppPopUps.showAlertDialog(
+                              message: "User Created Successfully",
                               onSubmit: () {
                                 view.resetState();
                                 Provider.of<AllPackagesViewModel>(myContext!,

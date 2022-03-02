@@ -5,9 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/all_employers_model.dart';
+import 'package:magnijobs_rnr/models/countries_model.dart';
+import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/screens/country_and_job/country_and_job_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:provider/provider.dart';
@@ -15,7 +18,11 @@ import 'package:provider/provider.dart';
 import '../../routes.dart';
 
 class JobPostScreen extends StatefulWidget {
-  JobPostScreen({Key? key}) : super(key: key);
+  String selectedCountryId;
+
+//not being used now id
+  JobPostScreen({required this.selectedCountryId});
+
   static const id = "JobPostScreen";
 
   @override
@@ -121,6 +128,47 @@ class _JobPostScreenState extends State<JobPostScreen> {
                               },
                             ),
                             space,
+                            StreamBuilder(
+                              stream: Provider.of<CompanyProfileViewModel>(
+                                      myContext!,
+                                      listen: false)
+                                  .loadCountries(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<Countries?>> snapshot) {
+                                if (snapshot.hasData) {
+                                  return MyDropDown(
+                                    leftPadding: 0,
+                                    rightPadding: 0,
+                                    onChange: (value) {
+                                      view.selectedCountryId = value.toString();
+                                    },
+                                    hintText: "Country",
+                                    labelText: "",
+                                    labelColor: AppColor.redColor,
+                                    borderColor: AppColor.alphaGrey,
+                                    fillColor: AppColor.whiteColor,
+                                    suffixIcon: "assets/icons/drop_down_ic.svg",
+                                    itemFuntion: snapshot.data!
+                                        .map((e) => DropdownMenuItem(
+                                              value: e?.id.toString() ?? '',
+                                              child: Text(
+                                                e?.name ?? '',
+                                                style: AppTextStyles
+                                                    .textStyleBoldBodySmall,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    validator: (string) {
+                                      return null;
+                                    },
+                                  );
+                                }
+                                return Center(
+                                    child: Container(
+                                        child: CircularProgressIndicator()));
+                              },
+                            ),
+                            space,
                             MyTextField(
                               leftPadding: 0,
                               rightPadding: 0,
@@ -178,6 +226,36 @@ class _JobPostScreenState extends State<JobPostScreen> {
                               },
                             ),
                             space,
+                            InkWell(
+                              onTap: () {
+                                showDatePickerDialog(
+                                    context: context,
+                                    onDateSelected: ((value) {
+                                      print(value.toString());
+                                      view.dueDateController.text =
+                                          value.toString();
+                                    }));
+                              },
+                              child: MyTextField(
+                                leftPadding: 0,
+                                rightPadding: 0,
+                                enable: false,
+                                fillColor: AppColor.whiteColor,
+                                textColor: AppColor.blackColor,
+                                hintColor: AppColor.blackColor,
+                                labelColor: AppColor.blackColor,
+                                hintText: "Due Date",
+                                controller: view.dueDateController,
+                                labelText: "Due Date",
+                                validator: (string) {
+                                  if (string == null || string.isEmpty) {
+                                    return 'Enter Value';
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                            space,
                             MyTextField(
                               leftPadding: 0,
                               rightPadding: 0,
@@ -205,8 +283,17 @@ class _JobPostScreenState extends State<JobPostScreen> {
                         buttonText: "Submit",
                         textColor: AppColor.whiteColor,
                         onTap: () {
+                          Provider.of<CountryAndJobViewModel>(myContext!,
+                                  listen: false)
+                              .getAllCandidates(completion:
+                                  (CountryAndJobModel countryAndJobModel) {
+                            Navigator.of(myContext!).push(MaterialPageRoute(
+                                builder: (c) => CountryAndJobScreen(
+                                    countryAndJobModel: countryAndJobModel)));
+                          });
                           if (view.formKey.currentState!.validate()) {
-                            if ((view.selectedCompanyId ?? "").isNotEmpty) {
+                            if (((view.selectedCompanyId ?? '').isNotEmpty) &&
+                                ((view.selectedCountryId).isNotEmpty)) {
                               view.postJob(
                                 completion: () {
                                   AppPopUps.showAlertDialog(
@@ -216,15 +303,23 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                       Provider.of<CountryAndJobViewModel>(
                                               myContext!,
                                               listen: false)
-                                          .getAllCandidates(completion: () {
-                                        Navigator.of(myContext!)
-                                            .pushReplacementNamed(
-                                                CountryAndJobScreen.id);
+                                          .getAllCandidates(completion:
+                                              (CountryAndJobModel
+                                                  countryAndJobModel) {
+                                        Navigator.of(myContext!).push(
+                                            MaterialPageRoute(
+                                                builder: (c) =>
+                                                    CountryAndJobScreen(
+                                                        countryAndJobModel:
+                                                            countryAndJobModel)));
                                       });
                                     },
                                   );
                                 },
                               );
+                            } else {
+                              AppPopUps.showAlertDialog(
+                                  message: 'Enter all required date');
                             }
                           }
                         },

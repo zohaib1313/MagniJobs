@@ -77,12 +77,12 @@ class UserDefaults {
     return sharedPreferences?.getString('type');
   }
 
-  static bool? getIsPhoneVerified() {
-    return sharedPreferences?.getBool('userVerified');
+  static String? getToken() {
+    return sharedPreferences?.getString('ApiToken');
   }
 
-  static setPhoneVerified(bool value) {
-    return sharedPreferences?.setBool('userVerified', value);
+  static setApiToken(String value) {
+    return sharedPreferences?.setString('ApiToken', value);
   }
 
   static SignInModel? getUserSession() {
@@ -91,6 +91,7 @@ class UserDefaults {
       Map<String, dynamic> json =
           jsonDecode(sharedPreferences!.getString('userData')!);
       user = SignInModel.fromJson(json);
+      setApiToken(user.token ?? '');
       printWrapped(user.toString());
     }
     return user;

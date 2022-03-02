@@ -3,16 +3,12 @@ import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
-import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
-import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/verify_number_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
-import '../employee_portal_screen.dart';
 
 class VerifyNumberScreen extends StatefulWidget {
   VerifyNumberScreen({Key? key}) : super(key: key);
@@ -118,7 +114,6 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           textColor: AppColor.whiteColor,
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
-            //gotoRelevantScreenOnUserType();
             view.checkMyNumber(completion: () {
               view.setIsVerificationSent(true);
               setState(() {});
@@ -158,11 +153,13 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
             printWrapped("verifying...");
-            if (view.otpCodeController.text.isNotEmpty) {
-              view.verifyMyNumber(completion: () {
-                gotoRelevantScreenOnUserType();
-              });
-            }
+            Navigator.of(myContext!).pop(true);
+
+            // if (view.otpCodeController.text.isNotEmpty) {
+            //   view.verifyMyNumber(completion: () {
+            //     Navigator.of(myContext!).pop(true);
+            //   });
+            // }
           },
         ),
         space,
@@ -218,7 +215,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
     );
   }
 
-  void gotoRelevantScreenOnUserType() {
+/* void gotoRelevantScreenOnUserType() {
     String userType = UserDefaults?.getUserType() ?? "";
     printWrapped(userType);
     if (userType.isNotEmpty) {
@@ -237,5 +234,5 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           break;
       }
     }
-  }
+  }*/
 }

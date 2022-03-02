@@ -113,3 +113,18 @@ mySwitch(
     ),
   );
 }
+
+Future<void> showDatePickerDialog(
+    {required BuildContext context,
+    required Function(dynamic date) onDateSelected,
+    DatePickerMode initialDatePickerMode = DatePickerMode.day}) async {
+  final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDatePickerMode: initialDatePickerMode,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1905),
+      lastDate: DateTime(3905));
+  if (picked != null && picked != DateTime.now()) {
+    onDateSelected(DateFormat('yyyy-MM-dd').format(picked));
+  }
+}

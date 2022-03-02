@@ -109,9 +109,10 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                             onTap: () {
                               UserDefaults().clearAll();
                               Navigator.of(context).pushReplacement(
-                                  MaterialPageRoute(
-                                      builder: (context) =>
-                                          ChooseSignInScreen()));
+                                MaterialPageRoute(
+                                  builder: (context) => ChooseSignInScreen(),
+                                ),
+                              );
                             },
                             child: Row(
                               children: [

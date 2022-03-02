@@ -371,7 +371,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                 child: Button(
                   buttonText: "Register",
                   textColor: AppColor.whiteColor,
-                  onTap: () {
+                  onTap: () async {
                     if (view.formKey.currentState!.validate()) {
                       if (view.nationalIdImage != null) {
                         view.registerApplicant(completion: () {

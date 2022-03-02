@@ -25,6 +25,7 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
     Timer(
         const Duration(seconds: 3),
         () => {
@@ -35,13 +36,23 @@ class _SplashScreenState extends State<SplashScreen> {
                   Navigator.of(myContext!)
                       .pushReplacementNamed(OnBoardingScreen.id)
                 }
+              /* Provider.of<CountriesListViewModel>(myContext!, listen: false)
+                  .loadCountries(completion: (countryModel) {
+                if (countryModel != null) {
+                  if (UserDefaults.getUserSession() != null) {
+                    gotoRelevantScreenOnUserType();
+                  } else {
+                    Navigator.of(myContext!)
+                        .pushReplacementNamed(OnBoardingScreen.id);
+                  }
+                }
+              })*/
             });
   }
 
   void gotoRelevantScreenOnUserType() {
     String userType = UserDefaults?.getUserType() ?? "";
 
-    bool isPhoneVerified = UserDefaults?.getIsPhoneVerified() ?? false;
     printWrapped(userType);
     //todo
     // && isPhoneVerified

@@ -314,7 +314,10 @@ class AppPopUps {
                 color: Colors.green,
                 textColor: Colors.white,
                 child: const Text('Ok'),
-                onPressed: onSubmit,
+                onPressed: onSubmit ??
+                    () {
+                      Navigator.pop(context);
+                    },
               ),
             ],
           );

@@ -6,7 +6,6 @@ import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/employee_portal_screen.dart';
 import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dart';
-import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
@@ -18,6 +17,7 @@ import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model.dart';
+import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
@@ -25,8 +25,8 @@ import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
 import 'package:magnijobs_rnr/view_models/forgot_password_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/jobseeker_profile_view_model.dart';
-import 'package:magnijobs_rnr/view_models/logout_view_model.dart';
 import 'package:magnijobs_rnr/view_models/my_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
@@ -52,7 +52,6 @@ final Map<String, Widget Function(BuildContext)> routes = {
   AddPaymentScreen.id: (context) => AddPaymentScreen(),
   VerifyNumberScreen.id: (context) => VerifyNumberScreen(),
   CompanyProfileScreen.id: (context) => CompanyProfileScreen(),
-  JobPostScreen.id: (context) => JobPostScreen(),
   AllJobScreen.id: (context) => AllJobScreen(),
   ApplicantSignUp.id: (context) => ApplicantSignUp(),
   EmployeePortalScreen.id: (context) => const EmployeePortalScreen(),
@@ -87,7 +86,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => EmployerSignUpViewModel()),
   ChangeNotifierProvider<TutorSignUpViewModel>(
       create: (_) => TutorSignUpViewModel()),
-  ChangeNotifierProvider<LogoutViewModel>(create: (_) => LogoutViewModel()),
   ChangeNotifierProvider<UploadMyResumesViewModel>(
       create: (_) => UploadMyResumesViewModel()),
   ChangeNotifierProvider<UploadMyNurseCertificateViewModel>(
@@ -107,4 +105,8 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => ForgotPasswordViewModel()),
   ChangeNotifierProvider<EmployerPortalViewModel>(
       create: (_) => EmployerPortalViewModel()),
+  ChangeNotifierProvider<ProfileSettingViewModel>(
+      create: (_) => ProfileSettingViewModel()),
+  ChangeNotifierProvider<CompanyProfileViewModel>(
+      create: (_) => CompanyProfileViewModel()),
 ];
