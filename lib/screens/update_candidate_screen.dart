@@ -5,22 +5,28 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
-import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
 
-class UpdateProfileScreen extends StatefulWidget {
-  UpdateProfileScreen({Key? key}) : super(key: key);
-  static const id = "UpdateProfileScreen";
+class UpdateCandidateScreen extends StatefulWidget {
+  UpdateCandidateScreen({Key? key}) : super(key: key);
+  static const id = "UpdateCandidateScreen";
 
   @override
-  _UpdateProfileScreenState createState() => _UpdateProfileScreenState();
+  _UpdateCandidateScreenState createState() => _UpdateCandidateScreenState();
 }
 
-class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
+class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
   final space = SizedBox(height: 20.h);
-  var view = Provider.of<UpdateMyProfileViewModel>(myContext!);
+  var view = Provider.of<UpdateCandidateProfileViewModel>(myContext!);
+
+  @override
+  void initState() {
+    super.initState();
+    view.setValuesWithSharedPref();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -97,9 +103,11 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                           getInputItem(
                               hint: "Email",
                               validateDate: true,
+                              enabled: false,
                               controller: view.emailController),
                           getInputItem(
                               hint: "Mobile",
+                              enabled: false,
                               validateDate: true,
                               controller: view.mobileController),
                           getInputItem(
@@ -110,10 +118,35 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               hint: "Location",
                               validateDate: true,
                               controller: view.locationController),
-                          getInputItem(
-                              hint: "Date of birth",
-                              validateDate: true,
-                              controller: view.dobController),
+                          space,
+                          InkWell(
+                            onTap: () {
+                              showDatePickerDialog(
+                                  context: context,
+                                  onDateSelected: ((value) {
+                                    print(value.toString());
+                                    view.dobController.text = value.toString();
+                                  }));
+                            },
+                            child: MyTextField(
+                              leftPadding: 0,
+                              rightPadding: 0,
+                              enable: false,
+                              fillColor: AppColor.whiteColor,
+                              textColor: AppColor.blackColor,
+                              hintColor: AppColor.blackColor,
+                              labelColor: AppColor.blackColor,
+                              hintText: "Date of birth",
+                              controller: view.dobController,
+                              labelText: "Date of birth",
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
+                          ),
                           getInputItem(
                               hint: "Nationality",
                               validateDate: true,
@@ -184,26 +217,20 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
                               return null;
                             },
                           ),
-                          space,
                           getInputItem(
                               hint: "School",
                               controller: view.schoolController),
-                          space,
                           getInputItem(
                               hint: "Work Experience",
                               controller: view.workExperienceController),
-                          space,
                           getInputItem(
                               hint: "Certificates",
                               controller: view.certificationController),
-                          space,
                           getInputItem(
                               hint: "Exams", controller: view.examsController),
-                          space,
                           getInputItem(
                               hint: "License",
                               controller: view.licenseController),
-                          space,
                           getInputItem(
                               hint: "Preferred Location",
                               controller: view.preferredlocationController),
@@ -239,12 +266,16 @@ class _UpdateProfileScreenState extends State<UpdateProfileScreen> {
   }
 
   getInputItem(
-      {required String hint, required controller, bool validateDate = false}) {
+      {required String hint,
+      bool enabled = true,
+      required controller,
+      bool validateDate = false}) {
     return Column(
       children: [
         space,
         MyTextField(
           leftPadding: 0,
+          enable: enabled,
           onChanged: (onChange) {},
           controller: controller,
           rightPadding: 0,

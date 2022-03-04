@@ -4,18 +4,19 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
-import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
+import 'package:magnijobs_rnr/screens/update_employer_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
-import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
-import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../models/all_jobs_model.dart';
+import '../models/countries_model.dart';
+import '../profile_settting_screen.dart';
+import '../view_models/company_profile_view_model.dart';
 import 'all_jobs_screen.dart';
-import 'choose_signin/choose_signin_screen.dart';
 
 class EmployeePortalScreen extends StatefulWidget {
   const EmployeePortalScreen({Key? key}) : super(key: key);
@@ -43,16 +44,18 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
           appBar: myAppBar(title: "Employee Portal", actions: [
             InkWell(
               onTap: () {
-                Provider.of<ProfileSettingViewModel>(myContext!, listen: false)
+                Navigator.of(myContext!).push(MaterialPageRoute(
+                    builder: (context) => ProfileSettingScreen()));
+                /*  Provider.of<ProfileSettingViewModel>(myContext!, listen: false)
                     .logout(onComplete: () {
                   UserDefaults().clearAll();
                   Navigator.of(context).pushReplacement(MaterialPageRoute(
                       builder: (context) => ChooseSignInScreen()));
-                });
+                });*/
               },
               child: const Padding(
                 padding: EdgeInsets.all(18.0),
-                child: SvgViewer(svgPath: "assets/icons/ic_logout.svg"),
+                child: SvgViewer(svgPath: "assets/icons/ic_settings.svg"),
               ),
             )
           ]),
@@ -79,7 +82,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        UserDefaults.getUserSession()?.user?.name ?? "",
+                        UserDefaults.getUserSession()?.user?.firstName ?? "",
                         style: AppTextStyles.textStyleBoldSubTitleLarge,
                       ),
                       SizedBox(
@@ -118,11 +121,8 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     buttonText: "Update Profile",
                     textColor: AppColor.whiteColor,
                     onTap: () {
-                      Provider.of<UpdateMyProfileViewModel>(myContext!,
-                              listen: false)
-                          .resetState();
                       Navigator.of(myContext!).push(MaterialPageRoute(
-                          builder: (context) => UpdateProfileScreen()));
+                          builder: (context) => UpdateEmployerProfileScreen()));
                     },
                   ),
                   space,
@@ -132,65 +132,75 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     style: AppTextStyles.textStyleBoldSubTitleLarge,
                   ),
                   space,
-                  MyDropDown(
-                    leftPadding: 200.w,
-                    rightPadding: 200.w,
-                    onChange: (value) {},
-                    hintText: "Country",
-                    labelText: "",
-                    labelColor: AppColor.redColor,
-                    borderColor: AppColor.alphaGrey,
-                    fillColor: AppColor.greyColor.withOpacity(0.34),
-                    suffixIcon: "assets/icons/drop_down_ic.svg",
-                    itemFuntion: [
-                      DropdownMenuItem(
-                        value: "A",
-                        child: Text(
-                          "A",
-                          style: AppTextStyles.textStyleBoldBodySmall,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: "B",
-                        child: Text(
-                          "B",
-                          style: AppTextStyles.textStyleBoldBodySmall,
-                        ),
-                      ),
-                    ],
-                    validator: (string) {
-                      return null;
+                  StreamBuilder(
+                    stream: Provider.of<CompanyProfileViewModel>(myContext!,
+                            listen: false)
+                        .loadCountries(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Countries?>> snapshot) {
+                      if (snapshot.hasData) {
+                        return MyDropDown(
+                          onChange: (value) {
+                            //  view.selectedCountryId = value.toString();
+                          },
+                          hintText: "Country",
+                          labelText: "",
+                          labelColor: AppColor.redColor,
+                          borderColor: AppColor.alphaGrey,
+                          fillColor: AppColor.whiteColor,
+                          suffixIcon: "assets/icons/drop_down_ic.svg",
+                          itemFuntion: snapshot.data!
+                              .map((e) => DropdownMenuItem(
+                                    value: e?.id.toString() ?? '',
+                                    child: Text(
+                                      e?.name ?? '',
+                                      style:
+                                          AppTextStyles.textStyleBoldBodySmall,
+                                    ),
+                                  ))
+                              .toList(),
+                          validator: (string) {
+                            return null;
+                          },
+                        );
+                      }
+                      return Center(
+                          child: Container(child: CircularProgressIndicator()));
                     },
                   ),
                   space,
-                  MyDropDown(
-                    leftPadding: 200.w,
-                    rightPadding: 200.w,
-                    onChange: (value) {},
-                    hintText: "Job",
-                    labelText: "",
-                    labelColor: AppColor.redColor,
-                    borderColor: AppColor.alphaGrey,
-                    fillColor: AppColor.greyColor.withOpacity(0.34),
-                    suffixIcon: "assets/icons/drop_down_ic.svg",
-                    itemFuntion: [
-                      DropdownMenuItem(
-                        value: "A",
-                        child: Text(
-                          "A",
-                          style: AppTextStyles.textStyleBoldBodySmall,
-                        ),
-                      ),
-                      DropdownMenuItem(
-                        value: "B",
-                        child: Text(
-                          "B",
-                          style: AppTextStyles.textStyleBoldBodySmall,
-                        ),
-                      ),
-                    ],
-                    validator: (string) {
-                      return null;
+                  StreamBuilder(
+                    stream: Provider.of<CompanyProfileViewModel>(myContext!,
+                            listen: false)
+                        .loadJobs(),
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Jobs?>> snapshot) {
+                      if (snapshot.hasData) {
+                        return MyDropDown(
+                          onChange: (value) {},
+                          hintText: "Jobs",
+                          labelText: "",
+                          labelColor: AppColor.redColor,
+                          borderColor: AppColor.alphaGrey,
+                          fillColor: AppColor.whiteColor,
+                          suffixIcon: "assets/icons/drop_down_ic.svg",
+                          itemFuntion: snapshot.data!
+                              .map((e) => DropdownMenuItem(
+                                    value: e?.id.toString() ?? '',
+                                    child: Text(
+                                      e?.job ?? '',
+                                      style:
+                                          AppTextStyles.textStyleBoldBodySmall,
+                                    ),
+                                  ))
+                              .toList(),
+                          validator: (string) {
+                            return null;
+                          },
+                        );
+                      }
+                      return Center(
+                          child: Container(child: CircularProgressIndicator()));
                     },
                   ),
                   space,
@@ -246,8 +256,15 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     backgroundColor: Colors.grey.shade200,
                     child: CircleAvatar(
                       radius: 250.r,
-                      backgroundImage: const AssetImage(
-                          'assets/images/place_your_image.png'),
+                      backgroundImage:
+                          (UserDefaults.getUserSession()?.user?.profile != null)
+                              ? Image.network(UserDefaults.getUserSession()
+                                          ?.user
+                                          ?.profile ??
+                                      "")
+                                  .image
+                              : const AssetImage(
+                                  'assets/images/place_your_image.png'),
                     ),
                   ),
                   Positioned(

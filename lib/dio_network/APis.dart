@@ -26,7 +26,10 @@ enum APIType {
   forgotPassword,
   sendMailForgotPassword,
   applyForJob,
-  all_countries
+  all_countries,
+  update_tutor_profile,
+  update_employer_profile,
+  place_booking
 }
 
 class ApiConstants {
@@ -59,4 +62,7 @@ class ApiConstants {
   static const sendMailForgotPassword = "password/email";
   static const applyForJob = "apply-job";
   static const all_countries = "all-countries";
+  static const update_tutor_profile = "update-tutor-profile";
+  static const update_employer_profile = "update-employer-profile";
+  static const place_booking = "place-booking";
 }

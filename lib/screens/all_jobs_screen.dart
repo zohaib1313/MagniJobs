@@ -12,6 +12,8 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../common_widgets/app_popups.dart';
+
 class AllJobScreen extends StatefulWidget {
   AllJobScreen({Key? key}) : super(key: key);
   static const id = "AllJobScreen";
@@ -49,7 +51,7 @@ class _AllJobScreenState extends State<AllJobScreen> {
                 InkWell(
                   onTap: () {
                     if (!view.toogle) {
-                      view.doSearch();
+                      // view.doSearch();
                     } else {
                       view.toogle = !view.toogle;
                       setState(() {});
@@ -78,9 +80,9 @@ class _AllJobScreenState extends State<AllJobScreen> {
               physics: const BouncingScrollPhysics(),
               shrinkWrap: true,
               // itemCount: 3,
-              itemCount: view.alJobs.length,
+              itemCount: view.filteredJobs.length,
               itemBuilder: (context, index) {
-                return getJobInforCard(view.alJobs[index]);
+                return getJobInforCard(view.filteredJobs[index]);
               },
             ),
           ),
@@ -201,7 +203,11 @@ class _AllJobScreenState extends State<AllJobScreen> {
                                         onTap: () {
                                           view.applyForJob(
                                               id: job.id ?? 0,
-                                              completion: () {});
+                                              completion: () {
+                                                AppPopUps.showAlertDialog(
+                                                    message:
+                                                        'Application was sent successfully');
+                                              });
                                         },
                                       ),
                                       space,
@@ -219,7 +225,12 @@ class _AllJobScreenState extends State<AllJobScreen> {
                       buttonText: "Apply",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        view.applyForJob(id: job.id ?? 0, completion: () {});
+                        view.applyForJob(
+                            id: job.id ?? 0,
+                            completion: () {
+                              AppPopUps.showAlertDialog(
+                                  message: 'Application was sent successfully');
+                            });
                       },
                     ),
                   ],

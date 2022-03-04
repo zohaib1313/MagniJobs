@@ -9,6 +9,12 @@ import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:provider/provider.dart';
+
+import '../../models/all_jobs_model.dart';
+import '../../utils/user_defaults.dart';
+import '../../view_models/all_jobs_view_model.dart';
+import '../job_posted/job_posted_screen.dart';
 
 class CountryAndJobScreen extends StatefulWidget {
   CountryAndJobModel countryAndJobModel;
@@ -35,6 +41,26 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
+          floatingActionButton: Container(
+            width: 500.w,
+            height: 80.h,
+            child: FloatingActionButton(
+                backgroundColor: AppColor.primaryBlueColor,
+                onPressed: () {
+                  Provider.of<AllJobsViewModel>(myContext!, listen: false)
+                      .getAllJobs(completion: (List<Jobs> jobs) {
+                    Provider.of<AllJobsViewModel>(myContext!, listen: false)
+                        .getFilterJobsOnEmployerId(
+                            id: (UserDefaults?.getUserSession()?.user?.id ?? 0)
+                                .toString(),
+                            completion: (List<Jobs> jobss) {
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (context) => JobPostedScreen()));
+                            });
+                  });
+                },
+                child: const Icon(Icons.arrow_forward)),
+          ),
           appBar: myAppBar(title: "Country & Job", actions: [
             const Padding(
               padding: EdgeInsets.all(18.0),
@@ -42,7 +68,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
-          body: /*(widget.countryAndJobModel.candidates?.length ?? 0)*/ 1 != 0
+          body: (widget.countryAndJobModel.candidates?.length ?? 0) != 0
               ? SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Container(
@@ -59,11 +85,12 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                       ),
                       child: ListView.builder(
                           itemCount:
-                              1 /*widget.countryAndJobModel.candidates?.length ?? 0*/,
+                              widget.countryAndJobModel.candidates?.length ?? 0,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
-                            return getJobSeekerWidget();
+                            return getJobSeekerWidget(
+                                widget.countryAndJobModel.candidates![index]);
                           })),
                 )
               : Center(
@@ -77,7 +104,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
     );
   }
 
-  getJobSeekerWidget() {
+  getJobSeekerWidget(Candidates? candidate) {
     return Container(
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
@@ -94,7 +121,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           ),
           space,
           Text(
-            "Rebecca James",
+            candidate?.firstName ?? '',
             overflow: TextOverflow.ellipsis,
             style: AppTextStyles.textStyleBoldSubTitleLarge
                 .copyWith(color: AppColor.primaryBlueColor),
@@ -110,16 +137,19 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_location.svg",
-                        text: "Bexel United Kingdom"),
+                        text: candidate?.location ?? ''),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_timer.svg", text: "29 Years"),
+                        icon: "assets/icons/ic_timer.svg",
+                        text: candidate?.dob ?? ''),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_person.svg", text: "British"),
+                        icon: "assets/icons/ic_person.svg",
+                        text: candidate?.nationality ?? ''),
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_gender.svg", text: "Female"),
+                        icon: "assets/icons/ic_gender.svg",
+                        text: candidate?.gender ?? ''),
                   ],
                 ),
               ),
@@ -162,7 +192,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                     ],
                                   ),
                                   space,
-                                  Text("Rebecca James",
+                                  Text(candidate?.firstName ?? '-',
                                       style: AppTextStyles
                                           .textStyleBoldSubTitleLarge
                                           .copyWith(
@@ -175,14 +205,24 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                     physics: const BouncingScrollPhysics(),
                                     child: Column(
                                       children: [
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
-                                        getBottomSheetRowInfo(),
+                                        getBottomSheetRowInfo('First Name',
+                                            candidate?.firstName ?? "-"),
+                                        getBottomSheetRowInfo('Last Name',
+                                            candidate?.lastName ?? "-"),
+                                        getBottomSheetRowInfo('Date of birth',
+                                            candidate?.dob ?? "-"),
+                                        getBottomSheetRowInfo('Nationality',
+                                            candidate?.nationality ?? "-"),
+                                        getBottomSheetRowInfo('Location',
+                                            candidate?.location ?? "-"),
+                                        getBottomSheetRowInfo(
+                                            'Gender', candidate?.gender ?? "-"),
+                                        getBottomSheetRowInfo('Martial Status',
+                                            candidate?.maritalStatus ?? "-"),
+                                        getBottomSheetRowInfo(
+                                            'Mobile', candidate?.mobile ?? "-"),
+                                        getBottomSheetRowInfo('Address',
+                                            candidate?.address ?? "-"),
                                         space,
                                         space,
                                         Row(
@@ -250,22 +290,22 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
     );
   }
 
-  getBottomSheetRowInfo() {
+  getBottomSheetRowInfo(String key, String value) {
     return Column(
       children: [
         space,
         Row(
           children: [
-            const Expanded(
+            Expanded(
               flex: 2,
-              child: Text("Martial Status"),
+              child: Text(key),
             ),
             Expanded(
               flex: 3,
               child: Button(
                 cornerRadius: 25.r,
                 padding: 18.h,
-                buttonText: "Single",
+                buttonText: value,
                 textColor: AppColor.whiteColor,
               ),
             ),

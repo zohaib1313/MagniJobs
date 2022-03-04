@@ -40,20 +40,22 @@ class User {
   String? lastName;
   String? email;
   String? mobile;
-  Null? emailVerifiedAt;
+  String? emailVerifiedAt;
   String? utype;
   String? otp;
   int? verified;
-  Null? phoneVerifiedAt;
-  Null? verification;
+  String? phoneVerifiedAt;
+  String? verification;
   String? createdAt;
   String? updatedAt;
-  Null? deletedAt;
+  String? deletedAt;
+  String? profile;
 
   User(
       {this.id,
       this.name,
       this.firstName,
+      this.profile,
       this.lastName,
       this.email,
       this.mobile,
@@ -77,6 +79,7 @@ class User {
     emailVerifiedAt = json['email_verified_at'];
     utype = json['utype'];
     otp = json['otp'];
+    profile = json['profile'];
     verified = json['verified'];
     phoneVerifiedAt = json['phone_verified_at'];
     verification = json['verification'];
@@ -96,6 +99,7 @@ class User {
     data['email_verified_at'] = this.emailVerifiedAt;
     data['utype'] = this.utype;
     data['otp'] = this.otp;
+    data['profile'] = this.profile;
     data['verified'] = this.verified;
     data['phone_verified_at'] = this.phoneVerifiedAt;
     data['verification'] = this.verification;

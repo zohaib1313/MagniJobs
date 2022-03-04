@@ -283,14 +283,14 @@ class _JobPostScreenState extends State<JobPostScreen> {
                         buttonText: "Submit",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Provider.of<CountryAndJobViewModel>(myContext!,
+                          /*   Provider.of<CountryAndJobViewModel>(myContext!,
                                   listen: false)
                               .getAllCandidates(completion:
                                   (CountryAndJobModel countryAndJobModel) {
                             Navigator.of(myContext!).push(MaterialPageRoute(
                                 builder: (c) => CountryAndJobScreen(
                                     countryAndJobModel: countryAndJobModel)));
-                          });
+                          });*/
                           if (view.formKey.currentState!.validate()) {
                             if (((view.selectedCompanyId ?? '').isNotEmpty) &&
                                 ((view.selectedCountryId).isNotEmpty)) {
@@ -306,8 +306,8 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                           .getAllCandidates(completion:
                                               (CountryAndJobModel
                                                   countryAndJobModel) {
-                                        Navigator.of(myContext!).push(
-                                            MaterialPageRoute(
+                                        Navigator.of(myContext!)
+                                            .pushReplacement(MaterialPageRoute(
                                                 builder: (c) =>
                                                     CountryAndJobScreen(
                                                         countryAndJobModel:

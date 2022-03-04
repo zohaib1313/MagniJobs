@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -12,9 +13,11 @@ import '../routes.dart';
 
 class ForgotPasswordEnterMailScreen extends StatefulWidget {
   static const id = "ForgotPasswordEnterMailScreen";
+  final String mail;
 
   const ForgotPasswordEnterMailScreen({
     Key? key,
+    required this.mail,
   }) : super(key: key);
 
   @override
@@ -29,6 +32,7 @@ class _ForgotPasswordEnterMailScreenState
 
   @override
   Widget build(BuildContext context) {
+    view.emailController.text = widget.mail;
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColor.whiteColor,
@@ -96,6 +100,7 @@ class _ForgotPasswordEnterMailScreenState
                                 space,
                                 MyTextField(
                                   leftPadding: 0,
+                                  enable: false,
                                   controller: view.emailController,
                                   rightPadding: 0,
                                   hintText: "Email",
@@ -152,7 +157,7 @@ class _ForgotPasswordEnterMailScreenState
                                       child: Icon(view.hidePassword2
                                           ? Icons.remove_red_eye_rounded
                                           : Icons.visibility_off_outlined)),
-                                  controller: view.passwordController,
+                                  controller: view.confirmPasswordController,
                                   hintText: "Confirm Password",
                                   obsecureText: view.hidePassword2,
                                   prefixIcon: "assets/icons/ic_lock.svg",
@@ -192,16 +197,12 @@ class _ForgotPasswordEnterMailScreenState
                                   textColor: AppColor.whiteColor,
                                   color: AppColor.primaryBlueDarkColor,
                                   onTap: () {
-                                    // Navigator.of(myContext!)
-                                    //     .pushNamed(VerifyNumberScreen.id);
                                     if (view.formKey.currentState!.validate()) {
                                       view.resetPassword(completion: () {
-                                        printWrapped('****Signed in*****');
-                                        /*       Navigator.of(context)
-                                            .push(MaterialPageRoute(
-                                          builder: (context) =>
-                                              VerifyNumberScreen(),
-                                        ));*/
+                                        printWrapped(
+                                            '****password changed *****');
+                                        AppPopUps.showAlertDialog(
+                                            message: 'Password Reset Success');
                                       });
                                     }
                                   },

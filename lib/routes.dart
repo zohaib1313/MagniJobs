@@ -11,12 +11,15 @@ import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
 import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/tutor_sign_up_screen.dart';
-import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
+import 'package:magnijobs_rnr/screens/update_candidate_screen.dart';
+import 'package:magnijobs_rnr/screens/update_employer_screen.dart';
+import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model.dart';
+import 'package:magnijobs_rnr/view_models/calender_applicant_bookings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
@@ -30,8 +33,10 @@ import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_employer_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/update_job_post_view_model.dart';
-import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_tutor_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/upload_my_business_registration_view_model.dart';
 import 'package:magnijobs_rnr/view_models/upload_my_covid_certificate_view_model.dart';
 import 'package:magnijobs_rnr/view_models/upload_my_national_id_view_model.dart';
@@ -55,7 +60,9 @@ final Map<String, Widget Function(BuildContext)> routes = {
   AllJobScreen.id: (context) => AllJobScreen(),
   ApplicantSignUp.id: (context) => ApplicantSignUp(),
   EmployeePortalScreen.id: (context) => const EmployeePortalScreen(),
-  UpdateProfileScreen.id: (context) => UpdateProfileScreen(),
+  UpdateCandidateScreen.id: (context) => UpdateCandidateScreen(),
+  UpdateEmployerProfileScreen.id: (context) => UpdateEmployerProfileScreen(),
+  UpdateTutorProfileScreen.id: (context) => UpdateTutorProfileScreen(),
   TutorSignUpScreen.id: (context) => TutorSignUpScreen(),
   TutorProfileScreen.id: (context) => TutorProfileScreen(),
 };
@@ -72,8 +79,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => MyProfileViewModel()),
   ChangeNotifierProvider<JobseekerViewModel>(
       create: (_) => JobseekerViewModel()),
-  ChangeNotifierProvider<UpdateMyProfileViewModel>(
-      create: (_) => UpdateMyProfileViewModel()),
   ChangeNotifierProvider<JobPostViewModel>(create: (_) => JobPostViewModel()),
   ChangeNotifierProvider<UpdateJobPostViewModel>(
       create: (_) => UpdateJobPostViewModel()),
@@ -109,4 +114,12 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => ProfileSettingViewModel()),
   ChangeNotifierProvider<CompanyProfileViewModel>(
       create: (_) => CompanyProfileViewModel()),
+  ChangeNotifierProvider<UpdateCandidateProfileViewModel>(
+      create: (_) => UpdateCandidateProfileViewModel()),
+  ChangeNotifierProvider<UpdateTutorProfileViewModel>(
+      create: (_) => UpdateTutorProfileViewModel()),
+  ChangeNotifierProvider<UpdateEmployerProfileViewModel>(
+      create: (_) => UpdateEmployerProfileViewModel()),
+  ChangeNotifierProvider<CalenderApplicantBookingsViewModel>(
+      create: (_) => CalenderApplicantBookingsViewModel()),
 ];

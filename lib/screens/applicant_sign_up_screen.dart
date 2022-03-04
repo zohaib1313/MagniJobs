@@ -10,7 +10,9 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../models/countries_model.dart';
 import '../routes.dart';
+import '../view_models/company_profile_view_model.dart';
 
 class ApplicantSignUp extends StatefulWidget {
   ApplicantSignUp({Key? key}) : super(key: key);
@@ -111,28 +113,67 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             },
                           ),
                           space,
-                          MyTextField(
-                            fillColor: AppColor.alphaGrey,
-                            hintText: "Location",
-                            controller: view.locationController,
-                            validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.locationController.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Location",
+                                  labelText: "",
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.alphaGrey,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    return null;
+                                  },
+                                );
                               }
-                              return null;
+                              return Center(
+                                  child: Container(
+                                      child: CircularProgressIndicator()));
                             },
                           ),
                           space,
-                          MyTextField(
-                            fillColor: AppColor.alphaGrey,
-                            hintText: "Date of Birth",
-                            controller: view.dobController,
-                            validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
-                              return null;
+                          InkWell(
+                            onTap: () {
+                              showDatePickerDialog(
+                                  context: context,
+                                  onDateSelected: ((value) {
+                                    print(value.toString());
+                                    view.dobController.text = value.toString();
+                                  }));
                             },
+                            child: MyTextField(
+                              fillColor: AppColor.alphaGrey,
+                              hintText: "Date of Birth",
+                              enable: false,
+                              controller: view.dobController,
+                              validator: (string) {
+                                if (string == null || string.isEmpty) {
+                                  return 'Enter Value';
+                                }
+                                return null;
+                              },
+                            ),
                           ),
                           space,
                           MyTextField(
@@ -213,7 +254,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                               return null;
                             },
                           ),
-                          space,
                           space,
                           MyDropDown(
                             onChange: (value) {
@@ -376,7 +416,9 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                       if (view.nationalIdImage != null) {
                         view.registerApplicant(completion: () {
                           AppPopUps.showAlertDialog(
-                              message: "User created Successfully");
+                              message: "User created Successfully go to login");
+                          view.resetState();
+                          Navigator.of(myContext!).pop();
                         });
                       } else {
                         AppPopUps.showAlertDialog(

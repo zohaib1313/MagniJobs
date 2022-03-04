@@ -68,7 +68,7 @@ class UserDefaults {
       ..setString('userData', user)
       ..setString('type', type));
     if (kDebugMode) {
-      printWrapped("user session saved ${user}");
+      printWrapped("user session saved type= ${type} ${user}");
       printWrapped(user.toString());
     }
   }

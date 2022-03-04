@@ -65,7 +65,7 @@ myAppBar(
               textInputAction: TextInputAction.search,
               decoration: InputDecoration(
                   prefixIcon: AnimatedOpacity(
-                      duration: const Duration(seconds: 1),
+                      duration: const Duration(seconds: 2),
                       opacity: toogled ? 0 : 1,
                       child: IconButton(
                         icon: const Icon(Icons.arrow_back_ios),
@@ -126,5 +126,17 @@ Future<void> showDatePickerDialog(
       lastDate: DateTime(3905));
   if (picked != null && picked != DateTime.now()) {
     onDateSelected(DateFormat('yyyy-MM-dd').format(picked));
+  }
+}
+
+Future<void> showMyTimePicker(
+    {required BuildContext context,
+    required Function(dynamic date) onTimeSelected,
+    TimePickerEntryMode initialDatePickerMode =
+        TimePickerEntryMode.dial}) async {
+  final TimeOfDay? picked =
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  if (picked != null) {
+    onTimeSelected(picked.period.name);
   }
 }

@@ -9,10 +9,12 @@ import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 
+import '../models/signin_model.dart';
 import '../routes.dart';
 
-class UpdateMyProfileViewModel extends ChangeNotifier {
+class UpdateCandidateProfileViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
   File? nationalIdImage;
@@ -142,5 +144,25 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
+  }
+
+  void setValuesWithSharedPref() {
+    SignInModel? user = UserDefaults.getUserSession();
+    firstnameContoller.text = user?.user?.firstName ?? "";
+    lastNameController.text = user?.user?.lastName ?? "";
+    emailController.text = user?.user?.email ?? "";
+    mobileController.text = user?.user?.mobile ?? "";
+    addressController.text = '';
+    locationController.text = "";
+    dobController.text = "";
+    nationalityController.text = "";
+    genderController.text = "";
+    martialStatusController.text = "";
+    schoolController.text = "";
+    workExperienceController.text = "";
+    certificationController.text = "";
+    examsController.text = "";
+    preferredlocationController.text = "";
+    licenseController.text = "";
   }
 }

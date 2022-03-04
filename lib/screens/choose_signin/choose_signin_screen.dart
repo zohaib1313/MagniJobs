@@ -9,7 +9,6 @@ import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../../routes.dart';
-import '../attendie_profile_screen.dart';
 import '../tutor_sign_up_screen.dart';
 
 class ChooseSignInScreen extends StatefulWidget {
@@ -287,9 +286,9 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(myContext!).push(MaterialPageRoute(
+                              /* Navigator.of(myContext!).push(MaterialPageRoute(
                                   builder: (contxt) =>
-                                      AttendieProfileScreen()));
+                                      AttendieProfileScreen()));*/
                             },
                             child: Text(
                               " Sign up!",

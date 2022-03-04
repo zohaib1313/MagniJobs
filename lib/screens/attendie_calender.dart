@@ -29,10 +29,10 @@ class _AttendieCalenderState extends State<AttendieCalender> {
       child: SafeArea(
         child: Scaffold(
           appBar: myAppBar(title: "Calender", actions: [
-            const Padding(
+            /* const Padding(
               padding: EdgeInsets.all(18.0),
               child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-            )
+            )*/
           ]),
           backgroundColor: AppColor.alphaGrey,
           body: Container(

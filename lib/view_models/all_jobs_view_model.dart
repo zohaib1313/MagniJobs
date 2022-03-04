@@ -16,12 +16,11 @@ extension MyIterable<E> on Iterable<E> {
 
 class AllJobsViewModel extends ChangeNotifier {
   List<Jobs> alJobs = [];
-  List<Jobs> filteredJobsOnEmployerId = [];
+  List<Jobs> filteredJobs = [];
   bool isRecentFilterd = false;
   bool isSortFiltered = false;
-  List<Jobs> searchedList = [];
 
-  bool _toogle = false;
+  bool _toogle = true;
 
   bool get toogle => _toogle;
 
@@ -33,24 +32,32 @@ class AllJobsViewModel extends ChangeNotifier {
   }
 
   void getFilterJobsOnEmployerId({completion, required String id}) {
-    filteredJobsOnEmployerId.clear();
+    filteredJobs.clear();
     for (var job in alJobs) {
       // if ((job.employer ?? "") == id) {
-      filteredJobsOnEmployerId.add(job);
+      filteredJobs.add(job);
       // }
     }
-    completion(filteredJobsOnEmployerId);
+    completion(filteredJobs);
   }
 
   void filterJobsOnDate() {
     AppPopUps().showProgressDialog(context: myContext);
+    /* filteredJobsOnEmployerId.clear();
+    for (var element in alJobs) {
+      int aDate = DateTime.parse(element.createdAt ?? '').microsecondsSinceEpoch;
+      int bDate = DateTime.parse(element.createdAt ?? '').microsecondsSinceEpoch;
+
+      aDate.compareTo(bDate)
+
+    }*/
 
     printWrapped("filtering ");
-    filteredJobsOnEmployerId.sort((a, b) {
-      int aDate = DateTime.parse(a.createdAt ?? '').microsecondsSinceEpoch;
-      int bDate = DateTime.parse(b.createdAt ?? '').microsecondsSinceEpoch;
+    filteredJobs.sort((a, b) {
+      num aDate = DateTime.parse(a.createdAt ?? '').microsecondsSinceEpoch;
+      num bDate = DateTime.parse(b.createdAt ?? '').microsecondsSinceEpoch;
       printWrapped(aDate.toString());
-      return aDate.compareTo(bDate);
+      return isRecentFilterd ? aDate.compareTo(bDate) : bDate.compareTo(aDate);
     });
     isRecentFilterd = !isRecentFilterd;
     AppPopUps().dissmissDialog();
@@ -60,7 +67,13 @@ class AllJobsViewModel extends ChangeNotifier {
 
   void filterJobsOnSort() {
     AppPopUps().showProgressDialog(context: myContext);
-    filteredJobsOnEmployerId.sortedBy((e) => e.salary ?? "");
+
+    filteredJobs.sort((a, b) {
+      num aDate = num.parse(a.salary ?? '0');
+      num bDate = num.parse(b.salary ?? '0');
+
+      return isSortFiltered ? aDate.compareTo(bDate) : bDate.compareTo(aDate);
+    });
     isSortFiltered = !isSortFiltered;
     AppPopUps().dissmissDialog();
 
@@ -83,6 +96,7 @@ class AllJobsViewModel extends ChangeNotifier {
         .then((response) {
       AppPopUps().dissmissDialog();
       alJobs = response.response?.data?.jobs?.jobs ?? [];
+      filteredJobs = alJobs;
       completion(alJobs);
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -114,6 +128,7 @@ class AllJobsViewModel extends ChangeNotifier {
         .then((response) {
       AppPopUps().dissmissDialog();
       completion();
+      print(response);
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();
@@ -128,7 +143,7 @@ class AllJobsViewModel extends ChangeNotifier {
   }
 
   void doSearch() {
-    searchedList.clear();
+    filteredJobs.clear();
     for (var element in alJobs) {
       if (searchTextController.text
               .toLowerCase()
@@ -138,7 +153,10 @@ class AllJobsViewModel extends ChangeNotifier {
               .contains(element.job ?? "".toLowerCase()) ||
           searchTextController.text
               .toLowerCase()
-              .contains(element.jobDescription ?? "".toLowerCase())) {}
+              .contains(element.jobDescription ?? "".toLowerCase())) {
+        filteredJobs.add(element);
+        notifyListeners();
+      }
     }
   }
 }

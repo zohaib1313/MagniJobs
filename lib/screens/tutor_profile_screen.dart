@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -80,7 +81,12 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                       child: Column(
                         children: [
                           getRowProfileItem(
-                              "assets/icons/ic_edit_person.svg", "Profile"),
+                              "assets/icons/ic_edit_person.svg", "Profile",
+                              onTap: () {
+                            Navigator.of(myContext!).push(MaterialPageRoute(
+                                builder: (context) =>
+                                    UpdateTutorProfileScreen()));
+                          }),
                           getRowProfileItem(
                               "assets/icons/ic_settings.svg", "Settings",
                               onTap: () {
@@ -206,8 +212,14 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                     backgroundColor: Colors.grey.shade200,
                     child: CircleAvatar(
                       radius: 250.r,
-                      backgroundImage: const AssetImage(
-                          'assets/images/place_your_image.png'),
+                      backgroundImage: (UserDefaults.getUserSession()
+                                  ?.user
+                                  ?.profile !=
+                              null)
+                          ? Image.network('assets/images/place_your_image.png')
+                              .image
+                          : const AssetImage(
+                              'assets/images/place_your_image.png'),
                     ),
                   ),
                   /*   Positioned(
@@ -238,7 +250,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
           ),
           space,
           Text(
-            UserDefaults.getUserSession()?.user?.name ?? "",
+            UserDefaults.getUserSession()?.user?.firstName ?? "",
             style: AppTextStyles.textStyleBoldSubTitleLarge,
           ),
         ],
@@ -247,7 +259,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
   }
 
   getRowProfileItem(String icon, String title, {onTap}) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
       child: Column(
         children: [

@@ -9,7 +9,11 @@ import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
+import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:provider/provider.dart';
+
+import 'common_widgets/app_popups.dart';
+import 'forgot_password_enter_mail_screen.dart';
 
 class ProfileSettingScreen extends StatefulWidget {
   ProfileSettingScreen({Key? key}) : super(key: key);
@@ -34,10 +38,10 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: myAppBar(title: "Setting", actions: [
-            const Padding(
+            /* const Padding(
               padding: EdgeInsets.all(18.0),
               child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-            )
+            )*/
           ]),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
@@ -93,7 +97,30 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             children: [
                               getRowProfileItem(
                                   "assets/icons/ic_change_password.svg",
-                                  "Change Password"),
+                                  "Change Password", onTap: () {
+                                AppPopUps.displayTextInputDialog(
+                                    title: "Enter mail where we will send OTP",
+                                    message: "Send Otp",
+                                    hint: "email",
+                                    onSubmit: (String text) {
+                                      if (text.isNotEmpty) {
+                                        Provider.of<SignInViewModel>(myContext!,
+                                                listen: false)
+                                            .sendForgotPassword(
+                                                completion: () {
+                                                  Navigator.of(myContext!).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ForgotPasswordEnterMailScreen(
+                                                        mail: text,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                mail: text);
+                                      }
+                                    });
+                              }),
                               getRowProfileItem(
                                   "assets/icons/ic_notifications.svg",
                                   "Notifications"),
@@ -228,45 +255,48 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
     );
   }
 
-  getRowProfileItem(String icon, String title, {String? endText}) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          children: [
-            SvgViewer(svgPath: icon),
-            SizedBox(
-              width: 35.w,
-            ),
-            Expanded(
-              child: Text(
-                title,
-                style: AppTextStyles.textStyleBoldBodyMedium,
+  getRowProfileItem(String icon, String title, {String? endText, onTap}) {
+    return InkWell(
+      onTap: onTap ?? () {},
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10.h,
+          ),
+          Row(
+            children: [
+              SvgViewer(svgPath: icon),
+              SizedBox(
+                width: 35.w,
               ),
-            ),
-            SizedBox(
-              width: 20.w,
-            ),
-            Row(
-              children: [
-                Text(
-                  endText ?? "",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.textStyleNormalBodySmall
-                      .copyWith(color: AppColor.greyColor),
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTextStyles.textStyleBoldBodyMedium,
                 ),
-                Icon(Icons.navigate_next),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10.h,
-        )
-      ],
+              ),
+              SizedBox(
+                width: 20.w,
+              ),
+              Row(
+                children: [
+                  Text(
+                    endText ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.textStyleNormalBodySmall
+                        .copyWith(color: AppColor.greyColor),
+                  ),
+                  Icon(Icons.navigate_next),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10.h,
+          )
+        ],
+      ),
     );
   }
 

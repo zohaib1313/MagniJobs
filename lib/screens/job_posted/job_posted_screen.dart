@@ -152,11 +152,10 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                 space,
                 Expanded(
                   child: ListView.builder(
-                      physics: BouncingScrollPhysics(),
-                      itemCount: view.filteredJobsOnEmployerId.length,
+                      physics: const BouncingScrollPhysics(),
+                      itemCount: view.filteredJobs.length,
                       itemBuilder: (context, index) {
-                        return getRowJob(
-                            job: view.filteredJobsOnEmployerId[index]);
+                        return getRowJob(job: view.filteredJobs[index]);
                       }),
                 ),
               ],

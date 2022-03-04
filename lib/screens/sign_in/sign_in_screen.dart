@@ -194,7 +194,9 @@ class _SigInScreenState extends State<SigInScreen> {
                                                               MaterialPageRoute(
                                                                 builder:
                                                                     (context) =>
-                                                                        const ForgotPasswordEnterMailScreen(),
+                                                                        ForgotPasswordEnterMailScreen(
+                                                                  mail: text,
+                                                                ),
                                                               ),
                                                             );
                                                           },
@@ -287,7 +289,7 @@ class _SigInScreenState extends State<SigInScreen> {
         if (user != null) {
           UserDefaults.saveUserSession(user, widget.userType);
           view.resetState();
-          gotoRelevantScreenOnUserType();
+          gotoRelevantScreenOnUserType(userType: widget.userType);
         }
       } else {
         Provider.of<VerifyNumberViewModel>(myContext!, listen: false)
@@ -300,7 +302,7 @@ class _SigInScreenState extends State<SigInScreen> {
           if (user != null) {
             UserDefaults.saveUserSession(user, widget.userType);
             view.resetState();
-            gotoRelevantScreenOnUserType();
+            gotoRelevantScreenOnUserType(userType: widget.userType);
           }
         } else {
           AppPopUps.showConfirmDialog(
@@ -314,10 +316,11 @@ class _SigInScreenState extends State<SigInScreen> {
     });
   }
 
-  void gotoRelevantScreenOnUserType() {
-    String userType = UserDefaults?.getUserType() ?? "";
-
+  void gotoRelevantScreenOnUserType({required String userType}) {
+    printWrapped("ussss***************");
     printWrapped(userType);
+    printWrapped("***************");
+
     //todo
     // && isPhoneVerified
     if (userType.isNotEmpty) {
