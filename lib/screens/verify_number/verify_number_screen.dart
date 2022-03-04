@@ -153,14 +153,14 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
             printWrapped("verifying...");
-            Navigator.of(myContext!).pop(true);
+           // Navigator.of(myContext!).pop(true);
 
             ///todo
-            /* if (view.otpCodeController.text.isNotEmpty) {
+             if (view.otpCodeController.text.isNotEmpty) {
               view.verifyMyNumber(completion: () {
                 Navigator.of(myContext!).pop(true);
               });
-            }*/
+            }
           },
         ),
         space,
