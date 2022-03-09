@@ -32,6 +32,7 @@ import 'package:magnijobs_rnr/view_models/my_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
+import 'package:magnijobs_rnr/view_models/tutor_booking_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
 import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/update_employer_profile_view_model.dart';
@@ -122,4 +123,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => UpdateEmployerProfileViewModel()),
   ChangeNotifierProvider<CalenderApplicantBookingsViewModel>(
       create: (_) => CalenderApplicantBookingsViewModel()),
+  ChangeNotifierProvider<TutorBookingJobHistoryViewModel>(
+      create: (_) => TutorBookingJobHistoryViewModel()),
 ];

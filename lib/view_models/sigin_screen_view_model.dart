@@ -31,7 +31,7 @@ class SignInViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  signInUser(String type, {completion}) async {
+  signInCandidateUser(String type, {completion}) async {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
       "email": userNameController.text,
@@ -45,8 +45,81 @@ class SignInViewModel extends ChangeNotifier {
               APIType.loginUser,
               body: body,
             ),
-            create: () => APIResponse<SignInModel>(create: () => SignInModel()),
-            apiFunction: signInUser)
+            create: () => APIResponse<CandidateSignInModel>(
+                create: () => CandidateSignInModel()),
+            apiFunction: signInCandidateUser)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+
+      if (response.response?.data?.token != null) {
+        UserDefaults.setApiToken(response.response?.data?.token ?? '');
+        completion(response.response?.data);
+      }
+    }).catchError((error) {
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
+  }
+
+  signInEmployerUser(String type, {completion}) async {
+    AppPopUps().showProgressDialog(context: myContext);
+    Map<String, dynamic> body = {
+      "email": userNameController.text,
+      "password": userPasswordController.text,
+    };
+
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.loginUser,
+              body: body,
+            ),
+            create: () => APIResponse<EmployerSignInModel>(
+                create: () => EmployerSignInModel()),
+            apiFunction: signInEmployerUser)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+
+      if (response.response?.data?.token != null) {
+        UserDefaults.setApiToken(response.response?.data?.token ?? '');
+        completion(response.response?.data);
+      }
+    }).catchError((error) {
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
+  }
+
+  signInTutorUser(String type, {completion}) async {
+    AppPopUps().showProgressDialog(context: myContext);
+    Map<String, dynamic> body = {
+      "email": userNameController.text,
+      "password": userPasswordController.text,
+    };
+
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.loginUser,
+              body: body,
+            ),
+            create: () =>
+                APIResponse<TutorSignInModel>(create: () => TutorSignInModel()),
+            apiFunction: signInTutorUser)
         .then((response) {
       AppPopUps().dissmissDialog();
 

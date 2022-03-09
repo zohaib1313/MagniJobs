@@ -16,6 +16,7 @@ class CompanyProfileViewModel extends ChangeNotifier {
       StreamController.broadcast();
 
   String _selectedCountryId = '';
+  TextEditingController queryEditingController = TextEditingController();
 
   String get selectedCountryId => _selectedCountryId;
 
@@ -67,5 +68,6 @@ class CompanyProfileViewModel extends ChangeNotifier {
 
   void resetState() {
     _selectedCountryId = '';
+    queryEditingController.clear();
   }
 }

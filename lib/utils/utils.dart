@@ -8,7 +8,8 @@ import '../styles.dart';
 
 void printWrapped(String text) {
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+  pattern.allMatches(text).forEach(
+      (match) => print("\n********TAGGGG*********\n${match.group(0)}"));
 }
 
 String formatAmount(String? amount) {
@@ -19,13 +20,9 @@ myAppBar(
     {String? title,
     Color backGroundColor = AppColor.whiteColor,
     List<Widget>? actions,
-    bool showSearch = false,
     BuildContext? context,
-    bool toogled = false,
     bool goBack = true,
-    TextEditingController? searchTextController,
-    onTapCloseSearch,
-    onTap}) {
+    onBacKTap}) {
   return AppBar(
     centerTitle: true,
     elevation: 0,
@@ -35,46 +32,15 @@ myAppBar(
             icon: const SvgViewer(
               svgPath: "assets/icons/back_arrow_ic.svg",
             ),
-            onPressed: onTap ?? () => Navigator.of(context ?? myContext!).pop(),
+            onPressed:
+                onBacKTap ?? () => Navigator.of(context ?? myContext!).pop(),
           )
         : null,
     backgroundColor: backGroundColor,
-    title: showSearch
-        ? AnimatedContainer(
-            width: toogled
-                ? 0
-                : MediaQuery.of(context ?? myContext!).size.width * 0.5,
-            transform: Matrix4.translationValues(
-                toogled
-                    ? MediaQuery.of(context ?? myContext!).size.width * 0.5
-                    : 0,
-                0,
-                0),
-            duration: const Duration(seconds: 1),
-            height: kToolbarHeight * 0.8,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(15.0),
-              border: Border.all(
-                width: 1,
-                color: Colors.grey[600]!,
-              ),
-            ),
-            child: TextField(
-              controller: searchTextController ?? TextEditingController(),
-              textInputAction: TextInputAction.search,
-              decoration: InputDecoration(
-                  prefixIcon: AnimatedOpacity(
-                      duration: const Duration(seconds: 2),
-                      opacity: toogled ? 0 : 1,
-                      child: IconButton(
-                        icon: const Icon(Icons.arrow_back_ios),
-                        onPressed: onTapCloseSearch,
-                      )),
-                  border: InputBorder.none),
-            ),
-          )
-        : Text(title ?? "", style: AppTextStyles.textStyleBoldTitleLarge),
+    title: Text(
+      title ?? "",
+      style: AppTextStyles.textStyleBoldBodyMedium,
+    ),
   );
 }
 

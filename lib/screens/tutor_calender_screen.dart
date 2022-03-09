@@ -33,12 +33,7 @@ class _TutorCalenderScreenState extends State<TutorCalenderScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Calender", actions: [
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-            )
-          ]),
+          appBar: myAppBar(title: "Calender", actions: []),
           backgroundColor: AppColor.alphaGrey,
           body: Container(
             // height: MediaQuery.of(context).size.height * 0.8,

@@ -29,7 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
     Timer(
         const Duration(seconds: 3),
         () => {
-              if (UserDefaults.getUserSession() != null)
+              if (UserDefaults.getUserType() != null)
                 {gotoRelevantScreenOnUserType()}
               else
                 {
@@ -59,17 +59,26 @@ class _SplashScreenState extends State<SplashScreen> {
     if (userType.isNotEmpty) {
       switch (userType) {
         case 'employer':
-          Navigator.of(myContext!)
-              .pushReplacementNamed(CompanyProfileScreen.id);
-
+          if (UserDefaults?.getEmployerUserSession()?.employerModel != null) {
+            Navigator.of(myContext!)
+                .pushReplacementNamed(CompanyProfileScreen.id);
+          }
           break;
         case 'applicant':
-          Navigator.of(myContext!)
-              .pushReplacementNamed(EmployeePortalScreen.id);
+          if (UserDefaults?.getCandidateUserSession()?.candidateModel != null) {
+            Navigator.of(myContext!)
+                .pushReplacementNamed(EmployeePortalScreen.id);
+          }
+
           break;
         case 'tutor':
-          Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
+          if (UserDefaults?.getTutorUserSession()?.tutorModel != null) {
+            Navigator.of(myContext!)
+                .pushReplacementNamed(TutorProfileScreen.id);
+          }
           break;
+        default:
+          Navigator.of(myContext!).pushReplacementNamed(OnBoardingScreen.id);
       }
     } else {
       Navigator.of(myContext!).pushReplacementNamed(OnBoardingScreen.id);

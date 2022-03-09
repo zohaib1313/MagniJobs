@@ -7,6 +7,14 @@ import '../styles.dart';
 
 class AppPopUps {
   bool isDialogShowing = true;
+  static void showSnackvBar(
+      {required String message, required BuildContext context}) {
+    final snackBar =
+        SnackBar(content: Text(message), backgroundColor: Colors.red);
+
+    // Find the Scaffold in the Widget tree and use it to show a SnackBar!
+    Scaffold.of(context).showSnackBar(snackBar);
+  }
 
   void oneButtonPop(
       {String? iconPath,

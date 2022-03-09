@@ -13,6 +13,7 @@ import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../common_widgets/app_popups.dart';
+import '../utils/my_app_bar.dart';
 
 class AllJobScreen extends StatefulWidget {
   AllJobScreen({Key? key}) : super(key: key);
@@ -27,6 +28,14 @@ class _AllJobScreenState extends State<AllJobScreen> {
   var view = Provider.of<AllJobsViewModel>(myContext!, listen: true);
 
   @override
+  void initState() {
+    super.initState();
+    view.searchJobPostedController.addListener(() {
+      view.searchJobPosted();
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
@@ -37,32 +46,16 @@ class _AllJobScreenState extends State<AllJobScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(
-              context: context,
-              showSearch: !view.toogle,
-              toogled: view.toogle,
-              searchTextController: view.searchTextController,
-              onTapCloseSearch: () {
-                view.toogle = !view.toogle;
-                setState(() {});
+          appBar: myAppBar(context: context, title: "Jobs Posted", actions: [
+            MyAnimSearchBar(
+              width: MediaQuery.of(context).size.width,
+              onSuffixTap: () {
+                view.searchJobPostedController.clear();
               },
-              title: "Jobs Posted",
-              actions: [
-                InkWell(
-                  onTap: () {
-                    if (!view.toogle) {
-                      // view.doSearch();
-                    } else {
-                      view.toogle = !view.toogle;
-                      setState(() {});
-                    }
-                  },
-                  child: const Padding(
-                    padding: EdgeInsets.all(18.0),
-                    child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-                  ),
-                )
-              ]),
+              closeSearchOnSuffixTap: true,
+              textController: view.searchJobPostedController,
+            )
+          ]),
           backgroundColor: AppColor.alphaGrey,
           body: Container(
             //  height: MediaQuery.of(context).size.height,

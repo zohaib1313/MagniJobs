@@ -6,7 +6,6 @@ import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/all_employers_model.dart';
 import 'package:magnijobs_rnr/models/countries_model.dart';
-import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/screens/country_and_job/country_and_job_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -52,7 +51,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
           child: Scaffold(
             appBar: myAppBar(
                 title: "Job Post",
-                onTap: () {
+                onBacKTap: () {
                   view.resetState();
                   Navigator.of(context).pop();
                 }),
@@ -303,15 +302,11 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                       Provider.of<CountryAndJobViewModel>(
                                               myContext!,
                                               listen: false)
-                                          .getAllCandidates(completion:
-                                              (CountryAndJobModel
-                                                  countryAndJobModel) {
+                                          .getAllCandidates(completion: () {
                                         Navigator.of(myContext!)
                                             .pushReplacement(MaterialPageRoute(
                                                 builder: (c) =>
-                                                    CountryAndJobScreen(
-                                                        countryAndJobModel:
-                                                            countryAndJobModel)));
+                                                    CountryAndJobScreen()));
                                       });
                                     },
                                   );
@@ -319,7 +314,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                               );
                             } else {
                               AppPopUps.showAlertDialog(
-                                  message: 'Enter all required date');
+                                  message: 'Enter all required fields');
                             }
                           }
                         },

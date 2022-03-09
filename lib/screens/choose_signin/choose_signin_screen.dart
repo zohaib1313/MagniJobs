@@ -270,7 +270,10 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(MaterialPageRoute(
+                              builder: (c) => SigInScreen(
+                                    userType: 'attendie',
+                                  )));
                         },
                       ),
                       space,

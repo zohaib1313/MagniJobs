@@ -147,7 +147,7 @@ class UpdateTutorProfileViewModel extends ChangeNotifier {
   }
 
   void setValuesWithSharedPref() {
-    SignInModel? user = UserDefaults.getUserSession();
+    CandidateSignInModel? user = UserDefaults.getCandidateUserSession();
     firstnameContoller.text = user?.user?.firstName ?? "";
     lastNameController.text = user?.user?.lastName ?? "";
     emailController.text = user?.user?.email ?? "";

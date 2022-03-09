@@ -2,11 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
 import 'package:magnijobs_rnr/models/countries_model.dart';
 import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
@@ -47,62 +50,46 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Company Profile", actions: [
+          appBar: myAppBar(title: 'Company & Profile', actions: [
             InkWell(
               onTap: () {
                 Navigator.of(myContext!).push(MaterialPageRoute(
                     builder: (context) => ProfileSettingScreen()));
+                /*  Provider.of<ProfileSettingViewModel>(myContext!, listen: false)
+                    .logout(onComplete: () {
+                  UserDefaults().clearAll();
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(
+                      builder: (context) => ChooseSignInScreen()));
+                });*/
               },
               child: const Padding(
-                padding: EdgeInsets.only(left: 8.0, right: 18.0),
-                child: SvgViewer(svgPath: 'assets/icons/ic_settings.svg'),
+                padding: EdgeInsets.all(18.0),
+                child: SvgViewer(svgPath: "assets/icons/ic_settings.svg"),
               ),
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Container(
-              height: MediaQuery.of(context).size.height * 0.9,
-              padding: EdgeInsets.only(
-                left: 50.w,
-                right: 50.w,
-                top: 50.h,
-                bottom: 50.h,
-              ),
-              margin: EdgeInsets.only(
-                top: 50.h,
-                bottom: 50.h,
-                left: 100.w,
-                right: 100.w,
-              ),
-              decoration: BoxDecoration(
-                color: AppColor.whiteColor,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.r),
-                    topRight: Radius.circular(40.r)),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: AppColor.alphaGrey,
-                    ),
-                    padding: EdgeInsets.all(80.r),
-                    child: CircleAvatar(
-                      backgroundColor: Colors.transparent,
-                      radius: 300.r,
-                      child: Icon(
-                        Icons.camera_alt,
-                        size: 300.r,
-                        color: AppColor.blackColor,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(top: 50.h, bottom: 20.h),
+          body: Container(
+            padding: EdgeInsets.only(
+              left: 100.w,
+              right: 100.w,
+              top: 50.h,
+              bottom: 50.h,
+            ),
+            decoration: BoxDecoration(
+              color: AppColor.whiteColor,
+              borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(40.r),
+                  topRight: Radius.circular(40.r)),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Flexible(
+                  child: imageEditWidget(),
+                ),
+                Flexible(
+                  child: Container(
                     decoration: BoxDecoration(
                       color: AppColor.alphaGrey,
                       borderRadius: BorderRadius.only(
@@ -120,43 +107,62 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         ),
                         space,
                         space,
-                        StreamBuilder(
-                          stream: streamCountries,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Countries?>> snapshot) {
-                            if (snapshot.hasData) {
-                              return MyDropDown(
-                                onChange: (value) {
-                                  view.selectedCountryId = value.toString();
-                                },
-                                hintText: "Country",
-                                labelText: "",
-                                labelColor: AppColor.redColor,
-                                borderColor: AppColor.alphaGrey,
-                                fillColor: AppColor.whiteColor,
-                                suffixIcon: "assets/icons/drop_down_ic.svg",
-                                itemFuntion: snapshot.data!
-                                    .map((e) => DropdownMenuItem(
-                                          value: e?.id.toString() ?? '',
-                                          child: Text(
-                                            e?.name ?? '',
-                                            style: AppTextStyles
-                                                .textStyleBoldBodySmall,
-                                          ),
-                                        ))
-                                    .toList(),
-                                validator: (string) {
-                                  return null;
-                                },
-                              );
-                            }
-                            return Center(
-                                child: Container(
-                                    child: CircularProgressIndicator()));
-                          },
+                        Flexible(
+                          child: StreamBuilder(
+                            stream: streamCountries,
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.selectedCountryId = value.toString();
+                                  },
+                                  hintText: "Country",
+                                  labelText: "",
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.whiteColor,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    return null;
+                                  },
+                                );
+                              }
+                              return Center(
+                                  child: Container(
+                                      child: CircularProgressIndicator()));
+                            },
+                          ),
                         ),
                         space,
-                        StreamBuilder(
+                        Flexible(
+                          child: MyTextField(
+                            fillColor: AppColor.whiteColor,
+                            textColor: AppColor.blackColor,
+                            hintColor: AppColor.blackColor,
+                            labelColor: AppColor.blackColor,
+                            hintText: "search job",
+                            controller: view.queryEditingController,
+                            labelText: "Jobs",
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          ),
+                        )
+                        /*   StreamBuilder(
                           stream: streamJobs,
                           builder: (BuildContext context,
                               AsyncSnapshot<List<Jobs?>> snapshot) {
@@ -188,49 +194,122 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                 child: Container(
                                     child: CircularProgressIndicator()));
                           },
-                        ),
+                        ),*/
+                        ,
                         space,
                         space,
                       ],
                     ),
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      space,
-                      space,
-                      space,
-                      space,
-                      Button(
-                        buttonText: "Submit",
-                        textColor: AppColor.whiteColor,
-                        color: AppColor.primaryBlueDarkColor,
-                        onTap: () {
-                          if (view.selectedCountryId.isNotEmpty) {
-                            Provider.of<JobPostViewModel>(myContext!,
-                                    listen: false)
-                                .getAllCompanies(completion: () {
-                              Navigator.of(myContext!).push(MaterialPageRoute(
+                ),
+                Flexible(
+                    child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    space,
+                    space,
+                    Button(
+                      buttonText: "Submit",
+                      textColor: AppColor.whiteColor,
+                      color: AppColor.primaryBlueDarkColor,
+                      onTap: () {
+                        if (view.selectedCountryId.isNotEmpty &&
+                            view.queryEditingController.text.isNotEmpty) {
+                          Provider.of<JobPostViewModel>(myContext!,
+                                  listen: false)
+                              .getAllCompanies(
+                            completion: () {
+                              Navigator.of(myContext!).push(
+                                MaterialPageRoute(
                                   builder: (context) => JobPostScreen(
-                                        selectedCountryId:
-                                            view.selectedCountryId,
-                                      )));
-                            });
-                          }
-                        },
-                      ),
-                      space,
-                      space,
-                      space,
-                      space,
-                    ],
-                  )
-                ],
-              ),
+                                    selectedCountryId: view.selectedCountryId,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        } else {
+                          AppPopUps.showAlertDialog(
+                              message: 'Enter all fields');
+                        }
+                      },
+                    ),
+                    space,
+                  ],
+                ))
+              ],
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  imageEditWidget() {
+    return Container(
+      padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
+      margin: EdgeInsets.all(20.h),
+      decoration: BoxDecoration(
+        color: AppColor.whiteColor,
+        borderRadius: BorderRadius.circular(50.r),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Stack(
+                children: [
+                  CircleAvatar(
+                    radius: 250.r,
+                    backgroundColor: Colors.grey.shade200,
+                    child: CircleAvatar(
+                      radius: 250.r,
+                      backgroundImage: (UserDefaults.getEmployerUserSession()
+                                  ?.employerModel
+                                  ?.logo !=
+                              null)
+                          ? Image.network(
+                              ApiConstants.imageBaseUrl +
+                                  (UserDefaults.getEmployerUserSession()
+                                          ?.employerModel
+                                          ?.logo ??
+                                      ''),
+                            ).image
+                          : const AssetImage(
+                              'assets/images/place_your_image.png'),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 5,
+                    right: 5,
+                    child: Container(
+                      child: const Padding(
+                        padding: EdgeInsets.all(4),
+                        child: Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                          size: 14,
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(
+                          Radius.circular(
+                            150.r,
+                          ),
+                        ),
+                        color: Colors.blue,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

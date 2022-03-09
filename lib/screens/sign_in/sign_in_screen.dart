@@ -59,7 +59,7 @@ class _SigInScreenState extends State<SigInScreen> {
           child: Scaffold(
             appBar: myAppBar(
                 title: "Sign in",
-                onTap: () {
+                onBacKTap: () {
                   view.resetState();
                   Navigator.of(context).pop();
                 }),
@@ -284,36 +284,107 @@ class _SigInScreenState extends State<SigInScreen> {
   }
 
   void startVerification() {
-    view.signInUser(widget.userType, completion: (SignInModel? user) async {
-      if ((user?.user?.verified ?? 0) != 0) {
-        if (user != null) {
-          UserDefaults.saveUserSession(user, widget.userType);
-          view.resetState();
-          gotoRelevantScreenOnUserType(userType: widget.userType);
-        }
-      } else {
-        Provider.of<VerifyNumberViewModel>(myContext!, listen: false)
-            .resetState();
-        bool? isVerified =
-            await Navigator.of(myContext!).push(MaterialPageRoute(
-          builder: (myContext) => VerifyNumberScreen(),
-        ));
-        if (isVerified ?? false) {
-          if (user != null) {
-            UserDefaults.saveUserSession(user, widget.userType);
-            view.resetState();
-            gotoRelevantScreenOnUserType(userType: widget.userType);
+    switch (widget.userType) {
+      case "employer":
+        view.signInEmployerUser(widget.userType,
+            completion: (EmployerSignInModel? user) async {
+          if ((user?.user?.verified ?? 0) != 0) {
+            if (user != null) {
+              UserDefaults.saveEmployerUserSession(user, widget.userType);
+              view.resetState();
+              gotoRelevantScreenOnUserType(userType: widget.userType);
+            }
+          } else {
+            Provider.of<VerifyNumberViewModel>(myContext!, listen: false)
+                .resetState();
+            bool? isVerified =
+                await Navigator.of(myContext!).push(MaterialPageRoute(
+              builder: (myContext) => VerifyNumberScreen(),
+            ));
+            if (isVerified ?? false) {
+              if (user != null) {
+                UserDefaults.saveEmployerUserSession(user, widget.userType);
+                view.resetState();
+                gotoRelevantScreenOnUserType(userType: widget.userType);
+              }
+            } else {
+              AppPopUps.showConfirmDialog(
+                  title: 'Alert',
+                  message: 'Verifications failed, retry?',
+                  onSubmit: () {
+                    startVerification();
+                  });
+            }
           }
-        } else {
-          AppPopUps.showConfirmDialog(
-              title: 'Alert',
-              message: 'Verifications failed, retry?',
-              onSubmit: () {
-                startVerification();
-              });
-        }
-      }
-    });
+        });
+        break;
+      case "applicant":
+        view.signInCandidateUser(widget.userType,
+            completion: (CandidateSignInModel? user) async {
+          if ((user?.user?.verified ?? 0) != 0) {
+            if (user != null) {
+              UserDefaults.saveCandidateUserSession(user, widget.userType);
+              view.resetState();
+              gotoRelevantScreenOnUserType(userType: widget.userType);
+            }
+          } else {
+            Provider.of<VerifyNumberViewModel>(myContext!, listen: false)
+                .resetState();
+            bool? isVerified =
+                await Navigator.of(myContext!).push(MaterialPageRoute(
+              builder: (myContext) => VerifyNumberScreen(),
+            ));
+            if (isVerified ?? false) {
+              if (user != null) {
+                UserDefaults.saveCandidateUserSession(user, widget.userType);
+                view.resetState();
+                gotoRelevantScreenOnUserType(userType: widget.userType);
+              }
+            } else {
+              AppPopUps.showConfirmDialog(
+                  title: 'Alert',
+                  message: 'Verifications failed, retry?',
+                  onSubmit: () {
+                    startVerification();
+                  });
+            }
+          }
+        });
+        break;
+      case "tutor":
+        view.signInTutorUser(widget.userType,
+            completion: (TutorSignInModel? user) async {
+          if ((user?.user?.verified ?? 0) != 0) {
+            if (user != null) {
+              UserDefaults.saveTutorSignInModel(user, widget.userType);
+              view.resetState();
+              gotoRelevantScreenOnUserType(userType: widget.userType);
+            }
+          } else {
+            Provider.of<VerifyNumberViewModel>(myContext!, listen: false)
+                .resetState();
+            bool? isVerified =
+                await Navigator.of(myContext!).push(MaterialPageRoute(
+              builder: (myContext) => VerifyNumberScreen(),
+            ));
+            if (isVerified ?? false) {
+              if (user != null) {
+                UserDefaults.saveTutorSignInModel(user, widget.userType);
+                view.resetState();
+                gotoRelevantScreenOnUserType(userType: widget.userType);
+              }
+            } else {
+              AppPopUps.showConfirmDialog(
+                  title: 'Alert',
+                  message: 'Verifications failed, retry?',
+                  onSubmit: () {
+                    startVerification();
+                  });
+            }
+          }
+        });
+        break;
+    }
   }
 
   void gotoRelevantScreenOnUserType({required String userType}) {

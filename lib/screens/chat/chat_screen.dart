@@ -9,7 +9,6 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
 import 'package:magnijobs_rnr/screens/job_posted/job_posted_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
-import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -165,20 +164,8 @@ class _ChatScreenState extends State<ChatScreen> {
                           Provider.of<AllJobsViewModel>(myContext!,
                                   listen: false)
                               .getAllJobs(completion: (List<Jobs> jobs) {
-                            Provider.of<AllJobsViewModel>(myContext!,
-                                    listen: false)
-                                .getFilterJobsOnEmployerId(
-                                    id: (UserDefaults?.getUserSession()
-                                                ?.user
-                                                ?.id ??
-                                            0)
-                                        .toString(),
-                                    completion: (List<Jobs> jobss) {
-                                      Navigator.of(myContext!).push(
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  JobPostedScreen()));
-                                    });
+                            Navigator.of(myContext!).push(MaterialPageRoute(
+                                builder: (context) => JobPostedScreen()));
                           });
                         },
                         child: const SvgViewer(

@@ -24,21 +24,11 @@ class AllJobsViewModel extends ChangeNotifier {
 
   bool get toogle => _toogle;
 
-  TextEditingController searchTextController = TextEditingController();
+  TextEditingController searchJobPostedController = TextEditingController();
 
   set toogle(bool value) {
     _toogle = value;
     notifyListeners();
-  }
-
-  void getFilterJobsOnEmployerId({completion, required String id}) {
-    filteredJobs.clear();
-    for (var job in alJobs) {
-      // if ((job.employer ?? "") == id) {
-      filteredJobs.add(job);
-      // }
-    }
-    completion(filteredJobs);
   }
 
   void filterJobsOnDate() {
@@ -96,7 +86,7 @@ class AllJobsViewModel extends ChangeNotifier {
         .then((response) {
       AppPopUps().dissmissDialog();
       alJobs = response.response?.data?.jobs?.jobs ?? [];
-      filteredJobs = alJobs;
+      filteredJobs.addAll(alJobs);
       completion(alJobs);
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -142,21 +132,30 @@ class AllJobsViewModel extends ChangeNotifier {
     });
   }
 
-  void doSearch() {
+  void searchJobPosted() {
+    printWrapped(alJobs.length.toString());
     filteredJobs.clear();
-    for (var element in alJobs) {
-      if (searchTextController.text
-              .toLowerCase()
-              .contains(element.employer ?? "".toLowerCase()) ||
-          searchTextController.text
-              .toLowerCase()
-              .contains(element.job ?? "".toLowerCase()) ||
-          searchTextController.text
-              .toLowerCase()
-              .contains(element.jobDescription ?? "".toLowerCase())) {
-        filteredJobs.add(element);
-        notifyListeners();
+    if (searchJobPostedController.text.isEmpty) {
+      printWrapped("empty");
+      filteredJobs.addAll(alJobs);
+    } else {
+      for (var element in alJobs) {
+        if (searchJobPostedController.text
+                .toLowerCase()
+                .contains(element.employer ?? "".toLowerCase()) ||
+            searchJobPostedController.text
+                .toLowerCase()
+                .contains(element.job ?? "".toLowerCase()) ||
+            searchJobPostedController.text
+                .toLowerCase()
+                .contains(element.jobDescription ?? "".toLowerCase()) ||
+            searchJobPostedController.text
+                .toLowerCase()
+                .contains(element.poster ?? "".toLowerCase())) {
+          filteredJobs.add(element);
+        }
       }
     }
+    notifyListeners();
   }
 }

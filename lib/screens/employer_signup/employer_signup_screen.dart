@@ -43,7 +43,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
           child: Scaffold(
             appBar: myAppBar(
                 title: "Employer Sign Up",
-                onTap: () {
+                onBacKTap: () {
                   view.resetState();
                   Navigator.of(context).pop();
                 }),

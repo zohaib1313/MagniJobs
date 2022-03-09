@@ -2,13 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/styles.dart';
-import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../../utils/my_app_bar.dart';
+import '../../utils/utils.dart';
 
 class JobPostedScreen extends StatefulWidget {
   static const id = "JobPostedScreen";
@@ -22,6 +23,14 @@ class JobPostedScreen extends StatefulWidget {
 class _JobPostedScreenState extends State<JobPostedScreen> {
   final space = SizedBox(height: 20.h);
   var view = Provider.of<AllJobsViewModel>(myContext!);
+  @override
+  void initState() {
+    super.initState();
+
+    view.searchJobPostedController.addListener(() {
+      view.searchJobPosted();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +44,13 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: myAppBar(title: "Jobs Posted", actions: [
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
+            MyAnimSearchBar(
+              width: MediaQuery.of(context).size.width,
+              onSuffixTap: () {
+                view.searchJobPostedController.clear();
+              },
+              closeSearchOnSuffixTap: true,
+              textController: view.searchJobPostedController,
             )
           ]),
           backgroundColor: AppColor.alphaGrey,

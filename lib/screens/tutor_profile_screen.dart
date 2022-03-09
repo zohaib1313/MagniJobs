@@ -4,12 +4,15 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/screens/tutor_bookings_job_history_screen.dart';
 import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 import '../profile_settting_screen.dart';
+import '../view_models/tutor_booking_job_view_model.dart';
 import 'choose_signin/choose_signin_screen.dart';
 import 'tutor_calender_screen.dart';
 
@@ -94,7 +97,17 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                                 builder: (context) => ProfileSettingScreen()));
                           }),
                           getRowProfileItem(
-                              "assets/icons/ic_history.svg", "Job History"),
+                              "assets/icons/ic_history.svg", "Job History",
+                              onTap: () {
+                            Provider.of<TutorBookingJobHistoryViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .getBookingHistory(completion: () {
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (context) =>
+                                      TutorBookingJobHistory()));
+                            });
+                          }),
                           getRowProfileItem(
                               "assets/icons/ic_heart_filled.svg", "Favourite"),
                           getRowProfileItem(
@@ -212,7 +225,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                     backgroundColor: Colors.grey.shade200,
                     child: CircleAvatar(
                       radius: 250.r,
-                      backgroundImage: (UserDefaults.getUserSession()
+                      backgroundImage: (UserDefaults.getCandidateUserSession()
                                   ?.user
                                   ?.profile !=
                               null)
@@ -250,7 +263,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
           ),
           space,
           Text(
-            UserDefaults.getUserSession()?.user?.firstName ?? "",
+            UserDefaults.getCandidateUserSession()?.user?.firstName ?? "",
             style: AppTextStyles.textStyleBoldSubTitleLarge,
           ),
         ],

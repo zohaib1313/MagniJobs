@@ -62,7 +62,8 @@ class UserDefaults {
 
   //employer, applicant,tutor
 
-  static void saveUserSession(SignInModel signInModel, String type) async {
+  static void saveCandidateUserSession(
+      CandidateSignInModel signInModel, String type) async {
     String user = json.encode(signInModel.toJson());
     getPref().then((value) => value
       ..setString('userData', user)
@@ -71,6 +72,66 @@ class UserDefaults {
       printWrapped("user session saved type= ${type} ${user}");
       printWrapped(user.toString());
     }
+  }
+
+  static CandidateSignInModel? getCandidateUserSession() {
+    CandidateSignInModel? user;
+    if (sharedPreferences!.getString('userData') != null) {
+      Map<String, dynamic> json =
+          jsonDecode(sharedPreferences!.getString('userData')!);
+      user = CandidateSignInModel.fromJson(json);
+      setApiToken(user.token ?? '');
+      printWrapped(user.toString());
+    }
+    return user;
+  }
+
+  static void saveEmployerUserSession(
+      EmployerSignInModel signInModel, String type) async {
+    String user = json.encode(signInModel.toJson());
+    getPref().then((value) => value
+      ..setString('userData', user)
+      ..setString('type', type));
+    if (kDebugMode) {
+      printWrapped("user session saved type= ${type} ${user}");
+      printWrapped(user.toString());
+    }
+  }
+
+  static EmployerSignInModel? getEmployerUserSession() {
+    EmployerSignInModel? user;
+    if (sharedPreferences!.getString('userData') != null) {
+      Map<String, dynamic> json =
+          jsonDecode(sharedPreferences!.getString('userData')!);
+      user = EmployerSignInModel.fromJson(json);
+      setApiToken(user.token ?? '');
+      printWrapped(user.toString());
+    }
+    return user;
+  }
+
+  static void saveTutorSignInModel(
+      TutorSignInModel signInModel, String type) async {
+    String user = json.encode(signInModel.toJson());
+    getPref().then((value) => value
+      ..setString('userData', user)
+      ..setString('type', type));
+    if (kDebugMode) {
+      printWrapped("user session saved type= ${type} ${user}");
+      printWrapped(user.toString());
+    }
+  }
+
+  static TutorSignInModel? getTutorUserSession() {
+    TutorSignInModel? user;
+    if (sharedPreferences!.getString('userData') != null) {
+      Map<String, dynamic> json =
+          jsonDecode(sharedPreferences!.getString('userData')!);
+      user = TutorSignInModel.fromJson(json);
+      setApiToken(user.token ?? '');
+      printWrapped(user.toString());
+    }
+    return user;
   }
 
   static String? getUserType() {
@@ -83,17 +144,5 @@ class UserDefaults {
 
   static setApiToken(String value) {
     return sharedPreferences?.setString('ApiToken', value);
-  }
-
-  static SignInModel? getUserSession() {
-    SignInModel? user;
-    if (sharedPreferences!.getString('userData') != null) {
-      Map<String, dynamic> json =
-          jsonDecode(sharedPreferences!.getString('userData')!);
-      user = SignInModel.fromJson(json);
-      setApiToken(user.token ?? '');
-      printWrapped(user.toString());
-    }
-    return user;
   }
 }

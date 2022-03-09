@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/update_employer_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
@@ -82,7 +83,10 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        UserDefaults.getUserSession()?.user?.firstName ?? "",
+                        UserDefaults.getCandidateUserSession()
+                                ?.user
+                                ?.firstName ??
+                            "",
                         style: AppTextStyles.textStyleBoldSubTitleLarge,
                       ),
                       SizedBox(
@@ -110,7 +114,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                   ),
                   space,
                   Text(
-                    UserDefaults.getUserSession()?.user?.utype ?? "",
+                    UserDefaults.getCandidateUserSession()?.user?.utype ?? "",
                     style: AppTextStyles.textStyleNormalBodySmall
                         .copyWith(color: AppColor.greyColor),
                   ),
@@ -256,15 +260,18 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     backgroundColor: Colors.grey.shade200,
                     child: CircleAvatar(
                       radius: 250.r,
-                      backgroundImage:
-                          (UserDefaults.getUserSession()?.user?.profile != null)
-                              ? Image.network(UserDefaults.getUserSession()
+                      backgroundImage: (UserDefaults.getCandidateUserSession()
+                                  ?.user
+                                  ?.profile !=
+                              null)
+                          ? Image.network(ApiConstants.imageBaseUrl +
+                                  (UserDefaults.getCandidateUserSession()
                                           ?.user
                                           ?.profile ??
-                                      "")
-                                  .image
-                              : const AssetImage(
-                                  'assets/images/place_your_image.png'),
+                                      ""))
+                              .image
+                          : const AssetImage(
+                              'assets/images/place_your_image.png'),
                     ),
                   ),
                   Positioned(

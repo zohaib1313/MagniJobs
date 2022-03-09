@@ -29,7 +29,10 @@ enum APIType {
   all_countries,
   update_tutor_profile,
   update_employer_profile,
-  place_booking
+  place_booking,
+  my_bookings,
+  cancelBookings,
+  candidateByCountry
 }
 
 class ApiConstants {
@@ -65,4 +68,9 @@ class ApiConstants {
   static const update_tutor_profile = "update-tutor-profile";
   static const update_employer_profile = "update-employer-profile";
   static const place_booking = "place-booking";
+  static const my_bookings = "my-bookings";
+  static const cancelBookings = "cancel-booking";
+  static const candidateByCountry = "candidates-by-country";
+
+  static var imageBaseUrl = 'http://magnijobs.applypressure.co.uk/';
 }

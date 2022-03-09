@@ -50,7 +50,7 @@ class _ForgotPasswordEnterMailScreenState
           child: Scaffold(
             appBar: myAppBar(
                 title: "Forgot Password",
-                onTap: () {
+                onBacKTap: () {
                   view.resetState();
                   Navigator.of(context).pop();
                 }),

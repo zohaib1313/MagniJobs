@@ -9,19 +9,18 @@ import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/all_jobs_model.dart';
-import '../../utils/user_defaults.dart';
+import '../../utils/my_app_bar.dart';
 import '../../view_models/all_jobs_view_model.dart';
 import '../job_posted/job_posted_screen.dart';
 
 class CountryAndJobScreen extends StatefulWidget {
-  CountryAndJobModel countryAndJobModel;
-
   static const id = "CountryAndJobScreen";
 
-  CountryAndJobScreen({required this.countryAndJobModel});
+  CountryAndJobScreen();
 
   @override
   _CountryAndJobScreenState createState() => _CountryAndJobScreenState();
@@ -29,6 +28,16 @@ class CountryAndJobScreen extends StatefulWidget {
 
 class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<CountryAndJobViewModel>(myContext!);
+
+  @override
+  void initState() {
+    super.initState();
+
+    view.searchTextController.addListener(() {
+      view.searchFromList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,26 +58,25 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                 onPressed: () {
                   Provider.of<AllJobsViewModel>(myContext!, listen: false)
                       .getAllJobs(completion: (List<Jobs> jobs) {
-                    Provider.of<AllJobsViewModel>(myContext!, listen: false)
-                        .getFilterJobsOnEmployerId(
-                            id: (UserDefaults?.getUserSession()?.user?.id ?? 0)
-                                .toString(),
-                            completion: (List<Jobs> jobss) {
-                              Navigator.of(myContext!).push(MaterialPageRoute(
-                                  builder: (context) => JobPostedScreen()));
-                            });
+                    Navigator.of(myContext!).push(MaterialPageRoute(
+                        builder: (context) => JobPostedScreen()));
                   });
                 },
                 child: const Icon(Icons.arrow_forward)),
           ),
           appBar: myAppBar(title: "Country & Job", actions: [
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
+            MyAnimSearchBar(
+              width: MediaQuery.of(context).size.width,
+              onSuffixTap: () {
+                view.searchTextController.clear();
+              },
+              closeSearchOnSuffixTap: true,
+              textController: view.searchTextController,
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
-          body: (widget.countryAndJobModel.candidates?.length ?? 0) != 0
+          // ignore: prefer_is_empty
+          body: (view.showingListOfCandidates.length) != 0
               ? SingleChildScrollView(
                   physics: BouncingScrollPhysics(),
                   child: Container(
@@ -84,13 +92,12 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                             topRight: Radius.circular(40.r)),
                       ),
                       child: ListView.builder(
-                          itemCount:
-                              widget.countryAndJobModel.candidates?.length ?? 0,
+                          itemCount: view.showingListOfCandidates.length,
                           shrinkWrap: true,
                           physics: const NeverScrollableScrollPhysics(),
                           itemBuilder: (context, index) {
                             return getJobSeekerWidget(
-                                widget.countryAndJobModel.candidates![index]);
+                                view.showingListOfCandidates[index]);
                           })),
                 )
               : Center(
