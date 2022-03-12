@@ -416,9 +416,11 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                       if (view.nationalIdImage != null) {
                         view.registerApplicant(completion: () {
                           AppPopUps.showAlertDialog(
-                              message: "User created Successfully go to login");
+                              message: "User created Successfully go to login",
+                              onSubmit: () {
+                                Navigator.of(myContext!).pop();
+                              });
                           view.resetState();
-                          Navigator.of(myContext!).pop();
                         });
                       } else {
                         AppPopUps.showAlertDialog(

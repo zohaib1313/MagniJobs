@@ -40,7 +40,7 @@ class _TutorBookingJobHistoryState extends State<TutorBookingJobHistory> {
           body: Builder(builder: (cc) {
             return Container(
               // height: MediaQuery.of(context).size.height * 0.8,
-              margin: EdgeInsets.only(top: 50.h, left: 40.h, right: 40.h),
+              margin: EdgeInsets.only(top: 20.h, left: 10.h, right: 10.h),
               decoration: const BoxDecoration(
                 color: AppColor.alphaGrey,
               ),
@@ -58,6 +58,7 @@ class _TutorBookingJobHistoryState extends State<TutorBookingJobHistory> {
                         space,
                         ListView.builder(
                           shrinkWrap: true,
+                          physics: const BouncingScrollPhysics(),
                           itemCount: view.bookingsList?.length ?? 0,
                           itemBuilder: (context, index) {
                             return getRow(view.bookingsList![index], cc);
@@ -78,33 +79,37 @@ class _TutorBookingJobHistoryState extends State<TutorBookingJobHistory> {
   }
 
   getRow(Bookings booking, BuildContext context) {
-    return InkWell(
-      onTap: () {
-        AppPopUps.showAlertDialog(
-            message: 'Are you sure to cancel booking',
-            onSubmit: () {
-              view.cancelBooking(booking, context);
-            });
-      },
-      child: Card(
-        child: ListTile(
-          title: Text("Exam Type: ${booking.examType ?? ""}",
-              style: AppTextStyles.textStyleBoldBodyMedium),
-          subtitle: Text("Exam sub-type: ${booking.examSubType ?? ""}",
-              style: AppTextStyles.textStyleBoldBodySmall),
-          leading: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Text(" ${booking.time ?? ""} :Hrs",
+    return Card(
+      child: ListTile(
+        title: Text("Exam Type: ${booking.examType ?? ""}",
+            style: AppTextStyles.textStyleBoldBodyMedium),
+        subtitle: Text("Exam sub-type: ${booking.examSubType ?? ""}",
+            style: AppTextStyles.textStyleBoldBodySmall),
+        leading: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Flexible(
+              child: Text(
+                  " ${DateFormat('dd-MM-yyyy').format(DateTime.parse(booking.date ?? ''))} ",
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.textStyleNormalBodyXSmall),
-            ],
-          ),
-          trailing: Text(
-              " ${DateFormat('dd-MM-yyyy').format(DateTime.parse(booking.date ?? ''))} ",
-              overflow: TextOverflow.ellipsis,
-              style: AppTextStyles.textStyleNormalBodyXSmall),
+            ),
+            Flexible(
+              child: Text(" ${booking.time ?? ""} :Hrs",
+                  style: AppTextStyles.textStyleNormalBodyXSmall),
+            ),
+          ],
         ),
+        trailing: ElevatedButton(
+            child: const Text('cancel'),
+            onPressed: () {
+              AppPopUps.showAlertDialog(
+                  message: 'Are you sure to cancel booking',
+                  onSubmit: () {
+                    view.cancelBooking(booking, context);
+                  });
+            }),
       ),
     );
   }

@@ -123,6 +123,9 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                 );
                               }).toList(),
                               validator: (item) {
+                                if ((view.selectedCompanyId ?? '').isEmpty) {
+                                  return "select company";
+                                }
                                 return null;
                               },
                             ),
@@ -158,6 +161,9 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                             ))
                                         .toList(),
                                     validator: (string) {
+                                      if ((view.selectedCountryId).isEmpty) {
+                                        return "select country";
+                                      }
                                       return null;
                                     },
                                   );

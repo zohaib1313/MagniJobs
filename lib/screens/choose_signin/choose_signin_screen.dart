@@ -289,9 +289,8 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              /* Navigator.of(myContext!).push(MaterialPageRoute(
-                                  builder: (contxt) =>
-                                      AttendieProfileScreen()));*/
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (contxt) => ApplicantSignUp()));
                             },
                             child: Text(
                               " Sign up!",

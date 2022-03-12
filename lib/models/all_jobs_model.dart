@@ -24,7 +24,7 @@ class AllJobsModel implements Decodable {
   }
 }
 
-class JobsA {
+class JobsA implements Decodable {
   List<Jobs>? jobs;
 
   JobsA({this.jobs});
@@ -45,12 +45,23 @@ class JobsA {
     }
     return data;
   }
+
+  @override
+  decode(json) {
+    if (json['jobs'] != null) {
+      jobs = <Jobs>[];
+      json['jobs'].forEach((v) {
+        jobs!.add(new Jobs.fromJson(v));
+      });
+    }
+    return this;
+  }
 }
 
 class Jobs {
   int? id;
   String? poster;
-  String? employer;
+  dynamic employer;
   String? job;
   String? location;
   String? salary;

@@ -10,6 +10,7 @@ import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
+import 'package:path/path.dart';
 
 import '../models/signin_model.dart';
 import '../routes.dart';
@@ -17,23 +18,13 @@ import '../routes.dart';
 class UpdateTutorProfileViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
-  File? nationalIdImage;
+  File? profilePic;
   TextEditingController firstnameContoller = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
   TextEditingController addressController = TextEditingController();
-  TextEditingController locationController = TextEditingController();
-  TextEditingController dobController = TextEditingController();
-  TextEditingController nationalityController = TextEditingController();
-  TextEditingController genderController = TextEditingController();
-  TextEditingController martialStatusController = TextEditingController();
-  TextEditingController schoolController = TextEditingController();
-  TextEditingController workExperienceController = TextEditingController();
-  TextEditingController certificationController = TextEditingController();
-  TextEditingController examsController = TextEditingController();
-  TextEditingController preferredlocationController = TextEditingController();
-  TextEditingController licenseController = TextEditingController();
+  TextEditingController companyController = TextEditingController();
 
   bool _hidePassword = true;
 
@@ -69,34 +60,27 @@ class UpdateTutorProfileViewModel extends ChangeNotifier {
         allowMultiple: false);
     if (result != null) {
       File file = File(result.files.single.path!);
-
-      nationalIdImage = file;
+      profilePic = file;
+      setValuesWithSharedPref();
+      updateProfile(onComplete: () {
+        AppPopUps.showAlertDialog(message: 'Profile updated');
+      });
     } else {
       // User canceled the picker
     }
   }
 
   resetState() {
-    nationalIdImage = null;
+    profilePic = null;
     firstnameContoller.clear();
     lastNameController.clear();
     emailController.clear();
     mobileController.clear();
     addressController.clear();
-    locationController.clear();
-    dobController.clear();
-    nationalityController.clear();
-    genderController.clear();
-    martialStatusController.clear();
-    schoolController.clear();
-    workExperienceController.clear();
-    certificationController.clear();
-    examsController.clear();
-    preferredlocationController.clear();
-    licenseController.clear();
+    companyController.clear();
   }
 
-  void updateProfile({onComplete}) {
+  Future<void> updateProfile({onComplete}) async {
     AppPopUps().showProgressDialog(context: myContext);
     FormData body = FormData.fromMap({
       "first_name": firstnameContoller.text,
@@ -104,34 +88,29 @@ class UpdateTutorProfileViewModel extends ChangeNotifier {
       "email": emailController.text,
       "mobile": mobileController.text,
       "address": addressController.text,
-      "location": locationController.text,
-      "dob": dobController.text,
-      "nationality": nationalityController.text,
-      "gender": genderController.text.isEmpty ? "Male" : genderController.text,
-      "marital_status": martialStatusController.text.isEmpty
-          ? "Single"
-          : martialStatusController.text,
-      "school": schoolController,
-      "work_experience": workExperienceController,
-      "certifications": certificationController.text,
-      "exams": examsController.text,
-      "license": licenseController.text,
-      "preferred_location": preferredlocationController.text,
+      "company": companyController.text,
+      'profile': profilePic?.path != null
+          ? await MultipartFile.fromFile(
+              profilePic!.path,
+              filename: basename(profilePic!.path),
+            )
+          : "",
     });
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
         .request(
-      route: APIRoute(
-        APIType.update_my_profile,
-        body: body,
-      ),
-      create: () => APIResponse(),
-      // apiFunction: registerApplicant()
-    )
-        .then((response) {
+            route: APIRoute(
+              APIType.update_tutor_profile,
+              body: body,
+            ),
+            create: () =>
+                APIResponse<TutorSignInModel>(create: () => TutorSignInModel()),
+            apiFunction: updateProfile)
+        .then((response) async {
       AppPopUps().dissmissDialog();
-
-      resetState();
+      await UserDefaults.saveTutorSignInModel(
+          response.response!.data!, UserDefaults.getUserType() ?? '');
+      //   resetState();
       onComplete();
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -147,22 +126,12 @@ class UpdateTutorProfileViewModel extends ChangeNotifier {
   }
 
   void setValuesWithSharedPref() {
-    CandidateSignInModel? user = UserDefaults.getCandidateUserSession();
+    TutorSignInModel? user = UserDefaults.getTutorUserSession();
     firstnameContoller.text = user?.user?.firstName ?? "";
     lastNameController.text = user?.user?.lastName ?? "";
     emailController.text = user?.user?.email ?? "";
     mobileController.text = user?.user?.mobile ?? "";
-    addressController.text = '';
-    locationController.text = "";
-    dobController.text = "";
-    nationalityController.text = "";
-    genderController.text = "";
-    martialStatusController.text = "";
-    schoolController.text = "";
-    workExperienceController.text = "";
-    certificationController.text = "";
-    examsController.text = "";
-    preferredlocationController.text = "";
-    licenseController.text = "";
+    addressController.text = user?.tutorModel?.address ?? "";
+    companyController.text = user?.tutorModel?.company ?? "";
   }
 }

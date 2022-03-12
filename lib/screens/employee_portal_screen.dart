@@ -2,22 +2,24 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
+import 'package:magnijobs_rnr/profile_settting_screen.dart';
 import 'package:magnijobs_rnr/routes.dart';
-import 'package:magnijobs_rnr/screens/update_employer_screen.dart';
+import 'package:magnijobs_rnr/screens/update_candidate_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../models/all_jobs_model.dart';
 import '../models/countries_model.dart';
-import '../profile_settting_screen.dart';
 import '../view_models/company_profile_view_model.dart';
 import 'all_jobs_screen.dart';
+import 'attendie_profile_screen.dart';
 
 class EmployeePortalScreen extends StatefulWidget {
   const EmployeePortalScreen({Key? key}) : super(key: key);
@@ -44,15 +46,16 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
         child: Scaffold(
           appBar: myAppBar(title: "Employee Portal", actions: [
             InkWell(
-              onTap: () {
-                Navigator.of(myContext!).push(MaterialPageRoute(
-                    builder: (context) => ProfileSettingScreen()));
-                /*  Provider.of<ProfileSettingViewModel>(myContext!, listen: false)
-                    .logout(onComplete: () {
-                  UserDefaults().clearAll();
-                  Navigator.of(context).pushReplacement(MaterialPageRoute(
-                      builder: (context) => ChooseSignInScreen()));
-                });*/
+              onTap: () async {
+                if (UserDefaults.getIsAttendie()) {
+                  await Navigator.of(myContext!).push(MaterialPageRoute(
+                      builder: (context) => AttendieCandidateProfileScreen()));
+                  setState(() {});
+                } else {
+                  await Navigator.of(myContext!).push(MaterialPageRoute(
+                      builder: (context) => ProfileSettingScreen()));
+                  setState(() {});
+                }
               },
               child: const Padding(
                 padding: EdgeInsets.all(18.0),
@@ -61,246 +64,286 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
-          body: SingleChildScrollView(
-            physics: const BouncingScrollPhysics(),
-            child: Container(
-              //  height: MediaQuery.of(context).size.height,
-              padding: EdgeInsets.only(
-                left: 50.w,
-                right: 50.w,
-              ),
-              decoration: BoxDecoration(
-                color: AppColor.alphaGrey,
-                borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(40.r),
-                    topRight: Radius.circular(40.r)),
-              ),
-              child: Column(
-                children: [
-                  imageEditWidget(),
-                  space,
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        UserDefaults.getCandidateUserSession()
-                                ?.user
-                                ?.firstName ??
-                            "",
-                        style: AppTextStyles.textStyleBoldSubTitleLarge,
-                      ),
-                      SizedBox(
-                        width: 50.w,
-                      ),
-                      Container(
-                        child: const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 12,
-                          ),
+          body: Builder(builder: (context) {
+            return SingleChildScrollView(
+              physics: const BouncingScrollPhysics(),
+              child: Container(
+                //  height: MediaQuery.of(context).size.height,
+                padding: EdgeInsets.only(
+                  left: 50.w,
+                  right: 50.w,
+                ),
+                decoration: BoxDecoration(
+                  color: AppColor.alphaGrey,
+                  borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(40.r),
+                      topRight: Radius.circular(40.r)),
+                ),
+                child: Column(
+                  children: [
+                    imageEditWidget(),
+                    space,
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          UserDefaults.getCandidateUserSession()
+                                  ?.user
+                                  ?.firstName ??
+                              "",
+                          style: AppTextStyles.textStyleBoldSubTitleLarge,
                         ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              100.r,
+                        SizedBox(
+                          width: 50.w,
+                        ),
+                        /*  Container(
+                          child: const Padding(
+                            padding: EdgeInsets.all(4),
+                            child: Icon(
+                              Icons.edit,
+                              color: Colors.white,
+                              size: 12,
                             ),
                           ),
-                          color: Colors.blue,
-                        ),
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(
+                                100.r,
+                              ),
+                            ),
+                            color: Colors.blue,
+                          ),
+                        ),*/
+                      ],
+                    ),
+                    space,
+                    Text(
+                      UserDefaults.getCandidateUserSession()?.user?.utype ?? "",
+                      style: AppTextStyles.textStyleNormalBodySmall
+                          .copyWith(color: AppColor.greyColor),
+                    ),
+                    space,
+                    Button(
+                      leftPadding: 200.w,
+                      rightPading: 200.w,
+                      buttonText: "Update Profile",
+                      textColor: AppColor.whiteColor,
+                      onTap: () {
+                        Navigator.of(myContext!).push(MaterialPageRoute(
+                            builder: (context) => UpdateCandidateScreen()));
+                      },
+                    ),
+                    space,
+                    space,
+                    Text(
+                      "Job Preferences",
+                      style: AppTextStyles.textStyleBoldSubTitleLarge,
+                    ),
+                    space,
+                    StreamBuilder(
+                      stream: Provider.of<CompanyProfileViewModel>(myContext!,
+                              listen: false)
+                          .loadCountries(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Countries?>> snapshot) {
+                        if (snapshot.hasData) {
+                          return MyDropDown(
+                            onChange: (value) {
+                              view.selectedCountryId = value.toString();
+                            },
+                            hintText: "Country",
+                            labelText: "",
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: snapshot.data!
+                                .map((e) => DropdownMenuItem(
+                                      value: e?.id.toString() ?? '',
+                                      child: Text(
+                                        e?.name ?? '',
+                                        style: AppTextStyles
+                                            .textStyleBoldBodySmall,
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (string) {
+                              return null;
+                            },
+                          );
+                        }
+                        return const Center(child: CircularProgressIndicator());
+                      },
+                    ),
+                    space,
+                    MyTextField(
+                      fillColor: AppColor.whiteColor,
+                      textColor: AppColor.blackColor,
+                      hintColor: AppColor.blackColor,
+                      labelColor: AppColor.blackColor,
+                      hintText: "search job",
+                      controller: view.queryEditingController,
+                      labelText: "Jobs",
+                      validator: (string) {
+                        if (string == null || string.isEmpty) {
+                          return 'Enter Value';
+                        }
+                        return null;
+                      },
+                    ),
+                    space,
+                    /*  StreamBuilder(
+                        stream: Provider.of<CompanyProfileViewModel>(myContext!,
+                                listen: false)
+                            .loadJobs(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Jobs?>> snapshot) {
+                          if (snapshot.hasData) {
+                            return MyDropDown(
+                              onChange: (value) {},
+                              hintText: "Jobs",
+                              labelText: "",
+                              labelColor: AppColor.redColor,
+                              borderColor: AppColor.alphaGrey,
+                              fillColor: AppColor.whiteColor,
+                              suffixIcon: "assets/icons/drop_down_ic.svg",
+                              itemFuntion: snapshot.data!
+                                  .map((e) => DropdownMenuItem(
+                                        value: e?.id.toString() ?? '',
+                                        child: Text(
+                                          e?.job ?? '',
+                                          style:
+                                              AppTextStyles.textStyleBoldBodySmall,
+                                        ),
+                                      ))
+                                  .toList(),
+                              validator: (string) {
+                                return null;
+                              },
+                            );
+                          }
+                          return Center(
+                              child: Container(child: CircularProgressIndicator()));
+                        },
                       ),
-                    ],
-                  ),
-                  space,
-                  Text(
-                    UserDefaults.getCandidateUserSession()?.user?.utype ?? "",
-                    style: AppTextStyles.textStyleNormalBodySmall
-                        .copyWith(color: AppColor.greyColor),
-                  ),
-                  space,
-                  Button(
-                    leftPadding: 200.w,
-                    rightPading: 200.w,
-                    buttonText: "Update Profile",
-                    textColor: AppColor.whiteColor,
-                    onTap: () {
-                      Navigator.of(myContext!).push(MaterialPageRoute(
-                          builder: (context) => UpdateEmployerProfileScreen()));
-                    },
-                  ),
-                  space,
-                  space,
-                  Text(
-                    "Job Preferences",
-                    style: AppTextStyles.textStyleBoldSubTitleLarge,
-                  ),
-                  space,
-                  StreamBuilder(
-                    stream: Provider.of<CompanyProfileViewModel>(myContext!,
-                            listen: false)
-                        .loadCountries(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Countries?>> snapshot) {
-                      if (snapshot.hasData) {
-                        return MyDropDown(
-                          onChange: (value) {
-                            //  view.selectedCountryId = value.toString();
-                          },
-                          hintText: "Country",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: snapshot.data!
-                              .map((e) => DropdownMenuItem(
-                                    value: e?.id.toString() ?? '',
-                                    child: Text(
-                                      e?.name ?? '',
-                                      style:
-                                          AppTextStyles.textStyleBoldBodySmall,
-                                    ),
-                                  ))
-                              .toList(),
-                          validator: (string) {
-                            return null;
-                          },
-                        );
-                      }
-                      return Center(
-                          child: Container(child: CircularProgressIndicator()));
-                    },
-                  ),
-                  space,
-                  StreamBuilder(
-                    stream: Provider.of<CompanyProfileViewModel>(myContext!,
-                            listen: false)
-                        .loadJobs(),
-                    builder: (BuildContext context,
-                        AsyncSnapshot<List<Jobs?>> snapshot) {
-                      if (snapshot.hasData) {
-                        return MyDropDown(
-                          onChange: (value) {},
-                          hintText: "Jobs",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: snapshot.data!
-                              .map((e) => DropdownMenuItem(
-                                    value: e?.id.toString() ?? '',
-                                    child: Text(
-                                      e?.job ?? '',
-                                      style:
-                                          AppTextStyles.textStyleBoldBodySmall,
-                                    ),
-                                  ))
-                              .toList(),
-                          validator: (string) {
-                            return null;
-                          },
-                        );
-                      }
-                      return Center(
-                          child: Container(child: CircularProgressIndicator()));
-                    },
-                  ),
-                  space,
-                  Button(
-                    leftPadding: 200.w,
-                    rightPading: 200.w,
-                    buttonText: "Save Profile",
-                    textColor: AppColor.whiteColor,
-                  ),
-                  space,
-                  Button(
-                    leftPadding: 200.w,
-                    rightPading: 200.w,
-                    buttonText: "Browse Jobs Posted",
-                    textColor: AppColor.whiteColor,
-                    onTap: () {
-                      Provider.of<AllJobsViewModel>(myContext!, listen: false)
-                          .getAllJobs(completion: (allJobs) {
-                        Navigator.of(context).push(MaterialPageRoute(
-                            builder: (context) => AllJobScreen()));
-                      });
-                    },
-                  ),
-                  space,
-                ],
+                      space,*/
+
+                    Button(
+                      leftPadding: 200.w,
+                      rightPading: 200.w,
+                      buttonText: "Browse Jobs Posted",
+                      textColor: AppColor.whiteColor,
+                      onTap: () {
+                        if (view.selectedCountryId != null &&
+                            view.queryEditingController.text.isNotEmpty) {
+                          Provider.of<AllJobsViewModel>(myContext!,
+                                  listen: false)
+                              .getJobBasedOnCountry(
+                            countryId: view.selectedCountryId ?? '',
+                            query: view.queryEditingController.text,
+                            completion: (allJobs) {
+                              Navigator.of(context).push(MaterialPageRoute(
+                                  builder: (context) => AllJobScreen()));
+                            },
+                          );
+                        } else {
+                          AppPopUps.showSnackvBar(
+                              message: 'Select country & enter search',
+                              context: context);
+                        }
+                      },
+                    ),
+                    space,
+                  ],
+                ),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );
   }
 
   imageEditWidget() {
-    return Container(
-      padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
-      margin: EdgeInsets.all(20.h),
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        borderRadius: BorderRadius.circular(50.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 250.r,
-                    backgroundColor: Colors.grey.shade200,
-                    child: CircleAvatar(
+    return InkWell(
+      onTap: () {
+        Provider.of<UpdateCandidateProfileViewModel>(myContext!, listen: false)
+            .getFile();
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
+        margin: EdgeInsets.all(20.h),
+        decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          borderRadius: BorderRadius.circular(50.r),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
                       radius: 250.r,
-                      backgroundImage: (UserDefaults.getCandidateUserSession()
-                                  ?.user
-                                  ?.profile !=
-                              null)
-                          ? Image.network(ApiConstants.imageBaseUrl +
-                                  (UserDefaults.getCandidateUserSession()
-                                          ?.user
-                                          ?.profile ??
-                                      ""))
-                              .image
-                          : const AssetImage(
-                              'assets/images/place_your_image.png'),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: Container(
-                      child: const Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 14,
-                        ),
+                      backgroundColor: Colors.grey.shade200,
+                      child: CircleAvatar(
+                        radius: 250.r,
+                        backgroundImage: Provider.of<UpdateCandidateProfileViewModel>(
+                                        myContext!,
+                                        listen: false)
+                                    .profilePicImage !=
+                                null
+                            ? (Image.file(
+                                    Provider.of<UpdateCandidateProfileViewModel>(
+                                            myContext!,
+                                            listen: false)
+                                        .profilePicImage!)
+                                .image)
+                            : (UserDefaults.getCandidateUserSession()
+                                        ?.user
+                                        ?.profile !=
+                                    null)
+                                ? Image.network(ApiConstants.profilePicsBaseUrl +
+                                        (UserDefaults.getCandidateUserSession()
+                                                ?.user
+                                                ?.profile ??
+                                            ""))
+                                    .image
+                                : const AssetImage(
+                                    'assets/images/place_your_image.png'),
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(
-                            150.r,
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: Container(
+                        child: const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 14,
                           ),
                         ),
-                        color: Colors.blue,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              150.r,
+                            ),
+                          ),
+                          color: Colors.blue,
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }

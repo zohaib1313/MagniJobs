@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -9,6 +10,8 @@ import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.da
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
+import '../models/countries_model.dart';
+import '../view_models/company_profile_view_model.dart';
 
 class UpdateCandidateScreen extends StatefulWidget {
   UpdateCandidateScreen({Key? key}) : super(key: key);
@@ -25,11 +28,11 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
   @override
   void initState() {
     super.initState();
-    view.setValuesWithSharedPref();
   }
 
   @override
   Widget build(BuildContext context) {
+    view.setValuesWithSharedPref();
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColor.whiteColor,
@@ -114,10 +117,52 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                               hint: "Address",
                               validateDate: true,
                               controller: view.addressController),
-                          getInputItem(
-                              hint: "Location",
-                              validateDate: true,
-                              controller: view.locationController),
+                          space,
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.locationController.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Location",
+                                  labelText: "",
+                                  leftPadding: 0,
+                                  rightPadding: 0,
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.whiteColor,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    if (((string ?? '').isEmpty) ||
+                                        view.locationController.text.isEmpty ||
+                                        view.locationController.text == '00') {
+                                      return 'Select Location';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                          ),
                           space,
                           InkWell(
                             onTap: () {
@@ -231,9 +276,54 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                           getInputItem(
                               hint: "License",
                               controller: view.licenseController),
-                          getInputItem(
-                              hint: "Preferred Location",
-                              controller: view.preferredlocationController),
+                          space,
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.preferredlocationController.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Preferred Location",
+                                  labelText: "",
+                                  leftPadding: 0,
+                                  rightPadding: 0,
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.whiteColor,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    if (((string ?? '').isEmpty ||
+                                        view.preferredlocationController.text
+                                            .isEmpty ||
+                                        view.preferredlocationController.text ==
+                                            '00')) {
+                                      return 'Select Preferred Location';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                          ),
                           space,
                         ],
                       ),
@@ -248,7 +338,10 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                     textColor: AppColor.whiteColor,
                     onTap: () {
                       if (view.formKey.currentState!.validate()) {
-                        view.updateProfile(onComplete: () {});
+                        view.updateProfile(onComplete: () {
+                          view.setValuesWithSharedPref();
+                          AppPopUps.showAlertDialog(message: 'Profile Updated');
+                        });
                       }
                     },
                   ),

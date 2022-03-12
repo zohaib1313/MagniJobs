@@ -10,7 +10,9 @@ import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/countries_model.dart';
 import '../../routes.dart';
+import '../../view_models/company_profile_view_model.dart';
 
 class EmployerSignUpScreen extends StatefulWidget {
   EmployerSignUpScreen({Key? key}) : super(key: key);
@@ -126,16 +128,47 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               },
                             ),
                             space,
-                            MyTextField(
-                              fillColor: AppColor.alphaGrey,
-                              hintText: "Location",
-                              labelText: "Location",
-                              controller: view.locationController,
-                              validator: (string) {
-                                if (string == null || string.isEmpty) {
-                                  return 'Enter Value';
+                            StreamBuilder(
+                              stream: Provider.of<CompanyProfileViewModel>(
+                                      myContext!,
+                                      listen: false)
+                                  .loadCountries(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<Countries?>> snapshot) {
+                                if (snapshot.hasData) {
+                                  return MyDropDown(
+                                    onChange: (value) {
+                                      view.locationController.text =
+                                          value.toString();
+                                    },
+                                    hintText: "Location",
+                                    labelText: "",
+                                    labelColor: AppColor.redColor,
+                                    borderColor: AppColor.alphaGrey,
+                                    fillColor: AppColor.alphaGrey,
+                                    suffixIcon: "assets/icons/drop_down_ic.svg",
+                                    itemFuntion: snapshot.data!
+                                        .map((e) => DropdownMenuItem(
+                                              value: e?.id.toString() ?? '',
+                                              child: Text(
+                                                e?.name ?? '',
+                                                style: AppTextStyles
+                                                    .textStyleBoldBodySmall,
+                                              ),
+                                            ))
+                                        .toList(),
+                                    validator: (string) {
+                                      if (view
+                                          .locationController.text.isEmpty) {
+                                        return 'select country';
+                                      }
+                                      return null;
+                                    },
+                                  );
                                 }
-                                return null;
+                                return Center(
+                                    child: Container(
+                                        child: CircularProgressIndicator()));
                               },
                             ),
                             space,

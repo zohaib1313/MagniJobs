@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../utils/user_defaults.dart';
+
 class ProfileSettingViewModel extends ChangeNotifier {
   void logout({onComplete}) {
+    UserDefaults().clearAll();
     onComplete();
+
     /* AppPopUps().showProgressDialog(context: myContext);
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client

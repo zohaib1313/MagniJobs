@@ -6,6 +6,7 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/forgot_password_enter_mail_screen.dart';
 import 'package:magnijobs_rnr/models/signin_model.dart';
 import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
+import 'package:magnijobs_rnr/screens/attendie_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
@@ -274,9 +275,13 @@ class _SigInScreenState extends State<SigInScreen> {
       case "employer":
         Navigator.of(myContext!).pushNamed(EmployerSignUpScreen.id);
         break;
-      case "applicant":
+      case "applicant": //candidate
         Navigator.of(myContext!).pushNamed(ApplicantSignUp.id);
         break;
+      case "attendie": //candidate
+        Navigator.of(myContext!).pushNamed(ApplicantSignUp.id);
+        break;
+
       case "tutor":
         Navigator.of(myContext!).pushNamed(TutorSignUpScreen.id);
         break;
@@ -318,7 +323,7 @@ class _SigInScreenState extends State<SigInScreen> {
           }
         });
         break;
-      case "applicant":
+      case "applicant": //candidate
         view.signInCandidateUser(widget.userType,
             completion: (CandidateSignInModel? user) async {
           if ((user?.user?.verified ?? 0) != 0) {
@@ -384,6 +389,39 @@ class _SigInScreenState extends State<SigInScreen> {
           }
         });
         break;
+      case "attendie": //candidate
+        view.signInCandidateUser(widget.userType,
+            completion: (CandidateSignInModel? user) async {
+          if ((user?.user?.verified ?? 0) != 0) {
+            if (user != null) {
+              UserDefaults.saveCandidateUserSession(user, widget.userType);
+              view.resetState();
+              gotoRelevantScreenOnUserType(userType: widget.userType);
+            }
+          } else {
+            Provider.of<VerifyNumberViewModel>(myContext!, listen: false)
+                .resetState();
+            bool? isVerified =
+                await Navigator.of(myContext!).push(MaterialPageRoute(
+              builder: (myContext) => VerifyNumberScreen(),
+            ));
+            if (isVerified ?? false) {
+              if (user != null) {
+                UserDefaults.saveCandidateUserSession(user, widget.userType);
+                view.resetState();
+                gotoRelevantScreenOnUserType(userType: widget.userType);
+              }
+            } else {
+              AppPopUps.showConfirmDialog(
+                  title: 'Alert',
+                  message: 'Verifications failed, retry?',
+                  onSubmit: () {
+                    startVerification();
+                  });
+            }
+          }
+        });
+        break;
     }
   }
 
@@ -407,6 +445,10 @@ class _SigInScreenState extends State<SigInScreen> {
           break;
         case 'tutor':
           Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
+          break;
+        case 'attendie':
+          Navigator.of(myContext!)
+              .pushReplacementNamed(AttendieCandidateProfileScreen.id);
           break;
       }
     } else {

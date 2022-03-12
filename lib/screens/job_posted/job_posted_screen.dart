@@ -8,6 +8,8 @@ import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../common_widgets/common_widgets.dart';
+import '../../profile_settting_screen.dart';
 import '../../utils/my_app_bar.dart';
 import '../../utils/utils.dart';
 
@@ -51,11 +53,23 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
               },
               closeSearchOnSuffixTap: true,
               textController: view.searchJobPostedController,
+            ),
+            Flexible(
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(myContext!).push(MaterialPageRoute(
+                      builder: (context) => ProfileSettingScreen()));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(18.0),
+                  child: SvgViewer(svgPath: "assets/icons/ic_settings.svg"),
+                ),
+              ),
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
           body: Padding(
-            padding: EdgeInsets.all(18.0),
+            padding: const EdgeInsets.all(18.0),
             child: Column(
               children: [
                 space,

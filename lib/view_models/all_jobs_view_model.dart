@@ -142,9 +142,6 @@ class AllJobsViewModel extends ChangeNotifier {
       for (var element in alJobs) {
         if (searchJobPostedController.text
                 .toLowerCase()
-                .contains(element.employer ?? "".toLowerCase()) ||
-            searchJobPostedController.text
-                .toLowerCase()
                 .contains(element.job ?? "".toLowerCase()) ||
             searchJobPostedController.text
                 .toLowerCase()
@@ -157,5 +154,39 @@ class AllJobsViewModel extends ChangeNotifier {
       }
     }
     notifyListeners();
+  }
+
+  void getJobBasedOnCountry(
+      {completion, required String countryId, required String query}) {
+    AppPopUps().showProgressDialog(context: myContext);
+    // Map<String, dynamic> body = {"country": countryId, "query": query};
+    Map<String, dynamic> body = {"country": "6", "query": "a"};
+
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.jobByCountry,
+              body: body,
+            ),
+            create: () => APIResponse<JobsA>(create: () => JobsA()),
+            apiFunction: getJobBasedOnCountry)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      alJobs = response.response?.data?.jobs ?? [];
+      filteredJobs.clear();
+      filteredJobs.addAll(alJobs);
+      completion(alJobs);
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
   }
 }

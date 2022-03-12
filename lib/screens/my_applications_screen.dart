@@ -4,35 +4,39 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
-import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/styles.dart';
-import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
-import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
+import 'package:magnijobs_rnr/view_models/attendie_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../common_widgets/app_popups.dart';
-import '../utils/my_app_bar.dart';
+import '../models/expandable_tile_model.dart';
+import '../models/my_applications.dart';
+import '../utils/app_alert_bottom_sheet.dart';
+import '../view_models/all_jobs_view_model.dart';
 
-class AllJobScreen extends StatefulWidget {
-  AllJobScreen({Key? key, allApplications}) : super(key: key);
-  static const id = "AllJobScreen";
+class MyApplicationsScreen extends StatefulWidget {
+  List<Applications> allApplications;
+
+  MyApplicationsScreen({Key? key, required this.allApplications})
+      : super(key: key);
+  static const id = "AllJobSMyApplicationsScreencreen";
 
   @override
-  _AllJobScreenState createState() => _AllJobScreenState();
+  _MyApplicationsScreenState createState() => _MyApplicationsScreenState();
 }
 
-class _AllJobScreenState extends State<AllJobScreen> {
+class _MyApplicationsScreenState extends State<MyApplicationsScreen> {
   final space = SizedBox(height: 20.h);
-  var view = Provider.of<AllJobsViewModel>(myContext!, listen: true);
+  var view = Provider.of<AttendieProfileViewModel>(myContext!, listen: true);
 
   @override
   void initState() {
     super.initState();
-    view.searchJobPostedController.addListener(() {
+    /*  view.searchJobPostedController.addListener(() {
       view.searchJobPosted();
-    });
+    });*/
   }
 
   @override
@@ -46,16 +50,7 @@ class _AllJobScreenState extends State<AllJobScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(context: context, title: "Jobs Posted", actions: [
-            MyAnimSearchBar(
-              width: MediaQuery.of(context).size.width,
-              onSuffixTap: () {
-                view.searchJobPostedController.clear();
-              },
-              closeSearchOnSuffixTap: true,
-              textController: view.searchJobPostedController,
-            )
-          ]),
+          appBar: myAppBar(context: context, title: "Jobs Posted", actions: []),
           backgroundColor: AppColor.alphaGrey,
           body: Container(
             //  height: MediaQuery.of(context).size.height,
@@ -69,7 +64,7 @@ class _AllJobScreenState extends State<AllJobScreen> {
                   topLeft: Radius.circular(40.r),
                   topRight: Radius.circular(40.r)),
             ),
-            child: view.filteredJobs.isEmpty
+            child: view.myApplicaitons.isEmpty
                 ? const Center(
                     child: Text(
                         'No Job Found related to selected country and search'),
@@ -78,9 +73,9 @@ class _AllJobScreenState extends State<AllJobScreen> {
                     physics: const BouncingScrollPhysics(),
                     shrinkWrap: true,
                     // itemCount: 3,
-                    itemCount: view.filteredJobs.length,
+                    itemCount: view.myApplicaitons.length,
                     itemBuilder: (context, index) {
-                      return getJobInforCard(view.filteredJobs[index]);
+                      return getJobInforCard(view.myApplicaitons[index]);
                     },
                   ),
           ),
@@ -89,7 +84,14 @@ class _AllJobScreenState extends State<AllJobScreen> {
     );
   }
 
-  getJobInforCard(Jobs job) {
+  getJobInforCard(Applications job) {
+    Jobs? jj;
+    for (var element in view.allJobs) {
+      if ((element.id ?? 0) == int.parse(job.jobId ?? '0')) {
+        jj = element;
+      }
+    }
+
     return Container(
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
@@ -101,14 +103,14 @@ class _AllJobScreenState extends State<AllJobScreen> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Text(
-            "Company",
+            "Application",
             style: AppTextStyles.textStyleBoldBodySmall,
           ),
           space,
           Text(
-            job.poster ?? "",
+            jj?.job ?? '',
             overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.textStyleBoldSubTitleLarge
+            style: AppTextStyles.textStyleBoldBodySmall
                 .copyWith(color: AppColor.primaryBlueColor),
           ),
           Row(
@@ -121,15 +123,16 @@ class _AllJobScreenState extends State<AllJobScreen> {
                   children: [
                     SizedBox(height: 10.h),
                     rowInformation(
-                        icon: "assets/icons/ic_file.svg", text: job.job ?? ""),
+                        icon: "assets/icons/ic_file.svg",
+                        text: jj?.poster ?? ""),
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_location.svg",
-                        text: job.location ?? ""),
+                        text: jj?.location ?? ""),
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_currency.svg",
-                        text: (job.salary ?? "") + " / Year"),
+                        text: (jj?.salary ?? "") + " / Year"),
                   ],
                 ),
               ),
@@ -180,14 +183,14 @@ class _AllJobScreenState extends State<AllJobScreen> {
                                       ExpandAbleTile(
                                           model: ExpandableTileModel(
                                               title: "Qualifications",
-                                              message: job.qualification ?? "",
+                                              message: jj?.qualification ?? "",
                                               isExpanded: false)),
                                       space,
                                       space,
                                       ExpandAbleTile(
                                           model: ExpandableTileModel(
                                               title: "Description",
-                                              message: job.jobDescription ?? "",
+                                              message: jj?.jobDescription ?? "",
                                               isExpanded: false)),
                                       space,
                                       space,
@@ -196,15 +199,40 @@ class _AllJobScreenState extends State<AllJobScreen> {
                                         padding: 18.h,
                                         leftPadding: 400.w,
                                         rightPading: 400.w,
-                                        buttonText: "Apply",
+                                        buttonText: "Cancel Application",
                                         textColor: AppColor.whiteColor,
                                         onTap: () {
-                                          view.applyForJob(
+                                          view.cancelApplication(
                                               id: job.id ?? 0,
                                               completion: () {
+                                                Navigator.of(myContext!).pop();
+                                                Provider.of<AllJobsViewModel>(
+                                                        myContext!,
+                                                        listen: false)
+                                                    .getAllJobs(
+                                                        completion: (allJobs) {
+                                                  Provider.of<AttendieProfileViewModel>(
+                                                          myContext!,
+                                                          listen: false)
+                                                      .allJobs = allJobs;
+                                                  Provider.of<AttendieProfileViewModel>(
+                                                          myContext!,
+                                                          listen: false)
+                                                      .getMyApplications(
+                                                    completion:
+                                                        (allApplications) {
+                                                      Navigator.of(context).pushReplacement(
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  MyApplicationsScreen(
+                                                                      allApplications:
+                                                                          allApplications)));
+                                                    },
+                                                  );
+                                                });
                                                 AppPopUps.showAlertDialog(
                                                     message:
-                                                        'Application was sent successfully');
+                                                        'Application Canceled');
                                               });
                                         },
                                       ),
@@ -220,14 +248,41 @@ class _AllJobScreenState extends State<AllJobScreen> {
                     space,
                     Button(
                       padding: 18.h,
-                      buttonText: "Apply",
+                      buttonText: "Cancel Application",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        view.applyForJob(
+                        Navigator.of(myContext!).pop();
+                        view.cancelApplication(
                             id: job.id ?? 0,
                             completion: () {
                               AppPopUps.showAlertDialog(
-                                  message: 'Application was sent successfully');
+                                  message: 'Application cancelled');
+                              Navigator.of(myContext!).pop();
+                              Navigator.of(myContext!).pop();
+
+                              Provider.of<AllJobsViewModel>(myContext!,
+                                      listen: false)
+                                  .getAllJobs(completion: (allJobs) {
+                                Provider.of<AttendieProfileViewModel>(
+                                        myContext!,
+                                        listen: false)
+                                    .allJobs = allJobs;
+                                Provider.of<AttendieProfileViewModel>(
+                                        myContext!,
+                                        listen: false)
+                                    .getMyApplications(
+                                  completion: (allApplications) {
+                                    Navigator.of(context).pushReplacement(
+                                      MaterialPageRoute(
+                                        builder: (context) =>
+                                            MyApplicationsScreen(
+                                                allApplications:
+                                                    allApplications),
+                                      ),
+                                    );
+                                  },
+                                );
+                              });
                             });
                       },
                     ),

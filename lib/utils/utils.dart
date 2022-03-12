@@ -3,7 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 
+import '../models/countries_model.dart';
 import '../styles.dart';
 
 void printWrapped(String text) {
@@ -105,4 +107,10 @@ Future<void> showMyTimePicker(
   if (picked != null) {
     onTimeSelected(picked.period.name);
   }
+}
+
+Countries? getCountryNameFromId(int id) {
+  CountriesModel? countriesModel = UserDefaults.getCountriesList();
+  return countriesModel?.countries
+      ?.firstWhere((element) => ((element.id ?? 0) == (id)));
 }

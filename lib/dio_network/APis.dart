@@ -32,7 +32,12 @@ enum APIType {
   place_booking,
   my_bookings,
   cancelBookings,
-  candidateByCountry
+  candidateByCountry,
+  jobByCountry,
+  getMyJobs,
+  cancelApplication,
+  allLessons,
+  bookWithTutor,
 }
 
 class ApiConstants {
@@ -71,6 +76,12 @@ class ApiConstants {
   static const my_bookings = "my-bookings";
   static const cancelBookings = "cancel-booking";
   static const candidateByCountry = "candidates-by-country";
+  static const jobByCountry = "jobs-in-countries";
+  static const getMyJobs = "my-applications";
+  static const cancelApplication = "cancel-application";
+  static const allLessons = "all-lessons";
+  static const bookWithTutor = "book-lesson";
 
-  static var imageBaseUrl = 'http://magnijobs.applypressure.co.uk/';
+  static var profilePicsBaseUrl =
+      'http://magnijobs.applypressure.co.uk/profile_pics/';
 }

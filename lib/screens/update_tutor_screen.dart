@@ -9,6 +9,7 @@ import 'package:magnijobs_rnr/view_models/update_tutor_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
+import '../common_widgets/app_popups.dart';
 
 class UpdateTutorProfileScreen extends StatefulWidget {
   UpdateTutorProfileScreen({Key? key}) : super(key: key);
@@ -26,11 +27,11 @@ class _UpdateTutorProfileScreenState extends State<UpdateTutorProfileScreen> {
   @override
   void initState() {
     super.initState();
-    view.setValuesWithSharedPref();
   }
 
   @override
   Widget build(BuildContext context) {
+    view.setValuesWithSharedPref();
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColor.whiteColor,
@@ -115,126 +116,12 @@ class _UpdateTutorProfileScreenState extends State<UpdateTutorProfileScreen> {
                               hint: "Address",
                               validateDate: true,
                               controller: view.addressController),
+                          space,
                           getInputItem(
-                              hint: "Location",
+                              hint: "Company Name",
                               validateDate: true,
-                              controller: view.locationController),
+                              controller: view.companyController),
                           space,
-                          InkWell(
-                            onTap: () {
-                              showDatePickerDialog(
-                                  context: context,
-                                  onDateSelected: ((value) {
-                                    print(value.toString());
-                                    view.dobController.text = value.toString();
-                                  }));
-                            },
-                            child: MyTextField(
-                              leftPadding: 0,
-                              rightPadding: 0,
-                              enable: false,
-                              fillColor: AppColor.whiteColor,
-                              textColor: AppColor.blackColor,
-                              hintColor: AppColor.blackColor,
-                              labelColor: AppColor.blackColor,
-                              hintText: "Date of birth",
-                              controller: view.dobController,
-                              labelText: "Date of birth",
-                              validator: (string) {
-                                if (string == null || string.isEmpty) {
-                                  return 'Enter Value';
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          getInputItem(
-                              hint: "Nationality",
-                              validateDate: true,
-                              controller: view.nationalityController),
-                          space,
-                          MyDropDown(
-                            onChange: (value) {
-                              view.genderController.text = value;
-                            },
-                            hintText: "Gender",
-                            labelText: "",
-                            leftPadding: 0,
-                            rightPadding: 0,
-                            labelColor: AppColor.redColor,
-                            borderColor: AppColor.whiteColor,
-                            fillColor: AppColor.whiteColor,
-                            suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Single",
-                                child: Text(
-                                  "Single",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Married",
-                                child: Text(
-                                  "Married",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
-                            validator: (string) {
-                              return null;
-                            },
-                          ),
-                          space,
-                          MyDropDown(
-                            onChange: (value) {
-                              view.martialStatusController.text = value;
-                            },
-                            hintText: "Marital Status",
-                            labelText: "",
-                            leftPadding: 0,
-                            rightPadding: 0,
-                            labelColor: AppColor.redColor,
-                            borderColor: AppColor.whiteColor,
-                            fillColor: AppColor.whiteColor,
-                            suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Male",
-                                child: Text(
-                                  "Male",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Female",
-                                child: Text(
-                                  "Female",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
-                            validator: (string) {
-                              return null;
-                            },
-                          ),
-                          getInputItem(
-                              hint: "School",
-                              controller: view.schoolController),
-                          getInputItem(
-                              hint: "Work Experience",
-                              controller: view.workExperienceController),
-                          getInputItem(
-                              hint: "Certificates",
-                              controller: view.certificationController),
-                          getInputItem(
-                              hint: "Exams", controller: view.examsController),
-                          getInputItem(
-                              hint: "License",
-                              controller: view.licenseController),
-                          getInputItem(
-                              hint: "Preferred Location",
-                              controller: view.preferredlocationController),
                           space,
                         ],
                       ),
@@ -249,7 +136,9 @@ class _UpdateTutorProfileScreenState extends State<UpdateTutorProfileScreen> {
                     textColor: AppColor.whiteColor,
                     onTap: () {
                       if (view.formKey.currentState!.validate()) {
-                        view.updateProfile(onComplete: () {});
+                        view.updateProfile(onComplete: () {
+                          AppPopUps.showAlertDialog(message: 'Profile updated');
+                        });
                       }
                     },
                   ),

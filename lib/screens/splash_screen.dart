@@ -2,13 +2,16 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 import '../routes.dart';
+import '../view_models/country_list_view_model.dart';
 import 'company_profile/company_profile_screen.dart';
 import 'employee_portal_screen.dart';
 
@@ -25,29 +28,25 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-
-    Timer(
-        const Duration(seconds: 3),
-        () => {
-              if (UserDefaults.getUserType() != null)
-                {gotoRelevantScreenOnUserType()}
-              else
-                {
-                  Navigator.of(myContext!)
-                      .pushReplacementNamed(OnBoardingScreen.id)
-                }
-              /* Provider.of<CountriesListViewModel>(myContext!, listen: false)
-                  .loadCountries(completion: (countryModel) {
-                if (countryModel != null) {
-                  if (UserDefaults.getUserSession() != null) {
-                    gotoRelevantScreenOnUserType();
-                  } else {
-                    Navigator.of(myContext!)
-                        .pushReplacementNamed(OnBoardingScreen.id);
-                  }
-                }
-              })*/
-            });
+    Provider.of<CountriesListViewModel>(myContext!, listen: false)
+        .loadCountries(completion: (countryModel) {
+      if (countryModel != null) {
+        UserDefaults.saveCountries(countryModel!);
+        Timer(
+            const Duration(seconds: 1),
+            () => {
+                  if (UserDefaults.getUserType() != null)
+                    {gotoRelevantScreenOnUserType()}
+                  else
+                    {
+                      Navigator.of(myContext!)
+                          .pushReplacementNamed(OnBoardingScreen.id)
+                    }
+                });
+      } else {
+        AppPopUps.showAlertDialog(message: "No Internet Connection");
+      }
+    });
   }
 
   void gotoRelevantScreenOnUserType() {

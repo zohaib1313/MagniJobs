@@ -5,6 +5,8 @@ import 'package:magnijobs_rnr/models/signin_model.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../models/countries_model.dart';
+
 class UserDefaults {
   static SharedPreferences? sharedPreferences;
 
@@ -62,16 +64,12 @@ class UserDefaults {
 
   //employer, applicant,tutor
 
-  static void saveCandidateUserSession(
+  static Future<void> saveCandidateUserSession(
       CandidateSignInModel signInModel, String type) async {
     String user = json.encode(signInModel.toJson());
-    getPref().then((value) => value
+    return getPref().then((value) => value
       ..setString('userData', user)
       ..setString('type', type));
-    if (kDebugMode) {
-      printWrapped("user session saved type= ${type} ${user}");
-      printWrapped(user.toString());
-    }
   }
 
   static CandidateSignInModel? getCandidateUserSession() {
@@ -80,7 +78,6 @@ class UserDefaults {
       Map<String, dynamic> json =
           jsonDecode(sharedPreferences!.getString('userData')!);
       user = CandidateSignInModel.fromJson(json);
-      setApiToken(user.token ?? '');
       printWrapped(user.toString());
     }
     return user;
@@ -104,16 +101,16 @@ class UserDefaults {
       Map<String, dynamic> json =
           jsonDecode(sharedPreferences!.getString('userData')!);
       user = EmployerSignInModel.fromJson(json);
-      setApiToken(user.token ?? '');
+
       printWrapped(user.toString());
     }
     return user;
   }
 
-  static void saveTutorSignInModel(
+  static Future<void> saveTutorSignInModel(
       TutorSignInModel signInModel, String type) async {
     String user = json.encode(signInModel.toJson());
-    getPref().then((value) => value
+    return getPref().then((value) => value
       ..setString('userData', user)
       ..setString('type', type));
     if (kDebugMode) {
@@ -122,13 +119,33 @@ class UserDefaults {
     }
   }
 
+  static void saveCountries(CountriesModel countriesModel) async {
+    String c = json.encode(countriesModel.toJson());
+    getPref().then((value) => value..setString('countries', c));
+    if (kDebugMode) {
+      printWrapped(c.toString());
+    }
+  }
+
+  static CountriesModel? getCountriesList() {
+    CountriesModel? countriesModel;
+    if (sharedPreferences!.getString('countries') != null) {
+      Map<String, dynamic> json =
+          jsonDecode(sharedPreferences!.getString('countries')!);
+      countriesModel = CountriesModel.fromJson(json);
+
+      printWrapped(countriesModel.toString());
+    }
+    return countriesModel;
+  }
+
   static TutorSignInModel? getTutorUserSession() {
     TutorSignInModel? user;
     if (sharedPreferences!.getString('userData') != null) {
       Map<String, dynamic> json =
           jsonDecode(sharedPreferences!.getString('userData')!);
       user = TutorSignInModel.fromJson(json);
-      setApiToken(user.token ?? '');
+
       printWrapped(user.toString());
     }
     return user;
@@ -144,5 +161,13 @@ class UserDefaults {
 
   static setApiToken(String value) {
     return sharedPreferences?.setString('ApiToken', value);
+  }
+
+  static setIsAttendie(bool value) {
+    return sharedPreferences?.setBool('isAttendie', value);
+  }
+
+  static bool getIsAttendie() {
+    return sharedPreferences?.getBool('isAttendie') ?? false;
   }
 }

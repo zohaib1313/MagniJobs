@@ -7,8 +7,6 @@ import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/models/get_jobseeker_profile.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
-import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
-import 'package:provider/provider.dart';
 
 import '../routes.dart';
 
@@ -21,8 +19,9 @@ class CountryAndJobViewModel extends ChangeNotifier {
   void getAllCandidates({completion}) {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
-      'country': Provider.of<CompanyProfileViewModel>(myContext!, listen: false)
-          .selectedCountryId
+      /*    'country': Provider.of<CompanyProfileViewModel>(myContext!, listen: false)
+          .selectedCountryId*/
+      'country': '4'
     };
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -109,10 +108,6 @@ class CountryAndJobViewModel extends ChangeNotifier {
         if ((candidate.firstName?.toLowerCase() ?? '')
                 .contains(text.toLowerCase()) ||
             (candidate.lastName?.toLowerCase() ?? '')
-                .contains(text.toLowerCase()) ||
-            (candidate.location?.toLowerCase() ?? '')
-                .contains(text.toLowerCase()) ||
-            (candidate.nationality?.toLowerCase() ?? '')
                 .contains(text.toLowerCase())) {
           showingListOfCandidates.add(candidate);
         }

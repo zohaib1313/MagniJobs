@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
 import 'package:magnijobs_rnr/screens/all_jobs_screen.dart';
 import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
+import 'package:magnijobs_rnr/screens/attendie_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/employee_portal_screen.dart';
@@ -19,9 +20,11 @@ import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model.dart';
+import 'package:magnijobs_rnr/view_models/attendie_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/calender_applicant_bookings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
+import 'package:magnijobs_rnr/view_models/country_list_view_model.dart';
 import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
@@ -66,6 +69,8 @@ final Map<String, Widget Function(BuildContext)> routes = {
   UpdateTutorProfileScreen.id: (context) => UpdateTutorProfileScreen(),
   TutorSignUpScreen.id: (context) => TutorSignUpScreen(),
   TutorProfileScreen.id: (context) => TutorProfileScreen(),
+  AttendieCandidateProfileScreen.id: (context) =>
+      AttendieCandidateProfileScreen(),
 };
 
 final List<ChangeNotifierProvider<dynamic>> multiProviders = [
@@ -125,4 +130,8 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => CalenderApplicantBookingsViewModel()),
   ChangeNotifierProvider<TutorBookingJobHistoryViewModel>(
       create: (_) => TutorBookingJobHistoryViewModel()),
+  ChangeNotifierProvider<AttendieProfileViewModel>(
+      create: (_) => AttendieProfileViewModel()),
+  ChangeNotifierProvider<CountriesListViewModel>(
+      create: (_) => CountriesListViewModel()),
 ];

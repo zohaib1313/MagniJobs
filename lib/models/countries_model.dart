@@ -32,6 +32,16 @@ class CountriesModel implements Decodable {
     }
     return this;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CountriesModel &&
+          runtimeType == other.runtimeType &&
+          countries == other.countries;
+
+  @override
+  int get hashCode => countries.hashCode;
 }
 
 class Countries {
@@ -62,4 +72,16 @@ class Countries {
     // data['updated_at'] = this.updatedAt;
     return data;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Countries &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          code == other.code &&
+          name == other.name;
+
+  @override
+  int get hashCode => id.hashCode ^ code.hashCode ^ name.hashCode;
 }

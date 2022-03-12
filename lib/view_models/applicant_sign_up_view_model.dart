@@ -102,7 +102,7 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
     client
         .request(
       route: APIRoute(
-        APIType.register_new_employer,
+        APIType.register_new_applicant,
         body: body,
       ),
       create: () => APIResponse(decoding: false),

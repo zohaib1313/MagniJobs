@@ -4,12 +4,14 @@ import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
+import 'package:path/path.dart';
 
 import '../models/signin_model.dart';
 import '../routes.dart';
@@ -17,7 +19,7 @@ import '../routes.dart';
 class UpdateCandidateProfileViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
-  File? nationalIdImage;
+  File? profilePicImage;
   TextEditingController firstnameContoller = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
@@ -69,15 +71,20 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
         allowMultiple: false);
     if (result != null) {
       File file = File(result.files.single.path!);
-
-      nationalIdImage = file;
+      profilePicImage = file;
+      setValuesWithSharedPref();
+      updateProfile(onComplete: () {
+        profilePicImage = null;
+        setValuesWithSharedPref();
+        AppPopUps.showAlertDialog(message: 'Profile updated');
+      });
     } else {
       // User canceled the picker
     }
   }
 
   resetState() {
-    nationalIdImage = null;
+    profilePicImage = null;
     firstnameContoller.clear();
     lastNameController.clear();
     emailController.clear();
@@ -96,7 +103,7 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
     licenseController.clear();
   }
 
-  void updateProfile({onComplete}) {
+  void updateProfile({onComplete}) async {
     AppPopUps().showProgressDialog(context: myContext);
     FormData body = FormData.fromMap({
       "first_name": firstnameContoller.text,
@@ -111,27 +118,33 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
       "marital_status": martialStatusController.text.isEmpty
           ? "Single"
           : martialStatusController.text,
-      "school": schoolController,
-      "work_experience": workExperienceController,
+      "school": schoolController.text,
+      "work_experience": workExperienceController.text,
       "certifications": certificationController.text,
       "exams": examsController.text,
       "license": licenseController.text,
       "preferred_location": preferredlocationController.text,
+      'profile': profilePicImage?.path != null
+          ? await MultipartFile.fromFile(
+              profilePicImage!.path,
+              filename: basename(profilePicImage!.path),
+            )
+          : "",
     });
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
         .request(
-      route: APIRoute(
-        APIType.update_my_profile,
-        body: body,
-      ),
-      create: () => APIResponse(),
-      // apiFunction: registerApplicant()
-    )
-        .then((response) {
+            route: APIRoute(
+              APIType.update_my_profile,
+              body: body,
+            ),
+            create: () => APIResponse<CandidateSignInModel>(
+                create: () => CandidateSignInModel()),
+            apiFunction: updateProfile)
+        .then((response) async {
       AppPopUps().dissmissDialog();
-
-      resetState();
+      await UserDefaults.saveCandidateUserSession(
+          response.response!.data!, UserDefaults.getUserType() ?? '');
       onComplete();
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -152,17 +165,22 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
     lastNameController.text = user?.user?.lastName ?? "";
     emailController.text = user?.user?.email ?? "";
     mobileController.text = user?.user?.mobile ?? "";
-    addressController.text = '';
-    locationController.text = "";
-    dobController.text = "";
-    nationalityController.text = "";
-    genderController.text = "";
-    martialStatusController.text = "";
-    schoolController.text = "";
-    workExperienceController.text = "";
-    certificationController.text = "";
-    examsController.text = "";
-    preferredlocationController.text = "";
-    licenseController.text = "";
+    addressController.text = user?.candidateModel?.address ?? '';
+    locationController.text = user?.candidateModel?.location ?? '00';
+    dobController.text = user?.candidateModel?.dob != null
+        ? DateFormat('yyyy-MM-dd')
+            .format(DateTime.parse(user!.candidateModel!.dob!))
+            .toString()
+        : '';
+    nationalityController.text = user?.candidateModel?.nationality ?? '';
+    genderController.text = user?.candidateModel?.gender ?? '';
+    martialStatusController.text = user?.candidateModel?.maritalStatus ?? '';
+    schoolController.text = user?.candidateModel?.school ?? '';
+    workExperienceController.text = user?.candidateModel?.workExperience ?? '';
+    certificationController.text = user?.candidateModel?.certifications ?? '';
+    examsController.text = user?.candidateModel?.exams ?? '';
+    preferredlocationController.text =
+        user?.candidateModel?.preferredLocation ?? '00';
+    licenseController.text = user?.candidateModel?.license ?? '';
   }
 }

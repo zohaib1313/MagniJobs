@@ -11,8 +11,10 @@ import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:provider/provider.dart';
 
+import '../dio_network/APis.dart';
 import '../profile_settting_screen.dart';
 import '../view_models/tutor_booking_job_view_model.dart';
+import '../view_models/update_tutor_profile_view_model.dart';
 import 'choose_signin/choose_signin_screen.dart';
 import 'tutor_calender_screen.dart';
 
@@ -26,7 +28,8 @@ class TutorProfileScreen extends StatefulWidget {
 
 class _TutorProfileScreenState extends State<TutorProfileScreen> {
   final space = SizedBox(height: 20.h);
-
+  var view =
+      Provider.of<UpdateTutorProfileViewModel>(myContext!, listen: false);
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -203,70 +206,79 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
   }
 
   imageEditWidget() {
-    return Container(
-      padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
-      margin: EdgeInsets.all(20.h),
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        borderRadius: BorderRadius.circular(50.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 250.r,
-                    backgroundColor: Colors.grey.shade200,
-                    child: CircleAvatar(
+    return GestureDetector(
+      onTap: () {
+        view.getFile();
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
+        margin: EdgeInsets.all(20.h),
+        decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          borderRadius: BorderRadius.circular(50.r),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
                       radius: 250.r,
-                      backgroundImage: (UserDefaults.getCandidateUserSession()
-                                  ?.user
-                                  ?.profile !=
-                              null)
-                          ? Image.network('assets/images/place_your_image.png')
-                              .image
-                          : const AssetImage(
-                              'assets/images/place_your_image.png'),
-                    ),
-                  ),
-                  /*   Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: Container(
-                      child: const Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 14,
-                        ),
+                      backgroundColor: Colors.grey.shade200,
+                      child: CircleAvatar(
+                        radius: 250.r,
+                        backgroundImage: (UserDefaults.getCandidateUserSession()
+                                    ?.user
+                                    ?.profile !=
+                                null)
+                            ? Image.network(ApiConstants.profilePicsBaseUrl +
+                                    (UserDefaults.getTutorUserSession()
+                                            ?.user
+                                            ?.profile ??
+                                        ""))
+                                .image
+                            : const AssetImage(
+                                'assets/images/place_your_image.png'),
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(
-                            150.r,
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: Container(
+                        child: const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 14,
                           ),
                         ),
-                        color: Colors.blue,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              150.r,
+                            ),
+                          ),
+                          color: Colors.blue,
+                        ),
                       ),
                     ),
-                  ),*/
-                ],
-              ),
-            ],
-          ),
-          space,
-          Text(
-            UserDefaults.getCandidateUserSession()?.user?.firstName ?? "",
-            style: AppTextStyles.textStyleBoldSubTitleLarge,
-          ),
-        ],
+                  ],
+                ),
+              ],
+            ),
+            space,
+            Text(
+              UserDefaults.getTutorUserSession()?.user?.firstName ?? "",
+              style: AppTextStyles.textStyleBoldSubTitleLarge,
+            ),
+          ],
+        ),
       ),
     );
   }

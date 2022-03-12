@@ -46,7 +46,7 @@ class Candidates {
   String? email;
   String? mobile;
   String? address;
-  String? location;
+  int? location;
   String? dob;
   String? nationality;
   String? gender;

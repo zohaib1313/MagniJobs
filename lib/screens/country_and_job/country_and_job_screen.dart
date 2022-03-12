@@ -13,6 +13,7 @@ import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/all_jobs_model.dart';
+import '../../profile_settting_screen.dart';
 import '../../utils/my_app_bar.dart';
 import '../../view_models/all_jobs_view_model.dart';
 import '../job_posted/job_posted_screen.dart';
@@ -72,6 +73,18 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
               },
               closeSearchOnSuffixTap: true,
               textController: view.searchTextController,
+            ),
+            Flexible(
+              child: InkWell(
+                onTap: () {
+                  Navigator.of(myContext!).push(MaterialPageRoute(
+                      builder: (context) => ProfileSettingScreen()));
+                },
+                child: const Padding(
+                  padding: EdgeInsets.all(18.0),
+                  child: SvgViewer(svgPath: "assets/icons/ic_settings.svg"),
+                ),
+              ),
             )
           ]),
           backgroundColor: AppColor.alphaGrey,
@@ -144,7 +157,9 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_location.svg",
-                        text: candidate?.location ?? ''),
+                        text: getCountryNameFromId(candidate?.location ?? 0)
+                                ?.name ??
+                            ""),
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_timer.svg",
@@ -220,8 +235,13 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                             candidate?.dob ?? "-"),
                                         getBottomSheetRowInfo('Nationality',
                                             candidate?.nationality ?? "-"),
-                                        getBottomSheetRowInfo('Location',
-                                            candidate?.location ?? "-"),
+                                        getBottomSheetRowInfo(
+                                            'Location',
+                                            getCountryNameFromId(
+                                                        candidate?.location ??
+                                                            0)
+                                                    ?.name ??
+                                                ""),
                                         getBottomSheetRowInfo(
                                             'Gender', candidate?.gender ?? "-"),
                                         getBottomSheetRowInfo('Martial Status',
