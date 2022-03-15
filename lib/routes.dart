@@ -22,6 +22,7 @@ import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model.dart';
 import 'package:magnijobs_rnr/view_models/attendie_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/calender_applicant_bookings_view_model.dart';
+import 'package:magnijobs_rnr/view_models/chat_view_model.dart';
 import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/country_list_view_model.dart';
@@ -134,4 +135,5 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => AttendieProfileViewModel()),
   ChangeNotifierProvider<CountriesListViewModel>(
       create: (_) => CountriesListViewModel()),
+  ChangeNotifierProvider<ChatViewModel>(create: (_) => ChatViewModel()),
 ];

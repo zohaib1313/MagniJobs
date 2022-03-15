@@ -85,6 +85,7 @@ class AllJobsViewModel extends ChangeNotifier {
             apiFunction: getAllJobs)
         .then((response) {
       AppPopUps().dissmissDialog();
+      filteredJobs.clear();
       alJobs = response.response?.data?.jobs?.jobs ?? [];
       filteredJobs.addAll(alJobs);
       completion(alJobs);
@@ -159,8 +160,8 @@ class AllJobsViewModel extends ChangeNotifier {
   void getJobBasedOnCountry(
       {completion, required String countryId, required String query}) {
     AppPopUps().showProgressDialog(context: myContext);
-    // Map<String, dynamic> body = {"country": countryId, "query": query};
-    Map<String, dynamic> body = {"country": "6", "query": "a"};
+    Map<String, dynamic> body = {"country": countryId, "query": query};
+    //Map<String, dynamic> body = {"country": "6", "query": "a"};
 
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -177,6 +178,39 @@ class AllJobsViewModel extends ChangeNotifier {
       filteredJobs.clear();
       filteredJobs.addAll(alJobs);
       completion(alJobs);
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
+  }
+
+  void deleteJob(Jobs job, {completion}) {
+    AppPopUps().showProgressDialog(context: myContext);
+    String s =
+        ApiConstants.baseUrl + ApiConstants.delete_job + "${job.id ?? 0}";
+    var client = APIClient(isCache: false, baseUrl: s);
+    client
+        .request(
+            route: APIRoute(
+              APIType.delete_job,
+              body: {},
+            ),
+            create: () => APIResponse(decoding: false),
+            apiFunction: deleteJob)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      getAllJobs(completion: (jobs) {
+        completion();
+      });
+
+      print(response);
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();

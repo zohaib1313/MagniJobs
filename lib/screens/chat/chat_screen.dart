@@ -6,16 +6,18 @@ import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/models/all_jobs_model.dart';
-import 'package:magnijobs_rnr/screens/job_posted/job_posted_screen.dart';
+import 'package:magnijobs_rnr/models/chat_model.dart';
+import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/styles.dart';
-import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
+import 'package:magnijobs_rnr/view_models/chat_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
 
 class ChatScreen extends StatefulWidget {
-  ChatScreen({Key? key}) : super(key: key);
+  Candidates? candidate;
+
+  ChatScreen(this.candidate, {Key? key}) : super(key: key);
   static const id = "ChatScreen";
 
   @override
@@ -24,6 +26,13 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<ChatViewModel>(myContext!, listen: false);
+
+  @override
+  void initState() {
+    super.initState();
+    view.listOfChat.clear();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -61,7 +70,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Rabeca James",
+                        Text(widget.candidate?.firstName ?? "",
                             style: AppTextStyles.textStyleBoldBodySmall),
                         Text("Active Now",
                             style: AppTextStyles.textStyleBoldBodySmall
@@ -93,33 +102,32 @@ class _ChatScreenState extends State<ChatScreen> {
           body: Column(
             children: [
               Expanded(
-                child: SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Container(
-                    //  height: MediaQuery.of(context).size.height,
-                    padding: EdgeInsets.only(
-                      left: 50.w,
-                      right: 50.w,
-                    ),
-                    decoration: BoxDecoration(
-                      color: AppColor.alphaGrey,
-                      borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(40.r),
-                          topRight: Radius.circular(40.r)),
-                    ),
-                    child: Column(
-                      children: [
-                        getChatBubble(BubbleType.receiverBubble),
-                        getChatBubble(BubbleType.sendBubble),
-                        getChatBubble(BubbleType.receiverBubble),
-                        getChatBubble(BubbleType.sendBubble),
-                        getChatBubble(BubbleType.receiverBubble),
-                        getChatBubble(BubbleType.sendBubble),
-                        getChatBubble(BubbleType.sendBubble),
-                        getChatBubble(BubbleType.receiverBubble),
-                        getChatBubble(BubbleType.sendBubble),
-                      ],
-                    ),
+                child: Container(
+                  //  height: MediaQuery.of(context).size.height,
+                  padding: EdgeInsets.only(
+                    left: 50.w,
+                    right: 50.w,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColor.alphaGrey,
+                    borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(40.r),
+                        topRight: Radius.circular(40.r)),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: ListView.builder(
+                        itemCount: view.listOfChat.length,
+                        shrinkWrap: true,
+                        itemBuilder: (contxt, index) {
+                          if (view.listOfChat[index].isSending) {
+                            return getChatBubble(BubbleType.sendBubble,
+                                view.listOfChat[index].message);
+                          } else {
+                            return getChatBubble(BubbleType.receiverBubble,
+                                view.listOfChat[index].message);
+                          }
+                        }),
                   ),
                 ),
               ),
@@ -138,7 +146,7 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(
                       flex: 4,
                       child: TextField(
-                        controller: TextEditingController(),
+                        controller: view.chatSendTextController,
                         keyboardType: TextInputType.multiline,
                         maxLines: 5,
                         minLines: 1,
@@ -161,12 +169,14 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          Provider.of<AllJobsViewModel>(myContext!,
+                          /*Provider.of<AllJobsViewModel>(myContext!,
                                   listen: false)
                               .getAllJobs(completion: (List<Jobs> jobs) {
                             Navigator.of(myContext!).push(MaterialPageRoute(
                                 builder: (context) => JobPostedScreen()));
-                          });
+                          });*/
+
+                          sendMessage();
                         },
                         child: const SvgViewer(
                           height: 30,
@@ -185,7 +195,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  getChatBubble(BubbleType bubbleType) {
+  getChatBubble(BubbleType bubbleType, String message) {
     if (bubbleType == BubbleType.sendBubble) {
       return ChatBubble(
         clipper: ChatBubbleClipper3(type: bubbleType),
@@ -197,8 +207,8 @@ class _ChatScreenState extends State<ChatScreen> {
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
-          child: const Text(
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+          child: Text(
+            message,
             style: TextStyle(color: Colors.black),
           ),
         ),
@@ -213,12 +223,20 @@ class _ChatScreenState extends State<ChatScreen> {
           constraints: BoxConstraints(
             maxWidth: MediaQuery.of(context).size.width * 0.7,
           ),
-          child: const Text(
-            "Ut enim ad minim veniam, quiskdflksjdfljsdfl;ksdj;lkfjs nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat",
+          child: Text(
+            message,
             style: TextStyle(color: Colors.black),
           ),
         ),
       );
+    }
+  }
+
+  void sendMessage() {
+    if (view.chatSendTextController.text.isNotEmpty) {
+      view.listOfChat.add(ChatModel(view.chatSendTextController.text, true));
+      view.chatSendTextController.clear();
+      setState(() {});
     }
   }
 }

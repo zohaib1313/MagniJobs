@@ -44,7 +44,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
         child: SafeArea(
           child: Scaffold(
             appBar: myAppBar(
-                title: "Employer Sign Up",
+                title: "Companies Sign Up",
                 onBacKTap: () {
                   view.resetState();
                   Navigator.of(context).pop();
@@ -198,7 +198,6 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               },
                             ),
                             space,
-                            space,
                             MyTextField(
                               fillColor: AppColor.alphaGrey,
                               hintText: "Company Mail",
@@ -212,7 +211,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               },
                             ),
                             space,
-                            MyDropDown(
+                            /*   MyDropDown(
                               onChange: (value) {
                                 view.martialStatusController.text = value ?? "";
                               },
@@ -241,8 +240,8 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               validator: (string) {
                                 return null;
                               },
-                            ),
-                            space,
+                            ),*/
+
                             MyTextField(
                               fillColor: AppColor.alphaGrey,
                               hintText: "Website",

@@ -17,6 +17,8 @@ import 'package:provider/provider.dart';
 
 import '../../profile_settting_screen.dart';
 import '../../routes.dart';
+import '../../view_models/country_and_job_view_model.dart';
+import '../country_and_job/country_and_job_screen.dart';
 
 class CompanyProfileScreen extends StatefulWidget {
   CompanyProfileScreen({Key? key}) : super(key: key);
@@ -192,7 +194,14 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         onTap: () {
                           if (view.selectedCountryId.isNotEmpty &&
                               view.queryEditingController.text.isNotEmpty) {
-                            Provider.of<JobPostViewModel>(myContext!,
+                            Provider.of<CountryAndJobViewModel>(myContext!,
+                                    listen: false)
+                                .getAllCandidates(completion: () {
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (c) => CountryAndJobScreen()));
+                            });
+
+                            /* Provider.of<JobPostViewModel>(myContext!,
                                     listen: false)
                                 .getAllCompanies(
                               completion: () {
@@ -200,17 +209,43 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                   MaterialPageRoute(
                                     builder: (context) => JobPostScreen(
                                       selectedCountryId: view.selectedCountryId,
+                                      isFromRecrutingButton: true,
                                     ),
                                   ),
                                 );
                               },
-                            );
+                            );*/
                           } else {
                             AppPopUps.showAlertDialog(
                                 message: 'Enter all fields');
                           }
                         },
                       ),
+                      space,
+                      space,
+                      Button(
+                        buttonText: "Job Posting",
+                        textColor: AppColor.whiteColor,
+                        color: AppColor.primaryBlueDarkColor,
+                        onTap: () {
+                          Provider.of<JobPostViewModel>(myContext!,
+                                  listen: false)
+                              .getAllCompanies(
+                            completion: () {
+                              Navigator.of(myContext!).push(
+                                MaterialPageRoute(
+                                  builder: (context) => JobPostScreen(
+                                    selectedCountryId: view.selectedCountryId,
+                                    updateId: null,
+                                  ),
+                                ),
+                              );
+                            },
+                          );
+                        },
+                      ),
+                      space,
+                      space,
                       space,
                     ],
                   )

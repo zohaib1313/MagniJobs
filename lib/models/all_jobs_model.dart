@@ -22,6 +22,16 @@ class AllJobsModel implements Decodable {
     jobs = json['jobs'] != null ? new JobsA.fromJson(json['jobs']) : null;
     return this;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AllJobsModel &&
+          runtimeType == other.runtimeType &&
+          jobs == other.jobs;
+
+  @override
+  int get hashCode => jobs.hashCode;
 }
 
 class JobsA implements Decodable {
@@ -56,6 +66,14 @@ class JobsA implements Decodable {
     }
     return this;
   }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is JobsA && runtimeType == other.runtimeType && jobs == other.jobs;
+
+  @override
+  int get hashCode => jobs.hashCode;
 }
 
 class Jobs {
@@ -70,6 +88,8 @@ class Jobs {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  String? due_date;
+  dynamic country;
 
   Jobs(
       {this.id,
@@ -78,10 +98,12 @@ class Jobs {
       this.job,
       this.location,
       this.salary,
+      this.due_date,
       this.qualification,
       this.jobDescription,
       this.createdAt,
       this.updatedAt,
+      this.country,
       this.deletedAt});
 
   Jobs.fromJson(Map<String, dynamic> json) {
@@ -96,6 +118,8 @@ class Jobs {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    country = json['country'];
+    due_date = json['due_date'];
   }
 
   Map<String, dynamic> toJson() {
@@ -111,6 +135,48 @@ class Jobs {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['country'] = this.country;
+    data['due_date'] = this.due_date;
     return data;
   }
+
+  @override
+  String toString() {
+    return 'Jobs{id: $id, poster: $poster, employer: $employer, job: $job, location: $location, salary: $salary, qualification: $qualification, jobDescription: $jobDescription, createdAt: $createdAt, updatedAt: $updatedAt, deletedAt: $deletedAt, due_date: $due_date, country: $country}';
+  }
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Jobs &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          poster == other.poster &&
+          employer == other.employer &&
+          job == other.job &&
+          location == other.location &&
+          salary == other.salary &&
+          qualification == other.qualification &&
+          jobDescription == other.jobDescription &&
+          createdAt == other.createdAt &&
+          updatedAt == other.updatedAt &&
+          deletedAt == other.deletedAt &&
+          due_date == other.due_date &&
+          country == other.country;
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      poster.hashCode ^
+      employer.hashCode ^
+      job.hashCode ^
+      location.hashCode ^
+      salary.hashCode ^
+      qualification.hashCode ^
+      jobDescription.hashCode ^
+      createdAt.hashCode ^
+      updatedAt.hashCode ^
+      deletedAt.hashCode ^
+      due_date.hashCode ^
+      country.hashCode;
 }

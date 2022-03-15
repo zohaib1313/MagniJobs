@@ -63,13 +63,13 @@ class EmployerSignUpViewModel extends ChangeNotifier {
       "utype": "Employer",
       "status": 0,
       "address": addressController.text,
-      // "location": locationController.text,
-      "location": 5,
+      "location": locationController.text,
+      //"location": 5,
 
       "company_name": companyNameController.text,
       "contact_number": contactNumberController.text,
       "contact_email": contactEmailController.text,
-      "marital_status": martialStatusController.text,
+      "marital_status": 'Male',
     };
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client

@@ -9,11 +9,14 @@ class AppPopUps {
   bool isDialogShowing = true;
   static void showSnackvBar(
       {required String message, required BuildContext context}) {
-    final snackBar =
-        SnackBar(content: Text(message), backgroundColor: Colors.red);
+    final snackBar = SnackBar(
+      content: Text(message),
+      backgroundColor: Colors.red,
+      duration: Duration(seconds: 2),
+    );
 
     // Find the Scaffold in the Widget tree and use it to show a SnackBar!
-    Scaffold.of(context).showSnackBar(snackBar);
+    ScaffoldMessenger.of(context).showSnackBar(snackBar);
   }
 
   void oneButtonPop(
@@ -369,6 +372,66 @@ class AppPopUps {
                 },
               ),
             ],
+          );
+        });
+  }
+
+  static Future<void> showThreeOptionsDialog({
+    onYes,
+    onNo,
+    onNutral,
+    required String yesTitle,
+    required String noTitle,
+    required String nutralTitle,
+    required String message,
+  }) {
+    return showDialog(
+        context: myContext!,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              message,
+              style: AppTextStyles.textStyleNormalBodyMedium,
+            ),
+            content: Row(
+              children: [
+                Flexible(
+                  child: FlatButton(
+                    color: Colors.green,
+                    textColor: Colors.white,
+                    child: Text(yesTitle),
+                    onPressed: onYes ??
+                        () {
+                          Navigator.pop(context);
+                        },
+                  ),
+                ),
+                SizedBox(width: 20.w),
+                Flexible(
+                  child: FlatButton(
+                    color: Colors.red,
+                    textColor: Colors.white,
+                    child: Text(noTitle),
+                    onPressed: onNo ??
+                        () {
+                          Navigator.pop(context);
+                        },
+                  ),
+                ),
+                SizedBox(width: 20.w),
+                Flexible(
+                  child: FlatButton(
+                    color: AppColor.primaryBlueColor,
+                    textColor: Colors.white,
+                    child: Text(nutralTitle),
+                    onPressed: onNutral ??
+                        () {
+                          Navigator.pop(context);
+                        },
+                  ),
+                ),
+              ],
+            ),
           );
         });
   }

@@ -10,6 +10,10 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../models/countries_model.dart';
+import '../routes.dart';
+import '../view_models/company_profile_view_model.dart';
+
 class TutorSignUpScreen extends StatefulWidget {
   TutorSignUpScreen({Key? key}) : super(key: key);
   static const id = "TutorSignUpScreen";
@@ -109,7 +113,49 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                             },
                           ),
                           space,
-                          MyTextField(
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.locationController.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Country",
+                                  labelText: "",
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.alphaGrey,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    if (string == null || string.isEmpty) {
+                                      return 'Required';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              }
+                              return Center(
+                                  child: Container(
+                                      child: CircularProgressIndicator()));
+                            },
+                          ),
+                          /*  MyTextField(
                             fillColor: AppColor.alphaGrey,
                             hintText: "Location",
                             controller: view.locationController,
@@ -119,7 +165,7 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                               }
                               return null;
                             },
-                          ),
+                          ),*/
                           space,
                           MyTextField(
                             fillColor: AppColor.alphaGrey,
@@ -264,7 +310,11 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                         view.registerTutor(
                           completion: () async {
                             AppPopUps.showAlertDialog(
-                                message: "User created Successfully");
+                                message: "User created Successfully",
+                                onSubmit: () {
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+                                });
                           },
                         );
                       } else {

@@ -7,8 +7,10 @@ import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/models/get_jobseeker_profile.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 import '../routes.dart';
+import 'company_profile_view_model.dart';
 
 class CountryAndJobViewModel extends ChangeNotifier {
   List<Candidates> _allCandidatesList = [];
@@ -19,9 +21,9 @@ class CountryAndJobViewModel extends ChangeNotifier {
   void getAllCandidates({completion}) {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
-      /*    'country': Provider.of<CompanyProfileViewModel>(myContext!, listen: false)
-          .selectedCountryId*/
-      'country': '4'
+      'country': Provider.of<CompanyProfileViewModel>(myContext!, listen: false)
+          .selectedCountryId
+      //  'country': '4'
     };
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -34,6 +36,7 @@ class CountryAndJobViewModel extends ChangeNotifier {
                 create: () => CountryAndJobModel()),
             apiFunction: getAllCandidates)
         .then((response) {
+      showingListOfCandidates.clear();
       _allCandidatesList = response.response?.data?.candidates ?? [];
       showingListOfCandidates.addAll(_allCandidatesList);
 
