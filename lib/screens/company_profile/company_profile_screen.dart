@@ -136,7 +136,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                           },
                         ),
                         space,
-                        MyTextField(
+                        /* MyTextField(
                           fillColor: AppColor.whiteColor,
                           textColor: AppColor.blackColor,
                           hintColor: AppColor.blackColor,
@@ -150,41 +150,30 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                             }
                             return null;
                           },
-                        )
-                        /*   StreamBuilder(
-                          stream: streamJobs,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Jobs?>> snapshot) {
-                            if (snapshot.hasData) {
-                              return MyDropDown(
-                                onChange: (value) {},
-                                hintText: "Jobs",
-                                labelText: "",
-                                labelColor: AppColor.redColor,
-                                borderColor: AppColor.alphaGrey,
-                                fillColor: AppColor.whiteColor,
-                                suffixIcon: "assets/icons/drop_down_ic.svg",
-                                itemFuntion: snapshot.data!
-                                    .map((e) => DropdownMenuItem(
-                                          value: e?.id.toString() ?? '',
-                                          child: Text(
-                                            e?.job ?? '',
-                                            style: AppTextStyles
-                                                .textStyleBoldBodySmall,
-                                          ),
-                                        ))
-                                    .toList(),
-                                validator: (string) {
-                                  return null;
-                                },
-                              );
-                            }
-                            return Center(
-                                child: Container(
-                                    child: CircularProgressIndicator()));
+                        )*/
+                        MyDropDown(
+                          onChange: (value) {
+                            view.queryEditingController.text = value ?? "";
                           },
-                        ),*/
-                        ,
+                          hintText: "Search Job",
+                          labelText: "",
+                          labelColor: AppColor.redColor,
+                          borderColor: AppColor.alphaGrey,
+                          fillColor: AppColor.whiteColor,
+                          suffixIcon: "assets/icons/drop_down_ic.svg",
+                          itemFuntion: [
+                            DropdownMenuItem(
+                              value: "Nurse",
+                              child: Text(
+                                "Nurse",
+                                style: AppTextStyles.textStyleBoldBodySmall,
+                              ),
+                            ),
+                          ],
+                          validator: (string) {
+                            return null;
+                          },
+                        ),
                         space,
                         space,
                       ],
