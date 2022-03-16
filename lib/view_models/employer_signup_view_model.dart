@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
+import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/employer_model.dart';
 
@@ -62,7 +63,9 @@ class EmployerSignUpViewModel extends ChangeNotifier {
       "utype": "Employer",
       "status": 0,
       "address": addressController.text,
-      "location": locationController.text,
+      // "location": locationController.text,
+      "location": 5,
+
       "company_name": companyNameController.text,
       "contact_number": contactNumberController.text,
       "contact_email": contactEmailController.text,
@@ -75,11 +78,11 @@ class EmployerSignUpViewModel extends ChangeNotifier {
               APIType.register_new_employer,
               body: body,
             ),
-            create: () => EmployerSignUpModel(),
+            create: () => APIResponse<EmployerSignUpModel>(
+                create: () => EmployerSignUpModel()),
             apiFunction: registerUser)
         .then((response) {
       AppPopUps().dissmissDialog();
-
       resetState();
       completion();
     }).catchError((error) {
@@ -97,18 +100,18 @@ class EmployerSignUpViewModel extends ChangeNotifier {
 
   resetState() {
     formKey = GlobalKey<FormState>();
-    firstnameContoller = TextEditingController();
-    lastNameController = TextEditingController();
-    emailController = TextEditingController();
-    mobileController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
-    addressController = TextEditingController();
-    locationController = TextEditingController();
-    companyNameController = TextEditingController();
-    contactNumberController = TextEditingController();
-    contactEmailController = TextEditingController();
-    martialStatusController = TextEditingController();
-    webSiteController = TextEditingController();
+    firstnameContoller.clear();
+    lastNameController.clear();
+    emailController.clear();
+    mobileController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    addressController.clear();
+    locationController.clear();
+    companyNameController.clear();
+    contactNumberController.clear();
+    contactEmailController.clear();
+    martialStatusController.clear();
+    webSiteController.clear();
   }
 }

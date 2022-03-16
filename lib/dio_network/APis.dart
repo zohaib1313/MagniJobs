@@ -23,6 +23,21 @@ enum APIType {
   upload_my_business_registration,
   upload_my_covid_certificate,
   assign_applicant_to_employee,
+  forgotPassword,
+  sendMailForgotPassword,
+  applyForJob,
+  all_countries,
+  update_tutor_profile,
+  update_employer_profile,
+  place_booking,
+  my_bookings,
+  cancelBookings,
+  candidateByCountry,
+  jobByCountry,
+  getMyJobs,
+  cancelApplication,
+  allLessons,
+  bookWithTutor,
 }
 
 class ApiConstants {
@@ -51,4 +66,22 @@ class ApiConstants {
   static const upload_my_business_registration = "upload-business-reg";
   static const upload_my_covid_certificate = "upload-covid-cert";
   static const assign_applicant_to_employee = "assign-applicant";
+  static const forgotPassword = "password/reset";
+  static const sendMailForgotPassword = "password/email";
+  static const applyForJob = "apply-job";
+  static const all_countries = "all-countries";
+  static const update_tutor_profile = "update-tutor-profile";
+  static const update_employer_profile = "update-employer-profile";
+  static const place_booking = "place-booking";
+  static const my_bookings = "my-bookings";
+  static const cancelBookings = "cancel-booking";
+  static const candidateByCountry = "candidates-by-country";
+  static const jobByCountry = "jobs-in-countries";
+  static const getMyJobs = "my-applications";
+  static const cancelApplication = "cancel-application";
+  static const allLessons = "all-lessons";
+  static const bookWithTutor = "book-lesson";
+
+  static var profilePicsBaseUrl =
+      'http://magnijobs.applypressure.co.uk/profile_pics/';
 }

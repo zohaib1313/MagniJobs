@@ -1,13 +1,13 @@
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/number_symbols_data.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
+import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
-import 'package:magnijobs_rnr/models/register_new_applicant.dart';
 import 'package:path/path.dart';
 
 import '../routes.dart';
@@ -29,7 +29,6 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   TextEditingController nationalityController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController martialStatusController = TextEditingController();
-
   TextEditingController companynameController = TextEditingController();
   TextEditingController contactnumberController = TextEditingController();
   TextEditingController contactemailController = TextEditingController();
@@ -67,8 +66,8 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
         allowMultiple: false);
     if (result != null) {
       File file = File(result.files.single.path!);
-
       nationalIdImage = file;
+      notifyListeners();
     } else {
       // User canceled the picker
     }
@@ -103,10 +102,10 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
     client
         .request(
       route: APIRoute(
-        APIType.register_new_employer,
+        APIType.register_new_applicant,
         body: body,
       ),
-      create: () => RegisterNewApplicant(),
+      create: () => APIResponse(decoding: false),
       // apiFunction: registerApplicant()
     )
         .then((response) {
@@ -128,15 +127,20 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   }
 
   resetState() {
-    firstnameContoller = TextEditingController();
-    lastNameController = TextEditingController();
-    emailController = TextEditingController();
-    mobileController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
-    addressController = TextEditingController();
-    locationController = TextEditingController();
-    martialStatusController = TextEditingController();
-    nationalityController = TextEditingController();
+    firstnameContoller.clear();
+    lastNameController.clear();
+    emailController.clear();
+    mobileController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    addressController.clear();
+    dobController.clear();
+    nationalityController.clear();
+    genderController.clear();
+    martialStatusController.clear();
+    companynameController.clear();
+    contactnumberController.clear();
+    contactemailController.clear();
+    nationalIdImage = null;
   }
 }

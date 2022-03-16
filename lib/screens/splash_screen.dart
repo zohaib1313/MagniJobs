@@ -2,10 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
+import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
+import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:provider/provider.dart';
 
 import '../routes.dart';
-import 'on_boarding/onboardin_screen.dart';
+import '../view_models/country_list_view_model.dart';
+import 'company_profile/company_profile_screen.dart';
+import 'employee_portal_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   static const id = "splash_screen";
@@ -20,21 +28,60 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(const Duration(seconds: 3),
-        () => {Navigator.pushReplacementNamed(myContext!, OnBoardingScreen.id)}
-        /*      {
-              if (UserDefaults.getUserSession() != null)
-                {Navigator.pushReplacementNamed(myContext!, MainScreen.id)}
-              else
-                {Navigator.pushReplacementNamed(myContext!, SignInScreen.id)}
-            }*/
-
-        );
+    Provider.of<CountriesListViewModel>(myContext!, listen: false)
+        .loadCountries(completion: (countryModel) {
+      if (countryModel != null) {
+        UserDefaults.saveCountries(countryModel!);
+        Timer(
+            const Duration(seconds: 1),
+            () => {
+                  if (UserDefaults.getUserType() != null)
+                    {gotoRelevantScreenOnUserType()}
+                  else
+                    {
+                      Navigator.of(myContext!)
+                          .pushReplacementNamed(OnBoardingScreen.id)
+                    }
+                });
+      } else {
+        AppPopUps.showAlertDialog(message: "No Internet Connection");
+      }
+    });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void gotoRelevantScreenOnUserType() {
+    String userType = UserDefaults?.getUserType() ?? "";
+
+    printWrapped(userType);
+    //todo
+    // && isPhoneVerified
+    if (userType.isNotEmpty) {
+      switch (userType) {
+        case 'employer':
+          if (UserDefaults?.getEmployerUserSession()?.employerModel != null) {
+            Navigator.of(myContext!)
+                .pushReplacementNamed(CompanyProfileScreen.id);
+          }
+          break;
+        case 'applicant':
+          if (UserDefaults?.getCandidateUserSession()?.candidateModel != null) {
+            Navigator.of(myContext!)
+                .pushReplacementNamed(EmployeePortalScreen.id);
+          }
+
+          break;
+        case 'tutor':
+          if (UserDefaults?.getTutorUserSession()?.tutorModel != null) {
+            Navigator.of(myContext!)
+                .pushReplacementNamed(TutorProfileScreen.id);
+          }
+          break;
+        default:
+          Navigator.of(myContext!).pushReplacementNamed(OnBoardingScreen.id);
+      }
+    } else {
+      Navigator.of(myContext!).pushReplacementNamed(OnBoardingScreen.id);
+    }
   }
 
   @override

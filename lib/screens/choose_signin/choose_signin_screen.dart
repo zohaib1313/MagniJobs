@@ -9,7 +9,6 @@ import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../../routes.dart';
-import '../attendie_profile_screen.dart';
 import '../tutor_sign_up_screen.dart';
 
 class ChooseSignInScreen extends StatefulWidget {
@@ -34,10 +33,10 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Welcome"),
+          appBar: myAppBar(title: "Welcome", goBack: false),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -73,7 +72,13 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => SigInScreen(
+                                userType: "employer",
+                              ),
+                            ),
+                          );
                         },
                       ),
                       space,
@@ -135,7 +140,13 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => SigInScreen(
+                                userType: "applicant",
+                              ),
+                            ),
+                          );
                         },
                       ),
                       space,
@@ -207,7 +218,13 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => SigInScreen(
+                                userType: "tutor",
+                              ),
+                            ),
+                          );
                         },
                       ),
                       space,
@@ -253,7 +270,10 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         buttonText: "Sign in",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          Navigator.of(myContext!).pushNamed(SigInScreen.id);
+                          Navigator.of(myContext!).push(MaterialPageRoute(
+                              builder: (c) => SigInScreen(
+                                    userType: 'attendie',
+                                  )));
                         },
                       ),
                       space,
@@ -270,8 +290,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                           GestureDetector(
                             onTap: () {
                               Navigator.of(myContext!).push(MaterialPageRoute(
-                                  builder: (contxt) =>
-                                      AttendieProfileScreen()));
+                                  builder: (contxt) => ApplicantSignUp()));
                             },
                             child: Text(
                               " Sign up!",

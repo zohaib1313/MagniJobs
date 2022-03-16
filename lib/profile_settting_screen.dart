@@ -3,8 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
+import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
+import 'package:provider/provider.dart';
+
+import 'common_widgets/app_popups.dart';
+import 'forgot_password_enter_mail_screen.dart';
 
 class ProfileSettingScreen extends StatefulWidget {
   ProfileSettingScreen({Key? key}) : super(key: key);
@@ -29,10 +38,10 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
       child: SafeArea(
         child: Scaffold(
           appBar: myAppBar(title: "Setting", actions: [
-            const Padding(
+            /* const Padding(
               padding: EdgeInsets.all(18.0),
               child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-            )
+            )*/
           ]),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
@@ -40,7 +49,7 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
             child: Container(
               // height: MediaQuery.of(context).size.height * 0.9,
               margin: EdgeInsets.only(top: 140.h, left: 20.h, right: 20.h),
-              decoration: BoxDecoration(
+              decoration: const BoxDecoration(
                 color: AppColor.alphaGrey,
               ),
               child: Column(
@@ -88,7 +97,30 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             children: [
                               getRowProfileItem(
                                   "assets/icons/ic_change_password.svg",
-                                  "Change Password"),
+                                  "Change Password", onTap: () {
+                                AppPopUps.displayTextInputDialog(
+                                    title: "Enter mail where we will send OTP",
+                                    message: "Send Otp",
+                                    hint: "email",
+                                    onSubmit: (String text) {
+                                      if (text.isNotEmpty) {
+                                        Provider.of<SignInViewModel>(myContext!,
+                                                listen: false)
+                                            .sendForgotPassword(
+                                                completion: () {
+                                                  Navigator.of(myContext!).push(
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ForgotPasswordEnterMailScreen(
+                                                        mail: text,
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                                mail: text);
+                                      }
+                                    });
+                              }),
                               getRowProfileItem(
                                   "assets/icons/ic_notifications.svg",
                                   "Notifications"),
@@ -99,24 +131,38 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                               SizedBox(
                                 height: 10.h,
                               ),
-                              Row(
-                                children: [
-                                  SvgViewer(
-                                      svgPath: "assets/icons/ic_logout.svg"),
-                                  SizedBox(
-                                    width: 35.w,
-                                  ),
-                                  Expanded(
-                                    child: Text(
-                                      "Sign out",
-                                      style:
-                                          AppTextStyles.textStyleBoldBodyMedium,
+                              GestureDetector(
+                                onTap: () {
+                                  Provider.of<ProfileSettingViewModel>(
+                                          myContext!,
+                                          listen: false)
+                                      .logout(onComplete: () {
+                                    UserDefaults().clearAll();
+                                    Navigator.of(context).pushReplacement(
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                ChooseSignInScreen()));
+                                  });
+                                },
+                                child: Row(
+                                  children: [
+                                    const SvgViewer(
+                                        svgPath: "assets/icons/ic_logout.svg"),
+                                    SizedBox(
+                                      width: 35.w,
                                     ),
-                                  ),
-                                  SizedBox(
-                                    width: 20.w,
-                                  ),
-                                ],
+                                    Expanded(
+                                      child: Text(
+                                        "Sign out",
+                                        style: AppTextStyles
+                                            .textStyleBoldBodyMedium,
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 20.w,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ],
                           ),
@@ -209,45 +255,48 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
     );
   }
 
-  getRowProfileItem(String icon, String title, {String? endText}) {
-    return Column(
-      children: [
-        SizedBox(
-          height: 10.h,
-        ),
-        Row(
-          children: [
-            SvgViewer(svgPath: icon),
-            SizedBox(
-              width: 35.w,
-            ),
-            Expanded(
-              child: Text(
-                title,
-                style: AppTextStyles.textStyleBoldBodyMedium,
+  getRowProfileItem(String icon, String title, {String? endText, onTap}) {
+    return InkWell(
+      onTap: onTap ?? () {},
+      child: Column(
+        children: [
+          SizedBox(
+            height: 10.h,
+          ),
+          Row(
+            children: [
+              SvgViewer(svgPath: icon),
+              SizedBox(
+                width: 35.w,
               ),
-            ),
-            SizedBox(
-              width: 20.w,
-            ),
-            Row(
-              children: [
-                Text(
-                  endText ?? "",
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.textStyleNormalBodySmall
-                      .copyWith(color: AppColor.greyColor),
+              Expanded(
+                child: Text(
+                  title,
+                  style: AppTextStyles.textStyleBoldBodyMedium,
                 ),
-                Icon(Icons.navigate_next),
-              ],
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 10.h,
-        )
-      ],
+              ),
+              SizedBox(
+                width: 20.w,
+              ),
+              Row(
+                children: [
+                  Text(
+                    endText ?? "",
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.textStyleNormalBodySmall
+                        .copyWith(color: AppColor.greyColor),
+                  ),
+                  Icon(Icons.navigate_next),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 10.h,
+          )
+        ],
+      ),
     );
   }
 

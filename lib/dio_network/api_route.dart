@@ -42,6 +42,7 @@ class APIRoute implements APIRouteConfigurable {
         return RequestOptions(
           path: ApiConstants.verify_my_phone_number,
           headers: headers,
+          //  contentType: ContentType.parse(value),
           data: body,
           method: APIMethod.post,
         );
@@ -68,7 +69,7 @@ class APIRoute implements APIRouteConfigurable {
         );
       case APIType.get_jobseeker_profile:
         return RequestOptions(
-          path: ApiConstants.get_jobseeker_profile,
+          path: "",
           headers: headers,
           data: body,
           method: APIMethod.get,
@@ -181,6 +182,112 @@ class APIRoute implements APIRouteConfigurable {
       case APIType.assign_applicant_to_employee:
         return RequestOptions(
           path: ApiConstants.assign_applicant_to_employee,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.forgotPassword:
+        return RequestOptions(
+          path: ApiConstants.forgotPassword,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.sendMailForgotPassword:
+        return RequestOptions(
+          path: ApiConstants.sendMailForgotPassword,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.applyForJob:
+        return RequestOptions(
+          path: ApiConstants.applyForJob,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.all_countries:
+        return RequestOptions(
+          path: ApiConstants.all_countries,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
+
+      case APIType.update_tutor_profile:
+        return RequestOptions(
+          path: ApiConstants.update_tutor_profile,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.update_employer_profile:
+        return RequestOptions(
+          path: ApiConstants.update_employer_profile,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.place_booking:
+        return RequestOptions(
+          path: ApiConstants.place_booking,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.my_bookings:
+        return RequestOptions(
+          path: ApiConstants.my_bookings,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
+      case APIType.candidateByCountry:
+        return RequestOptions(
+          path: ApiConstants.candidateByCountry,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.cancelBookings:
+        return RequestOptions(
+          path: '',
+          headers: headers,
+          data: body,
+          method: APIMethod.delete,
+        );
+      case APIType.jobByCountry:
+        return RequestOptions(
+          path: ApiConstants.jobByCountry,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
+      case APIType.getMyJobs:
+        return RequestOptions(
+          path: ApiConstants.getMyJobs,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
+      case APIType.cancelApplication:
+        return RequestOptions(
+          path: '',
+          headers: headers,
+          data: body,
+          method: APIMethod.delete,
+        );
+      case APIType.allLessons:
+        return RequestOptions(
+          path: ApiConstants.allLessons,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
+      case APIType.bookWithTutor:
+        return RequestOptions(
+          path: ApiConstants.bookWithTutor,
           headers: headers,
           data: body,
           method: APIMethod.post,

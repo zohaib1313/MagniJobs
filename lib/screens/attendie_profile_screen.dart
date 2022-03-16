@@ -4,21 +4,33 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/screens/update_candidate_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
+import 'package:magnijobs_rnr/view_models/attendie_profile_view_model.dart';
+import 'package:provider/provider.dart';
 
+import '../dio_network/APis.dart';
 import '../profile_settting_screen.dart';
+import '../utils/user_defaults.dart';
+import '../view_models/profile_settings_view_model.dart';
+import '../view_models/update_candidate_profile_view_model.dart';
 import 'attendie_calender.dart';
+import 'choose_signin/choose_signin_screen.dart';
+import 'my_applications_screen.dart';
 
-class AttendieProfileScreen extends StatefulWidget {
-  AttendieProfileScreen({Key? key}) : super(key: key);
+class AttendieCandidateProfileScreen extends StatefulWidget {
+  AttendieCandidateProfileScreen({Key? key}) : super(key: key);
   static const id = "AttendieProfileScreen";
 
   @override
-  _AttendieProfileScreenState createState() => _AttendieProfileScreenState();
+  _AttendieCandidateProfileScreenState createState() =>
+      _AttendieCandidateProfileScreenState();
 }
 
-class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
+class _AttendieCandidateProfileScreenState
+    extends State<AttendieCandidateProfileScreen> {
   final space = SizedBox(height: 20.h);
 
   @override
@@ -32,12 +44,7 @@ class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Profile", actions: [
-            const Padding(
-              padding: EdgeInsets.all(18.0),
-              child: SvgViewer(svgPath: "assets/icons/ic_search.svg"),
-            )
-          ]),
+          appBar: myAppBar(title: "Profile", actions: []),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
@@ -59,8 +66,8 @@ class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
                   space,
-                  space,
                   imageEditWidget(),
+                  space,
                   Spacer(),
                   Container(
                     //height: MediaQuery.of(context).size.height,
@@ -74,7 +81,13 @@ class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
                     child: Column(
                       children: [
                         getRowProfileItem(
-                            "assets/icons/ic_edit_person.svg", "Profile"),
+                          "assets/icons/ic_edit_person.svg",
+                          "Profile",
+                          onTap: () {
+                            Navigator.of(myContext!).push(MaterialPageRoute(
+                                builder: (context) => UpdateCandidateScreen()));
+                          },
+                        ),
                         getRowProfileItem(
                             "assets/icons/ic_settings.svg", "Settings",
                             onTap: () {
@@ -82,7 +95,25 @@ class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
                               builder: (context) => ProfileSettingScreen()));
                         }),
                         getRowProfileItem(
-                            "assets/icons/ic_history.svg", "Job History"),
+                            "assets/icons/ic_history.svg", "Job History",
+                            onTap: () {
+                          Provider.of<AllJobsViewModel>(myContext!,
+                                  listen: false)
+                              .getAllJobs(completion: (allJobs) {
+                            Provider.of<AttendieProfileViewModel>(myContext!,
+                                    listen: false)
+                                .allJobs = allJobs;
+                            Provider.of<AttendieProfileViewModel>(myContext!,
+                                    listen: false)
+                                .getMyApplications(
+                              completion: (allApplications) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => MyApplicationsScreen(
+                                        allApplications: allApplications)));
+                              },
+                            );
+                          });
+                        }),
                         getRowProfileItem(
                             "assets/icons/ic_heart_filled.svg", "Favourite"),
                         getRowProfileItem(
@@ -90,8 +121,13 @@ class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
                         getRowProfileItem(
                             "assets/icons/ic_calender.svg", "Calender",
                             onTap: () {
-                          Navigator.of(myContext!).push(MaterialPageRoute(
-                              builder: (context) => AttendieCalender()));
+                          Provider.of<AttendieProfileViewModel>(myContext!,
+                                  listen: false)
+                              .getAllLessions(completion: (lessons) {
+                            Navigator.of(myContext!).push(MaterialPageRoute(
+                                builder: (myC) =>
+                                    AttendieCalender.AttendieLessonBooking()));
+                          });
                         }),
                         getRowProfileItem(
                             "assets/icons/ic_file.svg", "Terms & Conditions"),
@@ -99,22 +135,34 @@ class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
                         SizedBox(
                           height: 10.h,
                         ),
-                        Row(
-                          children: [
-                            SvgViewer(svgPath: "assets/icons/ic_logout.svg"),
-                            SizedBox(
-                              width: 35.w,
-                            ),
-                            Expanded(
-                              child: Text(
-                                "Logout",
-                                style: AppTextStyles.textStyleBoldBodyMedium,
+                        GestureDetector(
+                          onTap: () {
+                            Provider.of<ProfileSettingViewModel>(myContext!,
+                                    listen: false)
+                                .logout(onComplete: () {
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChooseSignInScreen()));
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              SvgViewer(svgPath: "assets/icons/ic_logout.svg"),
+                              SizedBox(
+                                width: 35.w,
                               ),
-                            ),
-                            SizedBox(
-                              width: 20.w,
-                            ),
-                          ],
+                              Expanded(
+                                child: Text(
+                                  "Logout",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -165,64 +213,82 @@ class _AttendieProfileScreenState extends State<AttendieProfileScreen> {
   }
 
   imageEditWidget() {
-    return Container(
-      padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
-      margin: EdgeInsets.all(20.h),
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        borderRadius: BorderRadius.circular(50.r),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Stack(
-                children: [
-                  CircleAvatar(
-                    radius: 250.r,
-                    backgroundColor: Colors.grey.shade200,
-                    child: CircleAvatar(
+    return InkWell(
+      onTap: () {
+        Provider.of<UpdateCandidateProfileViewModel>(myContext!, listen: false)
+            .getFile();
+      },
+      child: Container(
+        padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
+        margin: EdgeInsets.all(20.h),
+        decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          borderRadius: BorderRadius.circular(50.r),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Stack(
+                  children: [
+                    CircleAvatar(
                       radius: 250.r,
-                      backgroundImage: const AssetImage(
-                          'assets/images/place_your_image.png'),
-                    ),
-                  ),
-                  /*   Positioned(
-                    bottom: 5,
-                    right: 5,
-                    child: Container(
-                      child: const Padding(
-                        padding: EdgeInsets.all(4),
-                        child: Icon(
-                          Icons.edit,
-                          color: Colors.white,
-                          size: 14,
-                        ),
+                      backgroundColor: Colors.grey.shade200,
+                      child: CircleAvatar(
+                        radius: 250.r,
+                        backgroundImage: (UserDefaults.getCandidateUserSession()
+                                    ?.user
+                                    ?.profile !=
+                                null)
+                            ? Image.network(ApiConstants.profilePicsBaseUrl +
+                                    (UserDefaults.getCandidateUserSession()
+                                            ?.user
+                                            ?.profile ??
+                                        ""))
+                                .image
+                            : const AssetImage(
+                                'assets/images/place_your_image.png'),
                       ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(
-                          Radius.circular(
-                            150.r,
+                    ),
+                    Positioned(
+                      bottom: 5,
+                      right: 5,
+                      child: Container(
+                        child: const Padding(
+                          padding: EdgeInsets.all(4),
+                          child: Icon(
+                            Icons.edit,
+                            color: Colors.white,
+                            size: 14,
                           ),
                         ),
-                        color: Colors.blue,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(
+                            Radius.circular(
+                              150.r,
+                            ),
+                          ),
+                          color: Colors.blue,
+                        ),
                       ),
                     ),
-                  ),*/
-                ],
-              ),
-            ],
-          ),
-          space,
-          Text(
-            "Rebeca James",
-            style: AppTextStyles.textStyleBoldSubTitleLarge,
-          ),
-        ],
+                  ],
+                ),
+              ],
+            ),
+            space,
+            Text(
+              UserDefaults.getCandidateUserSession()?.user?.firstName ?? "",
+              style: AppTextStyles.textStyleNormalBodySmall
+                  .copyWith(color: AppColor.blackColor),
+            ),
+            space,
+          ],
+        ),
       ),
     );
   }

@@ -12,8 +12,20 @@ import '../routes.dart';
 
 class VerifyNumberViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
-
+  bool isVerificationSent = false;
   TextEditingController phonenumberController = TextEditingController();
+  TextEditingController otpCodeController = TextEditingController();
+
+  bool timeEnd = false;
+
+  setTimeEnd(bool value) {
+    timeEnd = value;
+    notifyListeners();
+  }
+
+  setIsVerificationSent(bool value) {
+    isVerificationSent = value;
+  }
 
   bool _rememberMe = false;
 
@@ -24,8 +36,7 @@ class VerifyNumberViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  checkmynumber({completion}) async {
-    print("method is called");
+  checkMyNumber({completion}) async {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {};
 
@@ -35,20 +46,15 @@ class VerifyNumberViewModel extends ChangeNotifier {
     var client = APIClient(isCache: false, baseUrl: url);
     client
         .request(
-      route: APIRoute(
-        APIType.check_my_phone_number,
-        headers: {
-          "token":
-              "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJhdWQiOiIxIiwianRpIjoiNTI1MzM0N2Y2ODFmNTRlZTdhZDBkZjYzNmQxMmQzZmQ2ZjcwMTgwNDJiNjE5OTVlZGVhZjZkZWNjOWU3YzEzZjU1NGI5YzBjYmE5MDI1ZjkiLCJpYXQiOjE2NDQ4NTU0MjguMDA4NjA0LCJuYmYiOjE2NDQ4NTU0MjguMDA4NjA2LCJleHAiOjE2NjA0OTM4MjguMDAwNzc0LCJzdWIiOiIxIiwic2NvcGVzIjpbXX0.mwSj2JzSnws9nmSXQssN8DeLOCash-HMMZVy4xc5BnkVM2R1XQfAi9s5eZ_bowcNEafrIpwZwvRnMDtydYtI_-VyyzBXeuK4Hlw4Mdq1H0Aiboe_8_qeEYKSUFAixpJfjwHUTGYmUG3nRvHqDlKV35IbuG2etbdJFn0XHcxwRcHPPQgwKsMSAt0ly3EKUojgeHGm0RkWb1zJ1ZeTYBHENsCmq3fG4p8IYr6cewK7iF7SdrnFAxxc2TcVPir3Jtzsn7VRNwZYKOmVr0G0HMtQLvfRwKqL_CD_W9jT7QgCFbXKOV719pVx8Ev5uRN7ficPXhjK-bGzlofvEAHJGt2XKWSXLGn3xeTrFZX2JnLn_flLZR4RXNpYeohFsSJbCDBn4i8PZC12FaIlR5TSt99VLL9lvFL6HwI39_z9wyfXFuZ-uV7b__nAxRboK3vGx2co9kLNgp2oIHhtS4WP4CJTVls42Z5zSgd0qlloVz6LIA0JQu9WdU7esXTqnbhX6I1_7cNNB2Jw93wj5f6aBm7HwnAVDyuJivF4Zp3I9S1tYN_Ex3KGT6hVXhkzUMrTul3VsacXig9CpuD8fUa_9AY_T5NgyNPgNK8PCZxvB76A3Mc-bCiDmPBKSuoOAoLyTvxIcO9aq_RO2yI6T5fQ87XBTGVZ-Rw0F7nbcUWF5qlsBco"
-        },
-        body: body,
-      ),
-      create: () => APIResponse<User>(create: () => User()),
-    )
+            route: APIRoute(
+              APIType.check_my_phone_number,
+              body: body,
+            ),
+            create: () => APIResponse<User>(create: () => User()),
+            apiFunction: checkMyNumber)
         .then((response) {
       printWrapped(response.response!.data.toString());
       AppPopUps().dissmissDialog();
-      resetState();
       completion();
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -63,21 +69,23 @@ class VerifyNumberViewModel extends ChangeNotifier {
     });
   }
 
-  verifymynumber({completion}) async {
+  verifyMyNumber({completion}) async {
     AppPopUps().showProgressDialog(context: myContext);
-    Map<String, dynamic> body = {};
-    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    Map<String, dynamic> body = {
+      "otp": otpCodeController.text,
+      "mobile": phonenumberController.text
+    };
+    var client = APIClient(
+        isCache: false,
+        baseUrl: ApiConstants.baseUrl,
+        contentType: 'application/x-www-form-urlencoded');
     client
         .request(
-            route: APIRoute(
-              APIType.verify_my_phone_number,
-              body: body,
-            ),
-            create: () => VerifyMyPhoneNumber(),
-            apiFunction: verifymynumber())
+            route: APIRoute(APIType.verify_my_phone_number, body: body),
+            create: () => VerifyMyPhoneNumberModel(),
+            apiFunction: verifyMyNumber)
         .then((response) {
       AppPopUps().dissmissDialog();
-
       resetState();
       completion();
     }).catchError((error) {
@@ -94,6 +102,8 @@ class VerifyNumberViewModel extends ChangeNotifier {
   }
 
   resetState() {
-    phonenumberController = TextEditingController();
+    phonenumberController.clear();
+    isVerificationSent = false;
+    otpCodeController.clear();
   }
 }

@@ -6,15 +6,15 @@ import 'package:flutter/material.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
+import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
-import 'package:magnijobs_rnr/models/employer_model.dart';
 import 'package:magnijobs_rnr/models/register_new_tutor.dart';
 import 'package:path/path.dart';
 
 import '../routes.dart';
 
 class TutorSignUpViewModel extends ChangeNotifier {
-  final formKey = GlobalKey<FormState>();
+  var formKey = GlobalKey<FormState>();
   File? nationalIdImage;
   TextEditingController firstnameContoller = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
@@ -60,11 +60,39 @@ class TutorSignUpViewModel extends ChangeNotifier {
         allowMultiple: false);
     if (result != null) {
       File file = File(result.files.single.path!);
-
       nationalIdImage = file;
+      notifyListeners();
     } else {
       // User canceled the picker
     }
+  }
+
+  void logout({onComplete}) {
+    onComplete();
+    /* AppPopUps().showProgressDialog(context: myContext);
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.logout,
+              // body: body,
+            ),
+            create: () => APIResponse(decoding: false),
+            apiFunction: logout)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      onComplete();
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });*/
   }
 
   registerTutor({completion}) async {
@@ -85,9 +113,6 @@ class TutorSignUpViewModel extends ChangeNotifier {
         nationalIdImage!.path,
         filename: basename(nationalIdImage!.path),
       ),
-      //  "contact_number": contactNumberController.text,
-      // "contact_email": contactEmailController.text,
-      //  "marital_status": martialStatusController.text,
     });
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -96,11 +121,11 @@ class TutorSignUpViewModel extends ChangeNotifier {
               APIType.register_new_tutor,
               body: body,
             ),
-            create: () => RegisterNewTutor(),
+            create: () =>
+                APIResponse<RegisterNewTutor>(create: () => RegisterNewTutor()),
             apiFunction: registerTutor)
         .then((response) {
       AppPopUps().dissmissDialog();
-
       resetState();
       completion();
     }).catchError((error) {
@@ -117,15 +142,18 @@ class TutorSignUpViewModel extends ChangeNotifier {
   }
 
   resetState() {
-    firstnameContoller = TextEditingController();
-    lastNameController = TextEditingController();
-    emailController = TextEditingController();
-    mobileController = TextEditingController();
-    passwordController = TextEditingController();
-    confirmPasswordController = TextEditingController();
-    addressController = TextEditingController();
-    locationController = TextEditingController();
-    companyNameController = TextEditingController();
-    webSiteController = TextEditingController();
+    formKey = GlobalKey<FormState>();
+    nationalIdImage = null;
+    firstnameContoller.clear();
+    lastNameController.clear();
+    emailController.clear();
+    mobileController.clear();
+    passwordController.clear();
+    confirmPasswordController.clear();
+    addressController.clear();
+    locationController.clear();
+    companyNameController.clear();
+    webSiteController.clear();
+    _hidePassword = true;
   }
 }

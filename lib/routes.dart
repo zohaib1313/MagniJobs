@@ -1,37 +1,46 @@
 import 'package:flutter/cupertino.dart';
-import 'package:magnijobs_rnr/models/update_job_post.dart';
 import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
+import 'package:magnijobs_rnr/screens/all_jobs_screen.dart';
 import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
+import 'package:magnijobs_rnr/screens/attendie_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
 import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
-import 'package:magnijobs_rnr/screens/country_and_job/country_and_job_screen.dart';
 import 'package:magnijobs_rnr/screens/employee_portal_screen.dart';
 import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dart';
-import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
-import 'package:magnijobs_rnr/screens/sign_in/sign_in_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
-import 'package:magnijobs_rnr/screens/update_profile_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_sign_up_screen.dart';
+import 'package:magnijobs_rnr/screens/update_candidate_screen.dart';
+import 'package:magnijobs_rnr/screens/update_employer_screen.dart';
+import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
-import 'package:magnijobs_rnr/view_models/all_candidate_view_model.dart';
-import 'package:magnijobs_rnr/view_models/all_employers_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_jobs_view_model.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:magnijobs_rnr/view_models/assign_applicant_t_employee_view_model.dart';
+import 'package:magnijobs_rnr/view_models/attendie_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/calender_applicant_bookings_view_model.dart';
+import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
+import 'package:magnijobs_rnr/view_models/country_list_view_model.dart';
 import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
+import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
+import 'package:magnijobs_rnr/view_models/forgot_password_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/jobseeker_profile_view_model.dart';
-import 'package:magnijobs_rnr/view_models/logout_view_model.dart';
-import 'package:magnijobs_rnr/view_models/my_jobs_as_employer_view_model.dart';
 import 'package:magnijobs_rnr/view_models/my_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
+import 'package:magnijobs_rnr/view_models/tutor_booking_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_employer_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/update_job_post_view_model.dart';
-import 'package:magnijobs_rnr/view_models/update_my_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/update_tutor_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/upload_my_business_registration_view_model.dart';
 import 'package:magnijobs_rnr/view_models/upload_my_covid_certificate_view_model.dart';
 import 'package:magnijobs_rnr/view_models/upload_my_national_id_view_model.dart';
@@ -50,49 +59,44 @@ final Map<String, Widget Function(BuildContext)> routes = {
   EmployerSignUpScreen.id: (context) => EmployerSignUpScreen(),
   PackagesScreen.id: (context) => PackagesScreen(),
   AddPaymentScreen.id: (context) => AddPaymentScreen(),
-  SigInScreen.id: (context) => SigInScreen(),
   VerifyNumberScreen.id: (context) => VerifyNumberScreen(),
   CompanyProfileScreen.id: (context) => CompanyProfileScreen(),
-  JobPostScreen.id: (context) => JobPostScreen(),
-  CountryAndJobScreen.id: (context) => CountryAndJobScreen(),
+  AllJobScreen.id: (context) => AllJobScreen(),
   ApplicantSignUp.id: (context) => ApplicantSignUp(),
-  EmployeePortalScreen.id: (context) => EmployeePortalScreen(),
-  UpdateProfileScreen.id: (context) => UpdateProfileScreen(),
+  EmployeePortalScreen.id: (context) => const EmployeePortalScreen(),
+  UpdateCandidateScreen.id: (context) => UpdateCandidateScreen(),
+  UpdateEmployerProfileScreen.id: (context) => UpdateEmployerProfileScreen(),
+  UpdateTutorProfileScreen.id: (context) => UpdateTutorProfileScreen(),
+  TutorSignUpScreen.id: (context) => TutorSignUpScreen(),
+  TutorProfileScreen.id: (context) => TutorProfileScreen(),
+  AttendieCandidateProfileScreen.id: (context) =>
+      AttendieCandidateProfileScreen(),
 };
 
 final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<SplashScreenViewModel>(
       create: (_) => SplashScreenViewModel()),
   ChangeNotifierProvider<SignInViewModel>(create: (_) => SignInViewModel()),
-  ChangeNotifierProvider<AllJobsViewModel>(create: (_) => AllJobsViewModel()),
   ChangeNotifierProvider<VerifyNumberViewModel>(
       create: (_) => VerifyNumberViewModel()),
-  ChangeNotifierProvider<AllEmployerViewModel>(
-      create: (_) => AllEmployerViewModel()),
   ChangeNotifierProvider<AllPackagesViewModel>(
       create: (_) => AllPackagesViewModel()),
   ChangeNotifierProvider<MyProfileViewModel>(
       create: (_) => MyProfileViewModel()),
   ChangeNotifierProvider<JobseekerViewModel>(
       create: (_) => JobseekerViewModel()),
-  ChangeNotifierProvider<UpdateMyProfileViewModel>(
-      create: (_) => UpdateMyProfileViewModel()),
   ChangeNotifierProvider<JobPostViewModel>(create: (_) => JobPostViewModel()),
   ChangeNotifierProvider<UpdateJobPostViewModel>(
       create: (_) => UpdateJobPostViewModel()),
   ChangeNotifierProvider<DeleteJobPostViewModel>(
       create: (_) => DeleteJobPostViewModel()),
-  ChangeNotifierProvider<MyJobsAsEmployerViewModel>(
-      create: (_) => MyJobsAsEmployerViewModel()),
+  ChangeNotifierProvider<AllJobsViewModel>(create: (_) => AllJobsViewModel()),
   ChangeNotifierProvider<ApplicantSignUpViewModel>(
       create: (_) => ApplicantSignUpViewModel()),
   ChangeNotifierProvider<EmployerSignUpViewModel>(
       create: (_) => EmployerSignUpViewModel()),
   ChangeNotifierProvider<TutorSignUpViewModel>(
       create: (_) => TutorSignUpViewModel()),
-  ChangeNotifierProvider<LogoutViewModel>(create: (_) => LogoutViewModel()),
-  ChangeNotifierProvider<AllCandidateViewModel>(
-      create: (_) => AllCandidateViewModel()),
   ChangeNotifierProvider<UploadMyResumesViewModel>(
       create: (_) => UploadMyResumesViewModel()),
   ChangeNotifierProvider<UploadMyNurseCertificateViewModel>(
@@ -105,4 +109,29 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => UploadMyCovidCertificateViewModel()),
   ChangeNotifierProvider<AssignApplicantToEmployeeViewModel>(
       create: (_) => AssignApplicantToEmployeeViewModel()),
+  ChangeNotifierProvider<CountryAndJobViewModel>(
+      create: (_) => CountryAndJobViewModel()),
+  ChangeNotifierProvider<AllJobsViewModel>(create: (_) => AllJobsViewModel()),
+  ChangeNotifierProvider<ForgotPasswordViewModel>(
+      create: (_) => ForgotPasswordViewModel()),
+  ChangeNotifierProvider<EmployerPortalViewModel>(
+      create: (_) => EmployerPortalViewModel()),
+  ChangeNotifierProvider<ProfileSettingViewModel>(
+      create: (_) => ProfileSettingViewModel()),
+  ChangeNotifierProvider<CompanyProfileViewModel>(
+      create: (_) => CompanyProfileViewModel()),
+  ChangeNotifierProvider<UpdateCandidateProfileViewModel>(
+      create: (_) => UpdateCandidateProfileViewModel()),
+  ChangeNotifierProvider<UpdateTutorProfileViewModel>(
+      create: (_) => UpdateTutorProfileViewModel()),
+  ChangeNotifierProvider<UpdateEmployerProfileViewModel>(
+      create: (_) => UpdateEmployerProfileViewModel()),
+  ChangeNotifierProvider<CalenderApplicantBookingsViewModel>(
+      create: (_) => CalenderApplicantBookingsViewModel()),
+  ChangeNotifierProvider<TutorBookingJobHistoryViewModel>(
+      create: (_) => TutorBookingJobHistoryViewModel()),
+  ChangeNotifierProvider<AttendieProfileViewModel>(
+      create: (_) => AttendieProfileViewModel()),
+  ChangeNotifierProvider<CountriesListViewModel>(
+      create: (_) => CountriesListViewModel()),
 ];

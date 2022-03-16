@@ -3,12 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 
+import '../models/countries_model.dart';
 import '../styles.dart';
 
 void printWrapped(String text) {
   final pattern = RegExp('.{1,800}'); // 800 is the size of each chunk
-  pattern.allMatches(text).forEach((match) => print(match.group(0)));
+  pattern.allMatches(text).forEach(
+      (match) => print("\n********TAGGGG*********\n${match.group(0)}"));
 }
 
 String formatAmount(String? amount) {
@@ -19,19 +22,27 @@ myAppBar(
     {String? title,
     Color backGroundColor = AppColor.whiteColor,
     List<Widget>? actions,
-    onTap}) {
+    BuildContext? context,
+    bool goBack = true,
+    onBacKTap}) {
   return AppBar(
     centerTitle: true,
     elevation: 0,
     actions: actions ?? [],
-    leading: IconButton(
-      icon: SvgViewer(
-        svgPath: "assets/icons/back_arrow_ic.svg",
-      ),
-      onPressed: onTap ?? () => Navigator.of(myContext!).pop(),
-    ),
+    leading: goBack
+        ? IconButton(
+            icon: const SvgViewer(
+              svgPath: "assets/icons/back_arrow_ic.svg",
+            ),
+            onPressed:
+                onBacKTap ?? () => Navigator.of(context ?? myContext!).pop(),
+          )
+        : null,
     backgroundColor: backGroundColor,
-    title: Text(title ?? "", style: AppTextStyles.textStyleBoldTitleLarge),
+    title: Text(
+      title ?? "",
+      style: AppTextStyles.textStyleBoldBodyMedium,
+    ),
   );
 }
 
@@ -69,4 +80,37 @@ mySwitch(
       ],
     ),
   );
+}
+
+Future<void> showDatePickerDialog(
+    {required BuildContext context,
+    required Function(dynamic date) onDateSelected,
+    DatePickerMode initialDatePickerMode = DatePickerMode.day}) async {
+  final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDatePickerMode: initialDatePickerMode,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1905),
+      lastDate: DateTime(3905));
+  if (picked != null && picked != DateTime.now()) {
+    onDateSelected(DateFormat('yyyy-MM-dd').format(picked));
+  }
+}
+
+Future<void> showMyTimePicker(
+    {required BuildContext context,
+    required Function(dynamic date) onTimeSelected,
+    TimePickerEntryMode initialDatePickerMode =
+        TimePickerEntryMode.dial}) async {
+  final TimeOfDay? picked =
+      await showTimePicker(context: context, initialTime: TimeOfDay.now());
+  if (picked != null) {
+    onTimeSelected(picked.period.name);
+  }
+}
+
+Countries? getCountryNameFromId(int id) {
+  CountriesModel? countriesModel = UserDefaults.getCountriesList();
+  return countriesModel?.countries
+      ?.firstWhere((element) => ((element.id ?? 0) == (id)));
 }

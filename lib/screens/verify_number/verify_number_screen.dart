@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/screens/company_profile/company_profile_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/verify_number_view_model.dart';
@@ -21,13 +20,18 @@ class VerifyNumberScreen extends StatefulWidget {
 
 class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
   final space = SizedBox(height: 20.h);
-  bool isVerificationSent = false;
+  final hSpace = SizedBox(width: 20.h);
+
   int endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+  var view = Provider.of<VerifyNumberViewModel>(myContext!, listen: true);
+
+  @override
+  void initState() {
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var view = Provider.of<VerifyNumberViewModel>(myContext!);
-
     return AnnotatedRegion<SystemUiOverlayStyle>(
       value: const SystemUiOverlayStyle(
           statusBarColor: AppColor.whiteColor,
@@ -40,7 +44,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           appBar: myAppBar(title: "Verifying Number"),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Container(
               padding: EdgeInsets.only(
                 left: 100.w,
@@ -69,9 +73,9 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
                             color: AppColor.whiteColor,
                             borderRadius: BorderRadius.circular(50.r),
                           ),
-                          child: isVerificationSent
-                              ? getViewToSent()
-                              : getViewSent(view, context)),
+                          child: view.isVerificationSent
+                              ? getViewSent()
+                              : getViewToSent(view, context)),
                     ],
                   ),
                 ],
@@ -83,7 +87,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
     );
   }
 
-  getViewSent(VerifyNumberViewModel view, context) {
+  getViewToSent(VerifyNumberViewModel view, context) {
     return Column(
       children: [
         space,
@@ -110,34 +114,25 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           textColor: AppColor.whiteColor,
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
-            setState(() {
-              isVerificationSent = true;
-              view.checkmynumber(completion: () {});
-            });
+            ///todo
+            Navigator.of(myContext!).pop(true);
+/*            view.checkMyNumber(completion: () {
+              view.setIsVerificationSent(true);
+              setState(() {});
+            });*/
           },
-        ),
-        space,
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              "Verification Code sent to +444******** ",
-              style: AppTextStyles.textStyleNormalBodySmall,
-            ),
-          ],
         ),
         space,
       ],
     );
   }
 
-  getViewToSent() {
-    endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+  getViewSent() {
     return Column(
       children: [
         space,
         Text(
-          "We have sent verification code to\n+44444444444",
+          "We have sent verification code to\n${view.phonenumberController.text}",
           textAlign: TextAlign.center,
           style: AppTextStyles.textStyleNormalBodySmall
               .copyWith(color: AppColor.blackColor),
@@ -145,6 +140,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
         space,
         MyTextField(
           leftPadding: 0,
+          controller: view.otpCodeController,
           rightPadding: 0,
           hintText: "Enter Code",
           focusBorderColor: AppColor.primaryBlueDarkColor,
@@ -158,23 +154,56 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           textColor: AppColor.whiteColor,
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
-            Navigator.of(myContext!).pushNamed(CompanyProfileScreen.id);
+            printWrapped("verifying...");
+            //  Navigator.of(myContext!).pop(true);
+
+            ///todo
+            if (view.otpCodeController.text.isNotEmpty) {
+              view.verifyMyNumber(completion: () {
+                Navigator.of(myContext!).pop(true);
+              });
+            }
           },
         ),
         space,
         Row(
           mainAxisAlignment: MainAxisAlignment.end,
           children: [
+            Visibility(
+              visible: view.timeEnd,
+              child: GestureDetector(
+                onTap: () {
+                  view.checkMyNumber(completion: () {
+                    view.isVerificationSent = true;
+                    endTime = DateTime.now().millisecondsSinceEpoch + 1000 * 10;
+                    view.setTimeEnd(false);
+                    setState(() {});
+                  });
+
+                  // Navigator.of(myContext!)
+                  //     .pushReplacementNamed(VerifyNumberScreen.id);
+                },
+                child: Text(
+                  "Resend",
+                  style: AppTextStyles.textStyleBoldBodyMedium.copyWith(
+                      color: AppColor.blueColor,
+                      decoration: TextDecoration.underline),
+                ),
+              ),
+            ),
+            hSpace,
             Center(
               child: CountdownTimer(
                 endTime: endTime,
                 onEnd: () {
-                  /*  setState(() {
-                    isVerificationSent = false;
-                  });*/
+                  Future.delayed(Duration.zero, () async {
+                    endTime = 0;
+                    view.setTimeEnd(true);
+                    view.setIsVerificationSent(true);
+                    setState(() {});
+                  });
                 },
                 widgetBuilder: (context, time) {
-                  if (time == null) {}
                   return Text(
                     '${time?.sec ?? 0} Sec Left',
                     style: AppTextStyles.textStyleBoldBodySmall,
@@ -188,4 +217,25 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
       ],
     );
   }
+
+/* void gotoRelevantScreenOnUserType() {
+    String userType = UserDefaults?.getUserType() ?? "";
+    printWrapped(userType);
+    if (userType.isNotEmpty) {
+      switch (userType) {
+        case 'employer':
+          Navigator.of(myContext!)
+              .pushReplacementNamed(CompanyProfileScreen.id);
+          break;
+        case 'applicant':
+          Navigator.of(myContext!)
+              .pushReplacementNamed(EmployeePortalScreen.id);
+          break;
+        case 'tutor':
+          Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
+
+          break;
+      }
+    }
+  }*/
 }

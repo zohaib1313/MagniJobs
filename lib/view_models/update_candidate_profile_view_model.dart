@@ -1,39 +1,38 @@
-import 'package:flutter/cupertino.dart';
 import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/number_symbols_data.dart';
+import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
+import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
-import 'package:magnijobs_rnr/models/register_new_applicant.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:path/path.dart';
 
+import '../models/signin_model.dart';
 import '../routes.dart';
 
-class UpdateMyProfileViewModel extends ChangeNotifier {
+class UpdateCandidateProfileViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
 
-  File? nationalIdImage;
-
+  File? profilePicImage;
   TextEditingController firstnameContoller = TextEditingController();
   TextEditingController lastNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController mobileController = TextEditingController();
-
   TextEditingController addressController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController dobController = TextEditingController();
   TextEditingController nationalityController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController martialStatusController = TextEditingController();
-
   TextEditingController schoolController = TextEditingController();
   TextEditingController workExperienceController = TextEditingController();
   TextEditingController certificationController = TextEditingController();
-
   TextEditingController examsController = TextEditingController();
   TextEditingController preferredlocationController = TextEditingController();
   TextEditingController licenseController = TextEditingController();
@@ -72,14 +71,39 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
         allowMultiple: false);
     if (result != null) {
       File file = File(result.files.single.path!);
-
-      nationalIdImage = file;
+      profilePicImage = file;
+      setValuesWithSharedPref();
+      updateProfile(onComplete: () {
+        profilePicImage = null;
+        setValuesWithSharedPref();
+        AppPopUps.showAlertDialog(message: 'Profile updated');
+      });
     } else {
       // User canceled the picker
     }
   }
 
-  registerApplicant({completion}) async {
+  resetState() {
+    profilePicImage = null;
+    firstnameContoller.clear();
+    lastNameController.clear();
+    emailController.clear();
+    mobileController.clear();
+    addressController.clear();
+    locationController.clear();
+    dobController.clear();
+    nationalityController.clear();
+    genderController.clear();
+    martialStatusController.clear();
+    schoolController.clear();
+    workExperienceController.clear();
+    certificationController.clear();
+    examsController.clear();
+    preferredlocationController.clear();
+    licenseController.clear();
+  }
+
+  void updateProfile({onComplete}) async {
     AppPopUps().showProgressDialog(context: myContext);
     FormData body = FormData.fromMap({
       "first_name": firstnameContoller.text,
@@ -90,30 +114,38 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
       "location": locationController.text,
       "dob": dobController.text,
       "nationality": nationalityController.text,
-      "gender": genderController.text,
-      "marital_status": martialStatusController.text,
-      "school": schoolController,
-      "work_experience": workExperienceController,
+      "gender": genderController.text.isEmpty ? "Male" : genderController.text,
+      "marital_status": martialStatusController.text.isEmpty
+          ? "Single"
+          : martialStatusController.text,
+      "school": schoolController.text,
+      "work_experience": workExperienceController.text,
       "certifications": certificationController.text,
       "exams": examsController.text,
       "license": licenseController.text,
       "preferred_location": preferredlocationController.text,
+      'profile': profilePicImage?.path != null
+          ? await MultipartFile.fromFile(
+              profilePicImage!.path,
+              filename: basename(profilePicImage!.path),
+            )
+          : "",
     });
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
         .request(
-      route: APIRoute(
-        APIType.register_new_employer,
-        body: body,
-      ),
-      create: () => RegisterNewApplicant(),
-      // apiFunction: registerApplicant()
-    )
-        .then((response) {
+            route: APIRoute(
+              APIType.update_my_profile,
+              body: body,
+            ),
+            create: () => APIResponse<CandidateSignInModel>(
+                create: () => CandidateSignInModel()),
+            apiFunction: updateProfile)
+        .then((response) async {
       AppPopUps().dissmissDialog();
-
-      resetState();
-      completion();
+      await UserDefaults.saveCandidateUserSession(
+          response.response!.data!, UserDefaults.getUserType() ?? '');
+      onComplete();
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();
@@ -127,25 +159,28 @@ class UpdateMyProfileViewModel extends ChangeNotifier {
     });
   }
 
-  resetState() {
-    firstnameContoller = TextEditingController();
-    lastNameController = TextEditingController();
-    emailController = TextEditingController();
-    mobileController = TextEditingController();
-
-    addressController = TextEditingController();
-    locationController = TextEditingController();
-    dobController = TextEditingController();
-    nationalityController = TextEditingController();
-    genderController = TextEditingController();
-    martialStatusController = TextEditingController();
-
-    schoolController = TextEditingController();
-    workExperienceController = TextEditingController();
-    certificationController = TextEditingController();
-
-    examsController = TextEditingController();
-    preferredlocationController = TextEditingController();
-    licenseController = TextEditingController();
+  void setValuesWithSharedPref() {
+    CandidateSignInModel? user = UserDefaults.getCandidateUserSession();
+    firstnameContoller.text = user?.user?.firstName ?? "";
+    lastNameController.text = user?.user?.lastName ?? "";
+    emailController.text = user?.user?.email ?? "";
+    mobileController.text = user?.user?.mobile ?? "";
+    addressController.text = user?.candidateModel?.address ?? '';
+    locationController.text = user?.candidateModel?.location ?? '00';
+    dobController.text = user?.candidateModel?.dob != null
+        ? DateFormat('yyyy-MM-dd')
+            .format(DateTime.parse(user!.candidateModel!.dob!))
+            .toString()
+        : '';
+    nationalityController.text = user?.candidateModel?.nationality ?? '';
+    genderController.text = user?.candidateModel?.gender ?? '';
+    martialStatusController.text = user?.candidateModel?.maritalStatus ?? '';
+    schoolController.text = user?.candidateModel?.school ?? '';
+    workExperienceController.text = user?.candidateModel?.workExperience ?? '';
+    certificationController.text = user?.candidateModel?.certifications ?? '';
+    examsController.text = user?.candidateModel?.exams ?? '';
+    preferredlocationController.text =
+        user?.candidateModel?.preferredLocation ?? '00';
+    licenseController.text = user?.candidateModel?.license ?? '';
   }
 }
