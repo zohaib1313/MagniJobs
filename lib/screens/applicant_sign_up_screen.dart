@@ -193,9 +193,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             hintText: "Company name",
                             controller: view.companynameController,
                             validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
                               return null;
                             },
                           ),
@@ -205,9 +202,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             hintText: "Contact number",
                             controller: view.contactnumberController,
                             validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
                               return null;
                             },
                           ),
@@ -217,9 +211,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             hintText: "Contact email",
                             controller: view.contactemailController,
                             validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
                               return null;
                             },
                           ),
