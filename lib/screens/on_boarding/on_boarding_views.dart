@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
+import 'package:magnijobs_rnr/utils/app_constants.dart';
 
 import '../../styles.dart';
 
@@ -37,15 +38,13 @@ class _OnBoardingOurCompanyInfoState extends State<OnBoardingOurCompanyInfo> {
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Introduction",
-                            message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                            message: AppConstants.companyIntro,
                             isExpanded: true)),
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Goal",
-                            message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                            message: AppConstants.companyGoals,
                             isExpanded: false)),
                     space,
                     space,
@@ -98,36 +97,27 @@ class _OnBoardingForClientsState extends State<OnBoardingForClients> {
                         model: ExpandableTileModel(
                             title:
                                 "Employers, Recruitment Agencies, Placement Agencies",
-                            message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                            message: AppConstants.employerRecruitmentPlacement,
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Benifits",
                             message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
-                            isExpanded: false)),
-                    space,
-                    ExpandAbleTile(
-                        model: ExpandableTileModel(
-                            title: "Benifits",
-                            message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                "For CLIENTS such as employers and recruitment/placement agencies, the company offers: \n•Reduced expenses on recruitment process.\n• High quality and trained applicant.\n• Easy access to and communication with qualified   candidates.\n• Flexibility in advertising positions.",
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "How to Navigate",
                             message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                '''Sign Up, Sign In, Job Posting, Accessing Country and Job ''',
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Pricing",
-                            message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                            message: "Information Provided",
                             isExpanded: false)),
                     space,
                     space,
@@ -179,21 +169,38 @@ class _OnBoardingForApplicantState extends State<OnBoardingForApplicant> {
                         model: ExpandableTileModel(
                             title: "Job Seekers",
                             message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                '''Job seekers from across the world can benefit from this App, with communication
+with clients and usage incredibly easy. With the MAGNIJOBS App, it is possible
+to maintain visibility to all clients on the App and thus receive multiple offers. We
+offer a video on how to navigate the App for applicants so that they can start
+finding jobs fitting their skills as soon as possible ''',
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Benifits",
                             message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                '''For APPLICANTS, the company’s services are:
+    • Easy to use and communicate with clients.
+    • Allow applicants to receive multiple offers 
+      from clients.
+    • Increased visibility.
+    • Applicants have the option to apply for an
+      advertised job or just stand by until a client 
+      shows interest in their profile.  ''',
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Free to Use",
                             message:
-                                "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                '''The APP is free to use for all Job Seekers. Just sign up, sign in, then you’re ready to
+explore. There will be free access to exam tutors as well. Tutors like for example but
+not limited to IELTS FOR UKVI, OET, CBT, NCLEX and other exams necessary for
+a job application abroad.
+The APP will cater as a site for other service providers which include Emergency
+Loan, Recruitment Companies, Food Delivery, Groceries and other useful websites
+for our everyday need''',
                             isExpanded: false)),
                     space,
                     space,

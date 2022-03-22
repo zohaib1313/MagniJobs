@@ -34,6 +34,8 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   TextEditingController contactemailController = TextEditingController();
   bool _hidePassword = true;
 
+  bool termsConditionAccepted = false;
+
   bool get hidePassword => _hidePassword;
 
   set hidePassword(bool value) {

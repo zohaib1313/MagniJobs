@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/screens/verify_number/privacy_policy_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
@@ -219,6 +220,44 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                             },
                           ),
                           space,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 100.w),
+                            child: Row(
+                              children: [
+                                mySwitch(
+                                    message: "Accept",
+                                    isActive: view.termsConditionAccepted,
+                                    messageColor: AppColor.blackColor,
+                                    fillColor: AppColor.alphaGrey,
+                                    checkColor: AppColor.blackColor,
+                                    onTap: () {
+                                      view.termsConditionAccepted =
+                                          !view.termsConditionAccepted;
+                                      setState(() {});
+                                    }),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(myContext!).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                PrivacyPolicyScreen()));
+                                  },
+                                  child: Text(
+                                    'Terms & Conditions',
+                                    style: AppTextStyles
+                                        .textStyleNormalBodySmall
+                                        .copyWith(
+                                            color: AppColor.blueColor,
+                                            decoration:
+                                                TextDecoration.underline),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                           space,
                           Padding(
                             padding: EdgeInsets.all(100.w),
@@ -307,16 +346,21 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                   onTap: () {
                     if (view.formKey.currentState!.validate()) {
                       if (view.nationalIdImage != null) {
-                        view.registerTutor(
-                          completion: () async {
-                            AppPopUps.showAlertDialog(
-                                message: "User created Successfully",
-                                onSubmit: () {
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
-                                });
-                          },
-                        );
+                        if (view.termsConditionAccepted) {
+                          view.registerTutor(
+                            completion: () async {
+                              AppPopUps.showAlertDialog(
+                                  message: "User created Successfully",
+                                  onSubmit: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  });
+                            },
+                          );
+                        } else {
+                          AppPopUps.showAlertDialog(
+                              message: 'You Must Accept Terms & Conditions');
+                        }
                       } else {
                         AppPopUps.displayTextInputDialog(
                             title: "validation",

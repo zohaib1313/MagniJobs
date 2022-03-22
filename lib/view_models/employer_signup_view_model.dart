@@ -26,6 +26,8 @@ class EmployerSignUpViewModel extends ChangeNotifier {
   TextEditingController webSiteController = TextEditingController();
   bool _hidePassword = true;
 
+  bool termsConditionAccepted = false;
+
   bool get hidePassword => _hidePassword;
 
   set hidePassword(bool value) {
