@@ -5,10 +5,15 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/screens/verify_number/privacy_policy_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
 import 'package:provider/provider.dart';
+
+import '../models/countries_model.dart';
+import '../routes.dart';
+import '../view_models/company_profile_view_model.dart';
 
 class TutorSignUpScreen extends StatefulWidget {
   TutorSignUpScreen({Key? key}) : super(key: key);
@@ -109,7 +114,49 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                             },
                           ),
                           space,
-                          MyTextField(
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.locationController.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Country",
+                                  labelText: "",
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.alphaGrey,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    if (string == null || string.isEmpty) {
+                                      return 'Required';
+                                    }
+                                    return null;
+                                  },
+                                );
+                              }
+                              return Center(
+                                  child: Container(
+                                      child: CircularProgressIndicator()));
+                            },
+                          ),
+                          /*  MyTextField(
                             fillColor: AppColor.alphaGrey,
                             hintText: "Location",
                             controller: view.locationController,
@@ -119,7 +166,7 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                               }
                               return null;
                             },
-                          ),
+                          ),*/
                           space,
                           MyTextField(
                             fillColor: AppColor.alphaGrey,
@@ -173,6 +220,44 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                             },
                           ),
                           space,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 100.w),
+                            child: Row(
+                              children: [
+                                mySwitch(
+                                    message: "Accept",
+                                    isActive: view.termsConditionAccepted,
+                                    messageColor: AppColor.blackColor,
+                                    fillColor: AppColor.alphaGrey,
+                                    checkColor: AppColor.blackColor,
+                                    onTap: () {
+                                      view.termsConditionAccepted =
+                                          !view.termsConditionAccepted;
+                                      setState(() {});
+                                    }),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(myContext!).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                PrivacyPolicyScreen()));
+                                  },
+                                  child: Text(
+                                    'Terms & Conditions',
+                                    style: AppTextStyles
+                                        .textStyleNormalBodySmall
+                                        .copyWith(
+                                            color: AppColor.blueColor,
+                                            decoration:
+                                                TextDecoration.underline),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                           space,
                           Padding(
                             padding: EdgeInsets.all(100.w),
@@ -261,12 +346,21 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                   onTap: () {
                     if (view.formKey.currentState!.validate()) {
                       if (view.nationalIdImage != null) {
-                        view.registerTutor(
-                          completion: () async {
-                            AppPopUps.showAlertDialog(
-                                message: "User created Successfully");
-                          },
-                        );
+                        if (view.termsConditionAccepted) {
+                          view.registerTutor(
+                            completion: () async {
+                              AppPopUps.showAlertDialog(
+                                  message: "User created Successfully",
+                                  onSubmit: () {
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  });
+                            },
+                          );
+                        } else {
+                          AppPopUps.showAlertDialog(
+                              message: 'You Must Accept Terms & Conditions');
+                        }
                       } else {
                         AppPopUps.displayTextInputDialog(
                             title: "validation",

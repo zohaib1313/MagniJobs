@@ -34,6 +34,8 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   TextEditingController contactemailController = TextEditingController();
   bool _hidePassword = true;
 
+  bool termsConditionAccepted = false;
+
   bool get hidePassword => _hidePassword;
 
   set hidePassword(bool value) {
@@ -90,9 +92,14 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
       "nationality": nationalityController.text,
       "gender": genderController.text,
       "marital_status": martialStatusController.text,
-      "company_name": companynameController.text,
-      "contact_number": contactnumberController.text,
-      "contact_email": contactemailController.text,
+      "company_name":
+          companynameController.text.isEmpty ? "" : companynameController.text,
+      "contact_number": contactnumberController.text.isEmpty
+          ? ''
+          : contactnumberController.text,
+      "contact_email": contactemailController.text.isEmpty
+          ? ""
+          : contactemailController.text,
       "national_id": await MultipartFile.fromFile(
         nationalIdImage!.path,
         filename: basename(nationalIdImage!.path),

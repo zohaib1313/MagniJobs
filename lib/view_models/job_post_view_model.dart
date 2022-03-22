@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
@@ -92,7 +93,6 @@ class JobPostViewModel extends ChangeNotifier {
         .then((response) {
       AppPopUps().dissmissDialog();
       employersModel = response.response!.data;
-      resetState();
       completion();
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -107,13 +107,62 @@ class JobPostViewModel extends ChangeNotifier {
     });
   }
 
-  resetState() {
+  resetState(
+      {String? countryId,
+      String? job,
+      String? location,
+      String? salary,
+      String? qulification,
+      String? dueDate = '',
+      String? jobDesc}) {
     selectedCountryId = '';
-    jobController.clear();
-    locationController.clear();
-    salaryController.clear();
-    qualificationController.clear();
-    dueDateController.clear();
-    jobdiscriptionController.clear();
+    jobController.text = job ?? '';
+    locationController.text = location ?? '';
+    salaryController.text = salary ?? '';
+    qualificationController.text = qulification ?? '';
+    dueDateController.text = dueDate != ''
+        ? DateFormat('yyyy-MM-dd').format(DateTime.parse(dueDate!))
+        : '';
+    jobdiscriptionController.text = jobDesc ?? '';
+  }
+
+  void updateJobs({completion, required int id}) {
+    AppPopUps().showProgressDialog(context: myContext);
+    Map<String, dynamic> body = {
+      "job": jobController.text,
+      "location": locationController.text,
+      'country': selectedCountryId,
+      "salary": salaryController.text,
+      "company": selectedCompanyId ?? "",
+      "qualification": qualificationController.text,
+      "job_description": jobdiscriptionController.text,
+      'due_date': dueDateController.text,
+    };
+    String s =
+        ApiConstants.baseUrl + ApiConstants.update_job_post + id.toString();
+    var client = APIClient(isCache: false, baseUrl: s);
+    client
+        .request(
+            route: APIRoute(
+              APIType.update_job_post,
+              body: body,
+            ),
+            create: () => APIResponse(decoding: false),
+            apiFunction: updateJobs)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      resetState();
+      completion();
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
   }
 }

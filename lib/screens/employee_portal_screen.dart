@@ -16,6 +16,7 @@ import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
 import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../models/all_jobs_model.dart';
 import '../models/countries_model.dart';
 import '../view_models/company_profile_view_model.dart';
 import 'all_jobs_screen.dart';
@@ -44,7 +45,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Employee Portal", actions: [
+          appBar: myAppBar(title: "Applicant Portal", actions: [
             InkWell(
               onTap: () async {
                 if (UserDefaults.getIsAttendie()) {
@@ -176,80 +177,96 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                       },
                     ),
                     space,
-                    MyTextField(
-                      fillColor: AppColor.whiteColor,
-                      textColor: AppColor.blackColor,
-                      hintColor: AppColor.blackColor,
-                      labelColor: AppColor.blackColor,
-                      hintText: "search job",
-                      controller: view.queryEditingController,
-                      labelText: "Jobs",
-                      validator: (string) {
-                        if (string == null || string.isEmpty) {
-                          return 'Enter Value';
+                    StreamBuilder(
+                      stream: Provider.of<CompanyProfileViewModel>(myContext!,
+                              listen: false)
+                          .loadJobs(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<Jobs?>> snapshot) {
+                        if (snapshot.hasData) {
+                          return MyDropDown(
+                            onChange: (value) {
+                              if (value.id.toString() != '-1') {
+                                view.showQueryField = false;
+                                view.queryEditingController.text =
+                                    value.job ?? "";
+                              } else {
+                                view.showQueryField = true;
+                              }
+                            },
+                            hintText: "Jobs",
+                            labelText: "",
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: getListOfJobs(snapshot),
+                            validator: (string) {
+                              return null;
+                            },
+                          );
                         }
-                        return null;
+                        return Center(
+                            child:
+                                Container(child: CircularProgressIndicator()));
                       },
                     ),
                     space,
-                    /*  StreamBuilder(
-                        stream: Provider.of<CompanyProfileViewModel>(myContext!,
-                                listen: false)
-                            .loadJobs(),
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Jobs?>> snapshot) {
-                          if (snapshot.hasData) {
-                            return MyDropDown(
-                              onChange: (value) {},
-                              hintText: "Jobs",
-                              labelText: "",
-                              labelColor: AppColor.redColor,
-                              borderColor: AppColor.alphaGrey,
-                              fillColor: AppColor.whiteColor,
-                              suffixIcon: "assets/icons/drop_down_ic.svg",
-                              itemFuntion: snapshot.data!
-                                  .map((e) => DropdownMenuItem(
-                                        value: e?.id.toString() ?? '',
-                                        child: Text(
-                                          e?.job ?? '',
-                                          style:
-                                              AppTextStyles.textStyleBoldBodySmall,
-                                        ),
-                                      ))
-                                  .toList(),
-                              validator: (string) {
-                                return null;
-                              },
-                            );
-                          }
-                          return Center(
-                              child: Container(child: CircularProgressIndicator()));
-                        },
-                      ),
-                      space,*/
-
+                    /* Provider.of<EmployerPortalViewModel>(myContext!,
+                                listen: true)
+                            .showQueryField
+                        ? MyTextField(
+                            fillColor: AppColor.whiteColor,
+                            textColor: AppColor.blackColor,
+                            hintColor: AppColor.blackColor,
+                            labelColor: AppColor.blackColor,
+                            hintText: "search job",
+                            controller: view.queryEditingController,
+                            labelText: "Jobs",
+                            validator: (string) {
+                              if (string == null || string.isEmpty) {
+                                return 'Enter Value';
+                              }
+                              return null;
+                            },
+                          )
+                        : Container(),
+                    space,*/
                     Button(
                       leftPadding: 200.w,
                       rightPading: 200.w,
                       buttonText: "Browse Jobs Posted",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        if (view.selectedCountryId != null &&
-                            view.queryEditingController.text.isNotEmpty) {
-                          Provider.of<AllJobsViewModel>(myContext!,
-                                  listen: false)
-                              .getJobBasedOnCountry(
-                            countryId: view.selectedCountryId ?? '',
-                            query: view.queryEditingController.text,
-                            completion: (allJobs) {
-                              Navigator.of(context).push(MaterialPageRoute(
-                                  builder: (context) => AllJobScreen()));
-                            },
-                          );
+                        if (view.selectedCountryId != null) {
+                          if (view.showQueryField) {
+                            Provider.of<AllJobsViewModel>(myContext!,
+                                    listen: false)
+                                .getAllJobs(
+                              completion: (allJobs) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AllJobScreen()));
+                              },
+                            );
+                          } else if (view
+                              .queryEditingController.text.isNotEmpty) {
+                            Provider.of<AllJobsViewModel>(myContext!,
+                                    listen: false)
+                                .getJobBasedOnCountry(
+                              countryId: view.selectedCountryId ?? '',
+                              query: view.queryEditingController.text,
+                              completion: (allJobs) {
+                                Navigator.of(context).push(MaterialPageRoute(
+                                    builder: (context) => AllJobScreen()));
+                              },
+                            );
+                          } else {
+                            AppPopUps.showSnackvBar(
+                                message: 'Select job', context: context);
+                          }
                         } else {
                           AppPopUps.showSnackvBar(
-                              message: 'Select country & enter search',
-                              context: context);
+                              message: 'Select country', context: context);
                         }
                       },
                     ),
@@ -346,5 +363,27 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
         ),
       ),
     );
+  }
+
+  getListOfJobs(AsyncSnapshot<List<Jobs?>> snapshot) {
+    List<DropdownMenuItem<Jobs>> list = [];
+    list.add(DropdownMenuItem(
+      value: Jobs(id: -1),
+      child: Text(
+        'Others',
+        style: AppTextStyles.textStyleBoldBodySmall,
+      ),
+    ));
+    for (var e in snapshot.data!) {
+      list.add(DropdownMenuItem(
+        value: e,
+        child: Text(
+          e?.job ?? '',
+          style: AppTextStyles.textStyleBoldBodySmall,
+        ),
+      ));
+    }
+
+    return list;
   }
 }

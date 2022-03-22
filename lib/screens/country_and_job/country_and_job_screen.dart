@@ -270,7 +270,8 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                                   Navigator.of(myContext!).push(
                                                       MaterialPageRoute(
                                                           builder: (context) =>
-                                                              ChatScreen()));
+                                                              ChatScreen(
+                                                                  candidate)));
                                                 },
                                               ),
                                             ),
@@ -293,7 +294,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                       textColor: AppColor.whiteColor,
                       onTap: () {
                         Navigator.of(myContext!).push(MaterialPageRoute(
-                            builder: (context) => ChatScreen()));
+                            builder: (context) => ChatScreen(candidate)));
                       },
                     ),
                   ],

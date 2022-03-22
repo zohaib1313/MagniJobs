@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -13,6 +14,7 @@ import 'package:provider/provider.dart';
 import '../../models/countries_model.dart';
 import '../../routes.dart';
 import '../../view_models/company_profile_view_model.dart';
+import '../verify_number/privacy_policy_screen.dart';
 
 class EmployerSignUpScreen extends StatefulWidget {
   EmployerSignUpScreen({Key? key}) : super(key: key);
@@ -44,7 +46,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
         child: SafeArea(
           child: Scaffold(
             appBar: myAppBar(
-                title: "Employer Sign Up",
+                title: "Companies Sign Up",
                 onBacKTap: () {
                   view.resetState();
                   Navigator.of(context).pop();
@@ -198,7 +200,6 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               },
                             ),
                             space,
-                            space,
                             MyTextField(
                               fillColor: AppColor.alphaGrey,
                               hintText: "Company Mail",
@@ -212,7 +213,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               },
                             ),
                             space,
-                            MyDropDown(
+                            /*   MyDropDown(
                               onChange: (value) {
                                 view.martialStatusController.text = value ?? "";
                               },
@@ -241,8 +242,8 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               validator: (string) {
                                 return null;
                               },
-                            ),
-                            space,
+                            ),*/
+
                             MyTextField(
                               fillColor: AppColor.alphaGrey,
                               hintText: "Website",
@@ -298,6 +299,44 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               },
                             ),
                             space,
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 100.w),
+                              child: Row(
+                                children: [
+                                  mySwitch(
+                                      message: "Accept",
+                                      isActive: view.termsConditionAccepted,
+                                      messageColor: AppColor.blackColor,
+                                      fillColor: AppColor.alphaGrey,
+                                      checkColor: AppColor.blackColor,
+                                      onTap: () {
+                                        view.termsConditionAccepted =
+                                            !view.termsConditionAccepted;
+                                        setState(() {});
+                                      }),
+                                  SizedBox(
+                                    width: 5,
+                                  ),
+                                  InkWell(
+                                    onTap: () {
+                                      Navigator.of(myContext!).push(
+                                          MaterialPageRoute(
+                                              builder: (ctx) =>
+                                                  PrivacyPolicyScreen()));
+                                    },
+                                    child: Text(
+                                      'Terms & Conditions',
+                                      style: AppTextStyles
+                                          .textStyleNormalBodySmall
+                                          .copyWith(
+                                              color: AppColor.blueColor,
+                                              decoration:
+                                                  TextDecoration.underline),
+                                    ),
+                                  )
+                                ],
+                              ),
+                            ),
                             space,
                             space,
                             space,
@@ -314,19 +353,25 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                     textColor: AppColor.whiteColor,
                     onTap: () async {
                       if (view.formKey.currentState!.validate()) {
-                        view.registerUser(completion: () {
-                          AppPopUps.showAlertDialog(
-                              message: "User Created Successfully",
-                              onSubmit: () {
-                                view.resetState();
-                                Provider.of<AllPackagesViewModel>(myContext!,
-                                        listen: false)
-                                    .getAllPackages(completion: () {
-                                  Navigator.of(myContext!)
-                                      .pushReplacementNamed(PackagesScreen.id);
+                        if (view.termsConditionAccepted) {
+                          view.registerUser(completion: () {
+                            AppPopUps.showAlertDialog(
+                                message: "User Created Successfully",
+                                onSubmit: () {
+                                  view.resetState();
+                                  Provider.of<AllPackagesViewModel>(myContext!,
+                                          listen: false)
+                                      .getAllPackages(completion: () {
+                                    Navigator.of(myContext!)
+                                        .pushReplacementNamed(
+                                            PackagesScreen.id);
+                                  });
                                 });
-                              });
-                        });
+                          });
+                        } else {
+                          AppPopUps.showAlertDialog(
+                              message: 'You Must Accept Terms & Conditions');
+                        }
                       }
                     },
                   ),

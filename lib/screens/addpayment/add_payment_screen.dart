@@ -86,41 +86,59 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                       ),
                       space,
                       space,
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top: 100.r, left: 100.r, right: 100.r),
+                        child: Button(
+                          buttonText: "Go Back",
+                          textColor: AppColor.primaryBlueDarkColor,
+                          color: AppColor.whiteColor,
+                          onTap: () {
+                            Navigator.of(myContext!).pop();
+                          },
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            bottom: 100.h,
+                            top: 100.r,
+                            left: 100.r,
+                            right: 100.r),
+                        child: Button(
+                          buttonText: "Submit Payment",
+                          textColor: AppColor.primaryBlueDarkColor,
+                          color: AppColor.whiteColor,
+                          onTap: () {
+                            Navigator.of(myContext!).push(
+                              MaterialPageRoute(
+                                builder: (context) => SigInScreen(
+                                  userType: "employer",
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
+                      space,
                       space,
                       space,
                     ],
                   ),
                 ),
               ),
-              Padding(
-                padding: EdgeInsets.only(top: 100.r, left: 100.r, right: 100.r),
-                child: Button(
-                  buttonText: "Go Back",
-                  textColor: AppColor.primaryBlueDarkColor,
-                  color: AppColor.whiteColor,
-                  onTap: () {
-                    Navigator.of(myContext!).pop();
-                  },
-                ),
-              ),
-              Padding(
-                padding: EdgeInsets.only(
-                    bottom: 100.r, top: 100.r, left: 100.r, right: 100.r),
-                child: Button(
-                  buttonText: "Submit Payment",
-                  textColor: AppColor.primaryBlueDarkColor,
-                  color: AppColor.whiteColor,
-                  onTap: () {
-                    Navigator.of(myContext!).push(
-                      MaterialPageRoute(
-                        builder: (context) => SigInScreen(
-                          userType: "employer",
-                        ),
-                      ),
-                    );
-                  },
-                ),
-              )
             ],
           ),
         ),

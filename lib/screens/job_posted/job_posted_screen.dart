@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/styles.dart';
@@ -12,6 +13,8 @@ import '../../common_widgets/common_widgets.dart';
 import '../../profile_settting_screen.dart';
 import '../../utils/my_app_bar.dart';
 import '../../utils/utils.dart';
+import '../../view_models/job_post_view_model.dart';
+import '../job_post/job_post_screen.dart';
 
 class JobPostedScreen extends StatefulWidget {
   static const id = "JobPostedScreen";
@@ -25,6 +28,7 @@ class JobPostedScreen extends StatefulWidget {
 class _JobPostedScreenState extends State<JobPostedScreen> {
   final space = SizedBox(height: 20.h);
   var view = Provider.of<AllJobsViewModel>(myContext!);
+
   @override
   void initState() {
     super.initState();
@@ -182,7 +186,8 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                       physics: const BouncingScrollPhysics(),
                       itemCount: view.filteredJobs.length,
                       itemBuilder: (context, index) {
-                        return getRowJob(job: view.filteredJobs[index]);
+                        return getRowJob(
+                            job: view.filteredJobs[index], context: context);
                       }),
                 ),
               ],
@@ -193,52 +198,99 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
     );
   }
 
-  getRowJob({required Jobs job}) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 20.h),
-      padding: EdgeInsets.all(50.r),
-      decoration: BoxDecoration(
-        color: AppColor.whiteColor,
-        borderRadius: BorderRadius.circular(40.r),
-      ),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Expanded(
-              flex: 2,
-              child: CircleAvatar(
-                radius: 45,
-                backgroundColor: Colors.transparent,
-                child: Image.asset(
-                  "assets/images/jobs_ic.png",
-                ),
-              )),
-          Expanded(
-              flex: 4,
-              child: Padding(
-                padding: EdgeInsets.only(top: 45.r, left: 20.r),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      job.job ?? "",
-                      style: AppTextStyles.textStyleBoldBodyMedium,
+  getRowJob({required Jobs job, context}) {
+    return InkWell(
+      onTap: () {
+        AppPopUps.showThreeOptionsDialog(
+            yesTitle: 'Update',
+            onYes: () {
+              Navigator.pop(context);
+
+              Provider.of<JobPostViewModel>(myContext!, listen: false)
+                  .resetState(
+                      job: job.job ?? '',
+                      location: job.location,
+                      countryId: job.country?.toString() ?? '',
+                      jobDesc: job.jobDescription ?? '',
+                      qulification: job.qualification ?? '',
+                      dueDate: job.due_date ?? '',
+                      salary: job.salary ?? '');
+              Provider.of<JobPostViewModel>(myContext!, listen: false)
+                  .getAllCompanies(
+                completion: () async {
+                  await Navigator.of(myContext!).push(
+                    MaterialPageRoute(
+                      builder: (context) => JobPostScreen(
+                        selectedCountryId: job.location ?? '',
+                        updateId: job.id,
+                      ),
                     ),
-                    Text(
-                      job.location ?? "",
-                      style: AppTextStyles.textStyleBoldBodyMedium
-                          .copyWith(color: AppColor.primaryBlueColor),
-                    ),
-                    Text(
-                      "\€ ${job.salary ?? ""}/ Year",
-                      style: AppTextStyles.textStyleBoldBodyMedium
-                          .copyWith(color: AppColor.primaryBlueColor),
-                    ),
-                  ],
-                ),
-              ))
-        ],
+                  );
+                  view.getAllJobs(completion: (aa) {
+                    setState(() {});
+                  });
+                },
+              );
+            },
+            noTitle: 'Delete',
+            onNo: () {
+              Navigator.pop(context);
+
+              view.deleteJob(job, completion: () {
+                AppPopUps.showSnackvBar(
+                    message: 'Job Deleted', context: context);
+                setState(() {});
+              });
+            },
+            nutralTitle: 'Cancel',
+            message: 'Choose Action');
+      },
+      child: Container(
+        margin: EdgeInsets.only(bottom: 20.h),
+        padding: EdgeInsets.all(50.r),
+        decoration: BoxDecoration(
+          color: AppColor.whiteColor,
+          borderRadius: BorderRadius.circular(40.r),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Expanded(
+                flex: 2,
+                child: CircleAvatar(
+                  radius: 45,
+                  backgroundColor: Colors.transparent,
+                  child: Image.asset(
+                    "assets/images/jobs_ic.png",
+                  ),
+                )),
+            Expanded(
+                flex: 4,
+                child: Padding(
+                  padding: EdgeInsets.only(top: 45.r, left: 20.r),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        job.job ?? "",
+                        style: AppTextStyles.textStyleBoldBodyMedium,
+                      ),
+                      Text(
+                        job.location ?? "",
+                        style: AppTextStyles.textStyleBoldBodyMedium
+                            .copyWith(color: AppColor.primaryBlueColor),
+                      ),
+                      Text(
+                        "\€ ${job.salary ?? ""}/ Year",
+                        style: AppTextStyles.textStyleBoldBodyMedium
+                            .copyWith(color: AppColor.primaryBlueColor),
+                      ),
+                    ],
+                  ),
+                ))
+          ],
+        ),
       ),
     );
   }

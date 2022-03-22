@@ -6,11 +6,9 @@ import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/all_employers_model.dart';
 import 'package:magnijobs_rnr/models/countries_model.dart';
-import 'package:magnijobs_rnr/screens/country_and_job/country_and_job_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
-import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -18,9 +16,10 @@ import '../../routes.dart';
 
 class JobPostScreen extends StatefulWidget {
   String selectedCountryId;
+  int? updateId;
 
 //not being used now id
-  JobPostScreen({required this.selectedCountryId});
+  JobPostScreen({required this.selectedCountryId, required this.updateId});
 
   static const id = "JobPostScreen";
 
@@ -50,7 +49,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
         child: SafeArea(
           child: Scaffold(
             appBar: myAppBar(
-                title: "Job Post",
+                title: widget.updateId != null ? 'Update Job' : "Job Post",
                 onBacKTap: () {
                   view.resetState();
                   Navigator.of(context).pop();
@@ -285,39 +284,68 @@ class _JobPostScreenState extends State<JobPostScreen> {
                       space,
                       space,
                       Button(
-                        buttonText: "Submit",
+                        buttonText:
+                            widget.updateId != null ? 'Update' : "Submit",
                         textColor: AppColor.whiteColor,
                         onTap: () {
-                          /*   Provider.of<CountryAndJobViewModel>(myContext!,
-                                  listen: false)
-                              .getAllCandidates(completion:
-                                  (CountryAndJobModel countryAndJobModel) {
-                            Navigator.of(myContext!).push(MaterialPageRoute(
-                                builder: (c) => CountryAndJobScreen(
-                                    countryAndJobModel: countryAndJobModel)));
-                          });*/
                           if (view.formKey.currentState!.validate()) {
                             if (((view.selectedCompanyId ?? '').isNotEmpty) &&
                                 ((view.selectedCountryId).isNotEmpty)) {
-                              view.postJob(
-                                completion: () {
-                                  AppPopUps.showAlertDialog(
-                                    message: "Job Created Successfully",
-                                    onSubmit: () {
-                                      view.resetState();
-                                      Provider.of<CountryAndJobViewModel>(
-                                              myContext!,
-                                              listen: false)
-                                          .getAllCandidates(completion: () {
-                                        Navigator.of(myContext!)
-                                            .pushReplacement(MaterialPageRoute(
-                                                builder: (c) =>
-                                                    CountryAndJobScreen()));
-                                      });
-                                    },
-                                  );
-                                },
-                              );
+                              if (widget.updateId != null) {
+                                view.updateJobs(
+                                    id: widget.updateId!,
+                                    completion: () {
+                                      AppPopUps.showAlertDialog(
+                                        message: "Job Updated Successfully",
+                                        onSubmit: () {
+                                          view.resetState();
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                          /*   if (!widget.isForUpdate) {
+                                          Provider.of<CountryAndJobViewModel>(
+                                                  myContext!,
+                                                  listen: false)
+                                              .getAllCandidates(completion: () {
+                                            Navigator.of(myContext!)
+                                                .pushReplacement(MaterialPageRoute(
+                                                    builder: (c) =>
+                                                        CountryAndJobScreen()));
+                                          });
+                                        } else {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        }*/
+                                        },
+                                      );
+                                    });
+                              } else {
+                                view.postJob(
+                                  completion: () {
+                                    AppPopUps.showAlertDialog(
+                                      message: "Job Created Successfully",
+                                      onSubmit: () {
+                                        view.resetState();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        /*   if (!widget.isForUpdate) {
+                                          Provider.of<CountryAndJobViewModel>(
+                                                  myContext!,
+                                                  listen: false)
+                                              .getAllCandidates(completion: () {
+                                            Navigator.of(myContext!)
+                                                .pushReplacement(MaterialPageRoute(
+                                                    builder: (c) =>
+                                                        CountryAndJobScreen()));
+                                          });
+                                        } else {
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop();
+                                        }*/
+                                      },
+                                    );
+                                  },
+                                );
+                              }
                             } else {
                               AppPopUps.showAlertDialog(
                                   message: 'Enter all required fields');

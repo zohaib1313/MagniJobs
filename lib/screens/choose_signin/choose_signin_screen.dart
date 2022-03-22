@@ -10,6 +10,7 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../../routes.dart';
 import '../tutor_sign_up_screen.dart';
+import '../web_view_example.dart';
 
 class ChooseSignInScreen extends StatefulWidget {
   ChooseSignInScreen({Key? key}) : super(key: key);
@@ -61,7 +62,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              "Employers",
+                              "Companies",
                               style: AppTextStyles.textStyleBoldTitleLarge,
                             ),
                           ),
@@ -184,7 +185,10 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                   leftPadding: 200.w,
                   rightPading: 200.w,
                   textColor: AppColor.whiteColor,
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.of(myContext!).push(MaterialPageRoute(
+                        builder: (contet) => WebViewExample()));
+                  },
                 ),
                 SizedBox(height: 5.h),
                 Container(

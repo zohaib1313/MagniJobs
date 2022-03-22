@@ -4,12 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
-import 'package:magnijobs_rnr/routes.dart';
-import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
+///not being used
 class JobPostedEmployeeScreen extends StatefulWidget {
   JobPostedEmployeeScreen({Key? key}) : super(key: key);
   static const id = "JobPostedEmployeeScreen";
@@ -185,10 +184,10 @@ class _JobPostedEmployeeScreenState extends State<JobPostedEmployeeScreen> {
                                           buttonText: "Apply",
                                           textColor: AppColor.whiteColor,
                                           onTap: () {
-                                            Navigator.of(myContext!).push(
+                                            /*     Navigator.of(myContext!).push(
                                                 MaterialPageRoute(
                                                     builder: (context) =>
-                                                        ChatScreen()));
+                                                        ChatScreen(ca)));*/
                                           },
                                         ),
                                         space,

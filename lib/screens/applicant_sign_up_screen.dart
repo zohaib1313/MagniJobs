@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 import '../models/countries_model.dart';
 import '../routes.dart';
 import '../view_models/company_profile_view_model.dart';
+import 'verify_number/privacy_policy_screen.dart';
 
 class ApplicantSignUp extends StatefulWidget {
   ApplicantSignUp({Key? key}) : super(key: key);
@@ -193,9 +194,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             hintText: "Company name",
                             controller: view.companynameController,
                             validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
                               return null;
                             },
                           ),
@@ -205,9 +203,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             hintText: "Contact number",
                             controller: view.contactnumberController,
                             validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
                               return null;
                             },
                           ),
@@ -217,9 +212,6 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             hintText: "Contact email",
                             controller: view.contactemailController,
                             validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
                               return null;
                             },
                           ),
@@ -326,12 +318,50 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             },
                           ),
                           space,
+                          Padding(
+                            padding: EdgeInsets.symmetric(horizontal: 100.w),
+                            child: Row(
+                              children: [
+                                mySwitch(
+                                    message: "Accept",
+                                    isActive: view.termsConditionAccepted,
+                                    messageColor: AppColor.blackColor,
+                                    fillColor: AppColor.alphaGrey,
+                                    checkColor: AppColor.blackColor,
+                                    onTap: () {
+                                      view.termsConditionAccepted =
+                                          !view.termsConditionAccepted;
+                                      setState(() {});
+                                    }),
+                                SizedBox(
+                                  width: 5,
+                                ),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.of(myContext!).push(
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                PrivacyPolicyScreen()));
+                                  },
+                                  child: Text(
+                                    'Terms & Conditions',
+                                    style: AppTextStyles
+                                        .textStyleNormalBodySmall
+                                        .copyWith(
+                                            color: AppColor.blueColor,
+                                            decoration:
+                                                TextDecoration.underline),
+                                  ),
+                                )
+                              ],
+                            ),
+                          ),
                           space,
                           Padding(
                             padding: EdgeInsets.all(100.w),
                             child: DottedBorder(
                               color: AppColor.greyColor,
-                              dashPattern: [10, 10],
+                              dashPattern: const [10, 10],
                               strokeWidth: 1,
                               child: Container(
                                 padding: EdgeInsets.all(80.r),
@@ -414,14 +444,21 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                   onTap: () async {
                     if (view.formKey.currentState!.validate()) {
                       if (view.nationalIdImage != null) {
-                        view.registerApplicant(completion: () {
+                        if (view.termsConditionAccepted) {
+                          view.registerApplicant(completion: () {
+                            AppPopUps.showAlertDialog(
+                                message:
+                                    "User created Successfully go to login",
+                                onSubmit: () {
+                                  Navigator.of(myContext!).pop();
+                                });
+                            view.resetState();
+                          });
+                        } else {
                           AppPopUps.showAlertDialog(
-                              message: "User created Successfully go to login",
-                              onSubmit: () {
-                                Navigator.of(myContext!).pop();
-                              });
-                          view.resetState();
-                        });
+                            message: "You Must Accept Terms & Conditions",
+                          );
+                        }
                       } else {
                         AppPopUps.showAlertDialog(
                           message: "Select File",

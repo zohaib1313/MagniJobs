@@ -90,14 +90,14 @@ class APIRoute implements APIRouteConfigurable {
         );
       case APIType.update_job_post:
         return RequestOptions(
-          path: ApiConstants.update_job_post,
+          path: "",
           headers: headers,
           data: body,
           method: APIMethod.put,
         );
       case APIType.delete_job:
         return RequestOptions(
-          path: ApiConstants.delete_job,
+          path: '',
           headers: headers,
           data: body,
           method: APIMethod.delete,
