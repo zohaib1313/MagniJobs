@@ -39,8 +39,8 @@ class Packages {
   String? name;
   String? price;
   String? details;
-  Null? createdAt;
-  Null? updatedAt;
+  String? createdAt;
+  String? updatedAt;
 
   Packages(
       {this.id,

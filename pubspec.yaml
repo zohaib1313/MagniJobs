@@ -48,6 +48,7 @@ dependencies:
   badges: ^2.0.2
   file_picker:
   webview_flutter: ^3.0.1
+  flutter_stripe: ^2.4.0
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
