@@ -12,15 +12,12 @@ import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
-import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../profile_settting_screen.dart';
 import '../../routes.dart';
-import '../../view_models/all_packges_view_model.dart';
 import '../../view_models/country_and_job_view_model.dart';
 import '../country_and_job/country_and_job_screen.dart';
-import '../packages_/packages_screen.dart';
 
 class CompanyProfileScreen extends StatefulWidget {
   CompanyProfileScreen({Key? key}) : super(key: key);
@@ -215,25 +212,34 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          if ((UserDefaults.getEmployerUserSession()
+                          /*        if ((UserDefaults.getEmployerUserSession()
                                   ?.employerModel
                                   ?.isSubscribed ??
-                              false)) {
-                            Provider.of<JobPostViewModel>(myContext!,
-                                    listen: false)
-                                .getAllCompanies(
-                              completion: () {
-                                Navigator.of(myContext!).push(
-                                  MaterialPageRoute(
-                                    builder: (context) => JobPostScreen(
-                                      selectedCountryId: view.selectedCountryId,
-                                      updateId: null,
-                                    ),
+                              false)) {*/
+
+                          Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => JobPostScreen(
+                                selectedCountryId: view.selectedCountryId,
+                                updateId: null,
+                              ),
+                            ),
+                          );
+                          /*        Provider.of<JobPostViewModel>(myContext!,
+                                  listen: false)
+                              .getAllCompanies(
+                            completion: () {
+                              Navigator.of(myContext!).push(
+                                MaterialPageRoute(
+                                  builder: (context) => JobPostScreen(
+                                    selectedCountryId: view.selectedCountryId,
+                                    updateId: null,
                                   ),
-                                );
-                              },
-                            );
-                          } else {
+                                ),
+                              );
+                            },
+                          );*/
+                          /*  } else {
                             AppPopUps.showAlertDialog(
                                 message:
                                     'You are not subscribed to any plan , kindly subscribe to post a job',
@@ -255,7 +261,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                         });
                                       });
                                 });
-                          }
+                          }*/
                         },
                       ),
                       space,

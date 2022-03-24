@@ -8,6 +8,7 @@ import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/all_employers_model.dart';
 import 'package:magnijobs_rnr/models/post_job.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 
 class JobPostViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -45,7 +46,9 @@ class JobPostViewModel extends ChangeNotifier {
       "location": locationController.text,
       'country': selectedCountryId,
       "salary": salaryController.text,
-      "company": selectedCompanyId ?? "",
+      // "company": selectedCompanyId ?? "",
+      "company": (UserDefaults.getEmployerUserSession()?.employerModel?.id ?? 0)
+          .toString(),
       "qualification": qualificationController.text,
       "job_description": jobdiscriptionController.text,
       'due_date': dueDateController.text,

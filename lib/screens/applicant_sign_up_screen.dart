@@ -188,7 +188,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                               return null;
                             },
                           ),
-                          space,
+                          /*  space,
                           MyTextField(
                             fillColor: AppColor.alphaGrey,
                             hintText: "Company name",
@@ -214,7 +214,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             validator: (string) {
                               return null;
                             },
-                          ),
+                          ),*/
                           space,
                           MyDropDown(
                             onChange: (value) {

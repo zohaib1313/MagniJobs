@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
-import 'package:magnijobs_rnr/models/all_employers_model.dart';
 import 'package:magnijobs_rnr/models/countries_model.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -100,7 +99,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                   .copyWith(color: AppColor.blackColor),
                             ),
                             space,
-                            MyDropDown(
+                            /*  MyDropDown(
                               leftPadding: 0,
                               rightPadding: 0,
                               onChange: (value) {
@@ -128,7 +127,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                 return null;
                               },
                             ),
-                            space,
+                            space,*/
                             StreamBuilder(
                               stream: Provider.of<CompanyProfileViewModel>(
                                       myContext!,
@@ -289,21 +288,21 @@ class _JobPostScreenState extends State<JobPostScreen> {
                         textColor: AppColor.whiteColor,
                         onTap: () {
                           if (view.formKey.currentState!.validate()) {
-                            if (((view.selectedCompanyId ?? '')
-                                    .isNotEmpty) /*&&
-                                ((view.selectedCountryId).isNotEmpty)*/
-                                ) {
-                              if (widget.updateId != null) {
-                                view.updateJobs(
-                                    id: widget.updateId!,
-                                    completion: () {
-                                      AppPopUps.showAlertDialog(
-                                        message: "Job Updated Successfully",
-                                        onSubmit: () {
-                                          view.resetState();
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
-                                          /*   if (!widget.isForUpdate) {
+                            /* if (((view.selectedCompanyId ?? '')
+                                    .isNotEmpty) */ /*&&
+                                ((view.selectedCountryId).isNotEmpty)*/ /*
+                                ) {*/
+                            if (widget.updateId != null) {
+                              view.updateJobs(
+                                  id: widget.updateId!,
+                                  completion: () {
+                                    AppPopUps.showAlertDialog(
+                                      message: "Job Updated Successfully",
+                                      onSubmit: () {
+                                        view.resetState();
+                                        Navigator.of(context).pop();
+                                        Navigator.of(context).pop();
+                                        /*   if (!widget.isForUpdate) {
                                           Provider.of<CountryAndJobViewModel>(
                                                   myContext!,
                                                   listen: false)
@@ -317,27 +316,27 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                           Navigator.of(context).pop();
                                           Navigator.of(context).pop();
                                         }*/
-                                        },
-                                      );
-                                    });
-                              } else {
-                                view.postJob(
-                                  completion: () {
-                                    AppPopUps.showAlertDialog(
-                                      message: "Job Created Successfully",
-                                      onSubmit: () {
-                                        view.resetState();
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop();
                                       },
                                     );
-                                  },
-                                );
-                              }
+                                  });
                             } else {
+                              view.postJob(
+                                completion: () {
+                                  AppPopUps.showAlertDialog(
+                                    message: "Job Created Successfully",
+                                    onSubmit: () {
+                                      view.resetState();
+                                      Navigator.of(context).pop();
+                                      Navigator.of(context).pop();
+                                    },
+                                  );
+                                },
+                              );
+                            }
+                            /*    } else {
                               AppPopUps.showAlertDialog(
                                   message: 'Enter all required fields');
-                            }
+                            }*/
                           }
                         },
                       ),

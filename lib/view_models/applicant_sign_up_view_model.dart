@@ -29,9 +29,9 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   TextEditingController nationalityController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController martialStatusController = TextEditingController();
-  TextEditingController companynameController = TextEditingController();
+  /* TextEditingController companynameController = TextEditingController();
   TextEditingController contactnumberController = TextEditingController();
-  TextEditingController contactemailController = TextEditingController();
+  TextEditingController contactemailController = TextEditingController();*/
   bool _hidePassword = true;
 
   bool termsConditionAccepted = false;
@@ -92,14 +92,14 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
       "nationality": nationalityController.text,
       "gender": genderController.text,
       "marital_status": martialStatusController.text,
-      "company_name":
+      /*  "company_name":
           companynameController.text.isEmpty ? "" : companynameController.text,
       "contact_number": contactnumberController.text.isEmpty
           ? ''
           : contactnumberController.text,
       "contact_email": contactemailController.text.isEmpty
           ? ""
-          : contactemailController.text,
+          : contactemailController.text,*/
       "national_id": await MultipartFile.fromFile(
         nationalIdImage!.path,
         filename: basename(nationalIdImage!.path),
@@ -145,9 +145,9 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
     nationalityController.clear();
     genderController.clear();
     martialStatusController.clear();
-    companynameController.clear();
+    /*  companynameController.clear();
     contactnumberController.clear();
-    contactemailController.clear();
+    contactemailController.clear();*/
     nationalIdImage = null;
   }
 }
