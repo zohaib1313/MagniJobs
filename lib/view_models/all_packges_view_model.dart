@@ -63,10 +63,10 @@ class AllPackagesAndPaymentViewModel extends ChangeNotifier {
     dueDateController.clear();
     nameUsedOnCardController.clear();
   }
-///todo  ///in progress
+
+  ///todo  ///in progress
   void subscribeToPlan({completion}) {
     var body = {
-
       "expires_on": "2022-04-20",
       "employer": "Oral Kings",
       "package_id": "2",
