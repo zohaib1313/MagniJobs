@@ -13,6 +13,8 @@ class AllPackagesViewModel extends ChangeNotifier {
 
   bool _rememberMe = false;
 
+  Packages? selectedPaymentMethod;
+
   bool get rememberMe => _rememberMe;
   PackagesModel? allPackages;
 
@@ -35,6 +37,7 @@ class AllPackagesViewModel extends ChangeNotifier {
             apiFunction: getAllPackages)
         .then((response) {
       allPackages = response.response!.data;
+      selectedPaymentMethod = allPackages?.packages?[0];
       AppPopUps().dissmissDialog();
 
       completion();

@@ -160,9 +160,9 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                             ))
                                         .toList(),
                                     validator: (string) {
-                                      if ((view.selectedCountryId).isEmpty) {
+                                      /* if ((view.selectedCountryId).isEmpty) {
                                         return "select country";
-                                      }
+                                      }*/
                                       return null;
                                     },
                                   );
@@ -289,8 +289,10 @@ class _JobPostScreenState extends State<JobPostScreen> {
                         textColor: AppColor.whiteColor,
                         onTap: () {
                           if (view.formKey.currentState!.validate()) {
-                            if (((view.selectedCompanyId ?? '').isNotEmpty) &&
-                                ((view.selectedCountryId).isNotEmpty)) {
+                            if (((view.selectedCompanyId ?? '')
+                                    .isNotEmpty) /*&&
+                                ((view.selectedCountryId).isNotEmpty)*/
+                                ) {
                               if (widget.updateId != null) {
                                 view.updateJobs(
                                     id: widget.updateId!,

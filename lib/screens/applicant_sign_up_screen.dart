@@ -322,7 +322,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             padding: EdgeInsets.symmetric(horizontal: 100.w),
                             child: Row(
                               children: [
-                                mySwitch(
+                                myCheckBox(
                                     message: "Accept",
                                     isActive: view.termsConditionAccepted,
                                     messageColor: AppColor.blackColor,

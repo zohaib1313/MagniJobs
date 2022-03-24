@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
@@ -55,6 +56,16 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                 children: [
                                   space,
                                   ExpandAbleTile(
+                                    isCheckBox: true,
+                                    isActiveCheckBox: view
+                                            .selectedPaymentMethod ==
+                                        (view.allPackages?.packages?[index] ??
+                                            false),
+                                    onTapCheckBox: () {
+                                      view.selectedPaymentMethod =
+                                          view.allPackages?.packages?[index];
+                                      setState(() {});
+                                    },
                                     model: ExpandableTileModel(
                                         title: view.allPackages
                                                 ?.packages?[index].name ??
@@ -181,7 +192,11 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                     textColor: AppColor.primaryBlueDarkColor,
                     color: AppColor.whiteColor,
                     onTap: () {
-                      Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
+                      if (view.selectedPaymentMethod != null) {
+                        Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
+                      } else {
+                        AppPopUps.showAlertDialog(message: 'Select Package');
+                      }
                     },
                   ),
                 ),

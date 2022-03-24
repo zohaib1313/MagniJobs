@@ -303,7 +303,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                               padding: EdgeInsets.symmetric(horizontal: 100.w),
                               child: Row(
                                 children: [
-                                  mySwitch(
+                                  myCheckBox(
                                       message: "Accept",
                                       isActive: view.termsConditionAccepted,
                                       messageColor: AppColor.blackColor,
@@ -352,6 +352,12 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                     buttonText: "Register",
                     textColor: AppColor.whiteColor,
                     onTap: () async {
+                      /*    Provider.of<AllPackagesViewModel>(myContext!,
+                              listen: false)
+                          .getAllPackages(completion: () {
+                        Navigator.of(myContext!)
+                            .pushReplacementNamed(PackagesScreen.id);
+                      });*/
                       if (view.formKey.currentState!.validate()) {
                         if (view.termsConditionAccepted) {
                           view.registerUser(completion: () {

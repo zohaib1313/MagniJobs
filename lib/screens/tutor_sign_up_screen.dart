@@ -224,7 +224,7 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                             padding: EdgeInsets.symmetric(horizontal: 100.w),
                             child: Row(
                               children: [
-                                mySwitch(
+                                myCheckBox(
                                     message: "Accept",
                                     isActive: view.termsConditionAccepted,
                                     messageColor: AppColor.blackColor,

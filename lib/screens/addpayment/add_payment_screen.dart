@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 import 'package:magnijobs_rnr/screens/sign_in/sign_in_screen.dart';
+import 'package:provider/provider.dart';
 
 import '../../routes.dart';
 import '../../styles.dart';
+import '../../view_models/all_packges_view_model.dart';
 
 class AddPaymentScreen extends StatefulWidget {
   static const id = "AddPaymentScreen";
@@ -16,6 +19,7 @@ class AddPaymentScreen extends StatefulWidget {
 
 class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
   final space = SizedBox(height: 20.h);
+  var view = Provider.of<AllPackagesViewModel>(myContext!, listen: false);
 
   @override
   Widget build(BuildContext context) {
@@ -41,6 +45,20 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                   physics: const BouncingScrollPhysics(),
                   child: Column(
                     children: [
+                      space,
+                      Padding(
+                        padding: EdgeInsets.symmetric(horizontal: 100.w),
+                        child: ExpandAbleTile(
+                          isCheckBox: true,
+                          isActiveCheckBox: true,
+                          onTapCheckBox: () {},
+                          model: ExpandableTileModel(
+                              title: view.selectedPaymentMethod?.name ?? "",
+                              message:
+                                  view.selectedPaymentMethod?.details ?? "",
+                              isExpanded: false),
+                        ),
+                      ),
                       space,
                       MyTextField(
                         hintText: "Card Number",
