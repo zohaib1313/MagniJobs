@@ -178,7 +178,7 @@ finding jobs fitting their skills as soon as possible ''',
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
-                            title: "Benifits",
+                            title: "Benefits",
                             message:
                                 '''For APPLICANTS, the company’s services are:
     • Easy to use and communicate with clients.
