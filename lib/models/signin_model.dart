@@ -322,6 +322,9 @@ class EmployerModel {
   int? id;
   String? userId;
   String? fullName;
+  bool? isSubscribed;
+  String? subscribedPlan;
+  String? subExpiryDate;
   String? companyName;
   String? address;
   String? contactNumber;
@@ -337,6 +340,9 @@ class EmployerModel {
   EmployerModel(
       {this.id,
       this.userId,
+      this.isSubscribed,
+      this.subscribedPlan,
+      this.subExpiryDate,
       this.fullName,
       this.companyName,
       this.address,
@@ -353,6 +359,9 @@ class EmployerModel {
   EmployerModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
+    isSubscribed = json['is_subscribed'];
+    subscribedPlan = json['subscribed_plan'];
+    subExpiryDate = json['sub_expiry_date'];
     fullName = json['full_name'];
     companyName = json['company_name'];
     address = json['address'];
@@ -371,6 +380,9 @@ class EmployerModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['user_id'] = this.userId;
+    data['is_subscribed'] = this.isSubscribed;
+    data['subscribed_plan'] = this.subscribedPlan;
+    data['sub_expiry_date'] = this.subExpiryDate;
     data['full_name'] = this.fullName;
     data['company_name'] = this.companyName;
     data['address'] = this.address;
