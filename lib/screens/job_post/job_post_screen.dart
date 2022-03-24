@@ -329,20 +329,6 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                         view.resetState();
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pop();
-                                        /*   if (!widget.isForUpdate) {
-                                          Provider.of<CountryAndJobViewModel>(
-                                                  myContext!,
-                                                  listen: false)
-                                              .getAllCandidates(completion: () {
-                                            Navigator.of(myContext!)
-                                                .pushReplacement(MaterialPageRoute(
-                                                    builder: (c) =>
-                                                        CountryAndJobScreen()));
-                                          });
-                                        } else {
-                                          Navigator.of(context).pop();
-                                          Navigator.of(context).pop();
-                                        }*/
                                       },
                                     );
                                   },

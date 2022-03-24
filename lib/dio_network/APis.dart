@@ -38,6 +38,7 @@ enum APIType {
   cancelApplication,
   allLessons,
   bookWithTutor,
+  subScribeToPlan,
 }
 
 class ApiConstants {
@@ -81,7 +82,10 @@ class ApiConstants {
   static const cancelApplication = "cancel-application";
   static const allLessons = "all-lessons";
   static const bookWithTutor = "book-lesson";
+  static const subScribeToPlan = "subscribe-plan";
 
   static var profilePicsBaseUrl =
       'http://magnijobs.applypressure.co.uk/profile_pics/';
+  static var employer_logos =
+      'http://magnijobs.applypressure.co.uk/employer_logos/';
 }

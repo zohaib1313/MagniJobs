@@ -80,8 +80,8 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<SignInViewModel>(create: (_) => SignInViewModel()),
   ChangeNotifierProvider<VerifyNumberViewModel>(
       create: (_) => VerifyNumberViewModel()),
-  ChangeNotifierProvider<AllPackagesViewModel>(
-      create: (_) => AllPackagesViewModel()),
+  ChangeNotifierProvider<AllPackagesAndPaymentViewModel>(
+      create: (_) => AllPackagesAndPaymentViewModel()),
   ChangeNotifierProvider<MyProfileViewModel>(
       create: (_) => MyProfileViewModel()),
   ChangeNotifierProvider<JobseekerViewModel>(

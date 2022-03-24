@@ -352,7 +352,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                     buttonText: "Register",
                     textColor: AppColor.whiteColor,
                     onTap: () async {
-                      /*    Provider.of<AllPackagesViewModel>(myContext!,
+                      /*  Provider.of<AllPackagesViewModel>(myContext!,
                               listen: false)
                           .getAllPackages(completion: () {
                         Navigator.of(myContext!)
@@ -365,7 +365,8 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                                 message: "User Created Successfully",
                                 onSubmit: () {
                                   view.resetState();
-                                  Provider.of<AllPackagesViewModel>(myContext!,
+                                  Provider.of<AllPackagesAndPaymentViewModel>(
+                                          myContext!,
                                           listen: false)
                                       .getAllPackages(completion: () {
                                     Navigator.of(myContext!)

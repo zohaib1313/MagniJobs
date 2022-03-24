@@ -20,7 +20,8 @@ class PackagesScreen extends StatefulWidget {
 
 class _OnBoardingForApplicantState extends State<PackagesScreen> {
   final space = SizedBox(height: 20.h);
-  var view = Provider.of<AllPackagesViewModel>(myContext!, listen: false);
+  var view =
+      Provider.of<AllPackagesAndPaymentViewModel>(myContext!, listen: false);
 
   @override
   Widget build(BuildContext context) {

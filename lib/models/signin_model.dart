@@ -322,6 +322,9 @@ class EmployerModel {
   int? id;
   String? userId;
   String? fullName;
+  bool? isSubscribed;
+  String? subscribedPlan;
+  String? subExpiryDate;
   String? companyName;
   String? address;
   String? contactNumber;
@@ -338,6 +341,9 @@ class EmployerModel {
       {this.id,
       this.userId,
       this.fullName,
+      this.isSubscribed,
+      this.subscribedPlan,
+      this.subExpiryDate,
       this.companyName,
       this.address,
       this.contactNumber,
@@ -354,6 +360,9 @@ class EmployerModel {
     id = json['id'];
     userId = json['user_id'];
     fullName = json['full_name'];
+    isSubscribed = json['is_subscribed'];
+    subscribedPlan = json['subscribed_plan'];
+    subExpiryDate = json['sub_expiry_date'];
     companyName = json['company_name'];
     address = json['address'];
     contactNumber = json['contact_number'];
@@ -372,6 +381,9 @@ class EmployerModel {
     data['id'] = this.id;
     data['user_id'] = this.userId;
     data['full_name'] = this.fullName;
+    data['is_subscribed'] = this.isSubscribed;
+    data['subscribed_plan'] = this.subscribedPlan;
+    data['sub_expiry_date'] = this.subExpiryDate;
     data['company_name'] = this.companyName;
     data['address'] = this.address;
     data['contact_number'] = this.contactNumber;
