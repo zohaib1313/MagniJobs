@@ -5,12 +5,14 @@ import 'package:flutter_chat_bubble/bubble_type.dart';
 import 'package:flutter_chat_bubble/chat_bubble.dart';
 import 'package:flutter_chat_bubble/clippers/chat_bubble_clipper_3.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/chat_model.dart';
 import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/view_models/chat_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../routes.dart';
 
@@ -83,15 +85,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 Row(
                   children: [
-                    Padding(
+                    /*   Padding(
                       padding: EdgeInsets.all(50.w),
                       child: const SvgViewer(
                           svgPath: "assets/icons/ic_video_call.svg"),
-                    ),
-                    Padding(
-                      padding: EdgeInsets.all(50.w),
-                      child: const SvgViewer(
-                          svgPath: "assets/icons/ic_audio_call.svg"),
+                    ),*/
+                    InkWell(
+                      onTap: () {
+                        dialNumber(
+                            context: context,
+                            phoneNumber: widget.candidate?.mobile ?? "00");
+                      },
+                      child: Padding(
+                        padding: EdgeInsets.all(50.w),
+                        child: const SvgViewer(
+                            svgPath: "assets/icons/ic_audio_call.svg"),
+                      ),
                     )
                   ],
                 )
@@ -238,5 +247,18 @@ class _ChatScreenState extends State<ChatScreen> {
       view.chatSendTextController.clear();
       setState(() {});
     }
+  }
+
+  Future<void> dialNumber(
+      {required String phoneNumber, required BuildContext context}) async {
+    final url = "tel:$phoneNumber";
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      AppPopUps.showSnackvBar(
+          message: "Unable to call $phoneNumber", context: context);
+    }
+
+    return;
   }
 }

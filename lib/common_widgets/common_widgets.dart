@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 
 import '../styles.dart';
+import '../utils/utils.dart';
 
 typedef FieldValidator = String? Function(String? data);
 
@@ -436,14 +437,26 @@ class _ExpandableCardContainerState extends State<ExpandableCardContainer> {
 class ExpandAbleTile extends StatefulWidget {
   ExpandableTileModel model;
   Widget? expandedWidgetChild;
+  bool isCheckBox = false;
+  bool isActiveCheckBox = false;
+  Function? onTapCheckBox;
 
-  ExpandAbleTile({required this.model, this.expandedWidgetChild});
+  ExpandAbleTile(
+      {Key? key,
+      required this.model,
+      this.expandedWidgetChild,
+      this.isCheckBox = false,
+      this.onTapCheckBox,
+      this.isActiveCheckBox = false})
+      : super(key: key);
 
   @override
   State<ExpandAbleTile> createState() => _ExpandAbleTileState();
 }
 
 class _ExpandAbleTileState extends State<ExpandAbleTile> {
+  _ExpandAbleTileState();
+
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
@@ -453,15 +466,15 @@ class _ExpandAbleTileState extends State<ExpandAbleTile> {
         child: Column(
           children: [
             ExpansionTile(
-              tilePadding: EdgeInsets.only(left: 10, right: 5),
+              tilePadding: const EdgeInsets.only(left: 10, right: 5),
               initiallyExpanded: widget.model.isExpanded,
               trailing: widget.model.isExpanded
-                  ? Icon(
+                  ? const Icon(
                       Icons.arrow_drop_down_outlined,
                       color: AppColor.whiteColor,
                       size: 40,
                     )
-                  : Icon(
+                  : const Icon(
                       Icons.arrow_drop_up_outlined,
                       color: AppColor.whiteColor,
                       size: 40,
@@ -471,11 +484,16 @@ class _ExpandAbleTileState extends State<ExpandAbleTile> {
                   widget.model.isExpanded = value;
                 });
               },
-              title: Text(
-                widget.model.title ?? "",
-                style: AppTextStyles.textStyleNormalBodyMedium
-                    .copyWith(color: AppColor.whiteColor),
-              ),
+              title: widget.isCheckBox
+                  ? mySimpleCheckBox(
+                      message: widget.model.title ?? "",
+                      isActive: widget.isActiveCheckBox,
+                      onTap: widget.onTapCheckBox)
+                  : Text(
+                      widget.model.title ?? "",
+                      style: AppTextStyles.textStyleNormalBodyMedium
+                          .copyWith(color: AppColor.whiteColor),
+                    ),
               children: [
                 Padding(
                   padding:

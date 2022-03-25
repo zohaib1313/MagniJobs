@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:magnijobs_rnr/utils/utils.dart';
 
 import '../dio_network/APis.dart';
 import '../dio_network/api_client.dart';
@@ -23,6 +24,8 @@ class CountriesListViewModel extends ChangeNotifier {
         CountriesModel? countriesModel = response.response!.data;
         completion(countriesModel);
       }
-    }).catchError((error) {});
+    }).catchError((error) {
+      printWrapped(error.toString());
+    });
   }
 }

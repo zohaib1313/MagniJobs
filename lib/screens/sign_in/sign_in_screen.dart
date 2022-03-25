@@ -163,7 +163,7 @@ class _SigInScreenState extends State<SigInScreen> {
                                   mainAxisAlignment: MainAxisAlignment.end,
                                   children: [
                                     Expanded(
-                                      child: mySwitch(
+                                      child: myCheckBox(
                                           message: "Remember me",
                                           isActive: view.rememberMe,
                                           messageColor: AppColor.blackColor,

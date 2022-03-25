@@ -292,6 +292,13 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.post,
         );
+      case APIType.subScribeToPlan:
+        return RequestOptions(
+          path: ApiConstants.subScribeToPlan,
+          headers: headers,
+          data: body,
+          method: APIMethod.post,
+        );
       default:
         return RequestOptions(
           path: ApiConstants.loginUser,

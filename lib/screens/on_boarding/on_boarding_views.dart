@@ -102,7 +102,7 @@ class _OnBoardingForClientsState extends State<OnBoardingForClients> {
                     space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
-                            title: "Benifits",
+                            title: "Benefits",
                             message:
                                 "For CLIENTS such as employers and recruitment/placement agencies, the company offers: \n•Reduced expenses on recruitment process.\n• High quality and trained applicant.\n• Easy access to and communication with qualified   candidates.\n• Flexibility in advertising positions.",
                             isExpanded: false)),

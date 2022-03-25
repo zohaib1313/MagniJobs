@@ -46,7 +46,47 @@ myAppBar(
   );
 }
 
-mySwitch(
+mySimpleCheckBox(
+    {onTap,
+    Color? fillColor,
+    bool isActive = false,
+    Color? checkColor,
+    required String message,
+    Color? messageColor}) {
+  return InkWell(
+    onTap: onTap,
+    child: Row(
+      children: [
+        Container(
+          padding: EdgeInsets.all(8.r),
+          decoration: BoxDecoration(
+            color: fillColor ?? AppColor.whiteColor,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: isActive
+              ? const Icon(
+                  Icons.check,
+                  size: 15.0,
+                )
+              : const SizedBox(
+                  height: 15,
+                  width: 15,
+                ),
+        ),
+        SizedBox(
+          width: 50.w,
+        ),
+        Text(
+          message,
+          style: AppTextStyles.textStyleNormalBodySmall
+              .copyWith(color: messageColor ?? AppColor.whiteColor),
+        )
+      ],
+    ),
+  );
+}
+
+myCheckBox(
     {onTap,
     Color? fillColor,
     bool isActive = false,
