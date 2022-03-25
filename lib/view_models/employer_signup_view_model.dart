@@ -74,16 +74,8 @@ class EmployerSignUpViewModel extends ChangeNotifier {
       "marital_status": 'Male',
     };
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
-    client
-        .request(
-            route: APIRoute(
-              APIType.register_new_employer,
-              body: body,
-            ),
-            create: () => APIResponse<EmployerSignUpModel>(
-                create: () => EmployerSignUpModel()),
-            apiFunction: registerUser)
-        .then((response) {
+    client.request(route: APIRoute(APIType.register_new_employer, body: body,),
+            create: () => APIResponse<EmployerSignUpModel>(create: () => EmployerSignUpModel()), apiFunction: registerUser).then((response) {
       AppPopUps().dissmissDialog();
       resetState();
       completion();

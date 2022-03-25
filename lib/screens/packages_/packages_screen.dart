@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
@@ -8,8 +9,10 @@ import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../repo/stripe_repo.dart';
 import '../../routes.dart';
 import '../../styles.dart';
+import '../sign_in/sign_in_screen.dart';
 
 class PackagesScreen extends StatefulWidget {
   static const id = "PackagesScreen";
@@ -22,6 +25,40 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
   final space = SizedBox(height: 20.h);
   var view =
       Provider.of<AllPackagesAndPaymentViewModel>(myContext!, listen: false);
+  late String secretKey, pubKey;
+  bool isInProgress = false;
+  late Map<String, dynamic> paymentIntentData;
+
+
+  @override
+  void initState() {
+    _getStripeKey();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  _getStripeKey() async {
+    if (mounted) {
+      setState(() {
+        isInProgress = true;
+      });
+    }
+
+    await StripeRepo.stripeInfo().then((response) {
+      pubKey = response['publish'];
+    });
+
+    if (mounted) {
+      setState(() {
+        isInProgress = false;
+      });
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -194,7 +231,10 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                     color: AppColor.whiteColor,
                     onTap: () {
                       if (view.selectedPaymentMethod != null) {
-                        Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
+                        print(view.selectedPaymentMethod?.name);
+                        _initiateThePayment(view.selectedPaymentMethod?.id);
+
+                        //Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
                       } else {
                         AppPopUps.showAlertDialog(message: 'Select Package');
                       }
@@ -208,4 +248,86 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
       ),
     );
   }
+
+  _initiateThePayment(int? packageId) async {
+    if (mounted) {
+      setState(() {
+        isInProgress = true;
+      });
+    }
+
+    await StripeRepo().payForMySubscription(packageId!).then((response) {
+      //print(response);
+      paymentIntentData = response.data;
+    });
+
+    Stripe.publishableKey = pubKey;
+    Stripe.merchantIdentifier = 'MagniJobs';
+    await Stripe.instance.applySettings();
+
+    await Stripe.instance.initPaymentSheet(
+        paymentSheetParameters: SetupPaymentSheetParameters(
+            paymentIntentClientSecret: paymentIntentData['client_secret'],
+            applePay: true,
+            googlePay: true,
+            style: ThemeMode.dark,
+            merchantCountryCode: 'UK',
+            merchantDisplayName: 'MagniJobs'
+        ));
+
+    setState(() {});
+
+    displaySheet();
+
+    if (mounted) {
+      setState(() {
+        isInProgress = false;
+      });
+    }
+
+  }
+
+  Future<void> displaySheet() async {
+    try {
+      await Stripe.instance.presentPaymentSheet();
+      setState(() {
+        _updatePayment(paymentIntentData['id']);
+        paymentIntentData.clear();
+
+        Navigator.of(myContext!).push(
+          MaterialPageRoute(
+            builder: (context) => SigInScreen(
+              userType: "employer",
+            ),
+          ),
+        );
+      });
+    } catch (e){
+      AppPopUps.showAlertDialog(message: 'Failed to make the payment.');
+    }
+  }
+
+  _updatePayment(String paymentID) async {
+    if (mounted) {
+      setState(() {
+        isInProgress = true;
+      });
+    }
+
+    await StripeRepo.confirmSubscriptionPayment(view.selectedPaymentMethod?.id,view.selectedPaymentMethod?.price,paymentID).then((response) {
+
+      AppPopUps.showAlertDialog(message: 'Subscription payment received.');
+
+    });
+
+    setState(() {});
+
+    if (mounted) {
+      setState(() {
+        isInProgress = false;
+      });
+    }
+
+  }
+
 }

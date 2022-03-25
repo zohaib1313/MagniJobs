@@ -41,6 +41,7 @@ enum APIType {
   subScribeToPlan,
   get_stripe_key,
   create_payment_intent,
+  confirm_subs_payment,
 }
 
 class ApiConstants {
@@ -87,6 +88,7 @@ class ApiConstants {
   static const subScribeToPlan = "subscribe-plan";
   static const get_stripe_key = "get-stripe-key";
   static const create_payment_intent = "make-stripe-intent";
+  static const confirm_subs_payment = "subscribe-plan";
 
   static var profilePicsBaseUrl =
       'http://magnijobs.applypressure.co.uk/profile_pics/';
