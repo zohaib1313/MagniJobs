@@ -50,6 +50,7 @@ dependencies:
   webview_flutter: ^3.0.1
   url_launcher:
   flutter_stripe: ^2.4.0
+  simple_rich_text: ^2.0.49
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

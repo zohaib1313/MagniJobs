@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../../models/countries_model.dart';
 import '../../routes.dart';
+import '../../utils/app_constants.dart';
 import '../../view_models/company_profile_view_model.dart';
 import '../verify_number/privacy_policy_screen.dart';
 
@@ -314,7 +315,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                                             !view.termsConditionAccepted;
                                         setState(() {});
                                       }),
-                                  SizedBox(
+                                  const SizedBox(
                                     width: 5,
                                   ),
                                   InkWell(
@@ -322,7 +323,12 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                                       Navigator.of(myContext!).push(
                                           MaterialPageRoute(
                                               builder: (ctx) =>
-                                                  PrivacyPolicyScreen()));
+                                                  PrivacyPolicyScreen(
+                                                    title:
+                                                        'Company/Client Disclaimer',
+                                                    value: AppConstants
+                                                        .companyDiscalmir,
+                                                  )));
                                     },
                                     child: Text(
                                       'Terms & Conditions',
@@ -365,8 +371,13 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                                 message: "User Created Successfully",
                                 onSubmit: () {
                                   view.resetState();
-                                  Provider.of<AllPackagesAndPaymentViewModel>(myContext!, listen: false).getAllPackages(completion: () {
-                                    Navigator.of(myContext!).pushReplacementNamed(PackagesScreen.id);
+                                  Provider.of<AllPackagesAndPaymentViewModel>(
+                                          myContext!,
+                                          listen: false)
+                                      .getAllPackages(completion: () {
+                                    Navigator.of(myContext!)
+                                        .pushReplacementNamed(
+                                            PackagesScreen.id);
                                   });
                                 });
                           });

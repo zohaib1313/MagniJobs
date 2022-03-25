@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../models/countries_model.dart';
 import '../routes.dart';
+import '../utils/app_constants.dart';
 import '../view_models/company_profile_view_model.dart';
 
 class TutorSignUpScreen extends StatefulWidget {
@@ -243,7 +244,12 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                                     Navigator.of(myContext!).push(
                                         MaterialPageRoute(
                                             builder: (ctx) =>
-                                                PrivacyPolicyScreen()));
+                                                PrivacyPolicyScreen(
+                                                  title:
+                                                      'Tutor Agreement/Disclaimer',
+                                                  value: AppConstants
+                                                      .tutorDisclamir,
+                                                )));
                                   },
                                   child: Text(
                                     'Terms & Conditions',

@@ -16,8 +16,10 @@ import 'package:provider/provider.dart';
 
 import '../../profile_settting_screen.dart';
 import '../../routes.dart';
+import '../../view_models/all_packges_view_model.dart';
 import '../../view_models/country_and_job_view_model.dart';
 import '../country_and_job/country_and_job_screen.dart';
+import '../packages_/packages_screen.dart';
 
 class CompanyProfileScreen extends StatefulWidget {
   CompanyProfileScreen({Key? key}) : super(key: key);
@@ -212,20 +214,19 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          /*        if ((UserDefaults.getEmployerUserSession()
+                          if ((UserDefaults.getEmployerUserSession()
                                   ?.employerModel
                                   ?.isSubscribed ??
-                              false)) {*/
-
-                          Navigator.of(myContext!).push(
-                            MaterialPageRoute(
-                              builder: (context) => JobPostScreen(
-                                selectedCountryId: view.selectedCountryId,
-                                updateId: null,
+                              false)) {
+                            Navigator.of(myContext!).push(
+                              MaterialPageRoute(
+                                builder: (context) => JobPostScreen(
+                                  selectedCountryId: view.selectedCountryId,
+                                  updateId: null,
+                                ),
                               ),
-                            ),
-                          );
-                          /*        Provider.of<JobPostViewModel>(myContext!,
+                            );
+                            /*        Provider.of<JobPostViewModel>(myContext!,
                                   listen: false)
                               .getAllCompanies(
                             completion: () {
@@ -239,7 +240,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                               );
                             },
                           );*/
-                          /*  } else {
+                          } else {
                             AppPopUps.showAlertDialog(
                                 message:
                                     'You are not subscribed to any plan , kindly subscribe to post a job',
@@ -261,7 +262,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                         });
                                       });
                                 });
-                          }*/
+                          }
                         },
                       ),
                       space,

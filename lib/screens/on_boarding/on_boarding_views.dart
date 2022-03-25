@@ -117,7 +117,37 @@ class _OnBoardingForClientsState extends State<OnBoardingForClients> {
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Pricing",
-                            message: "Information Provided",
+                            message: '''SUBSCRIPTION
+
+BASIC MEMBERSHIP - £99
+
+- 1 Job Post
+- Set Post End Date
+- 10 Saved Contacts
+- Email Support
+
+ESSENTIAL MEMBERSHIP - £199
+
+- 3 Job Posts
+- Set Post End Date
+- 20 Saved Contacts
+- Email Support
+
+PREMIERE MEMBERSHIP - £299
+
+- 5 Job Posts
+- Set Post End Date
+- 50 Saved Contacts
+- Email Support
+
+EXCLUSIVE MEMBERSHIP - £499
+
+- 5 Job Posts
+- HIGHLIGHTED Job Postings (More Visibility)
+- Set End Date
+- 50 Saved Contacts 
+- Chat and Email Support
+                            ''',
                             isExpanded: false)),
                     space,
                     space,

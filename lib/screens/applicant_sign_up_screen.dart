@@ -6,6 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/app_constants.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:provider/provider.dart';
@@ -341,7 +342,11 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                     Navigator.of(myContext!).push(
                                         MaterialPageRoute(
                                             builder: (ctx) =>
-                                                PrivacyPolicyScreen()));
+                                                PrivacyPolicyScreen(
+                                                  title: 'Applicant Disclaimer',
+                                                  value: AppConstants
+                                                      .applicatntDisclamir,
+                                                )));
                                   },
                                   child: Text(
                                     'Terms & Conditions',
