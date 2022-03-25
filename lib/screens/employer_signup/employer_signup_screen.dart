@@ -365,13 +365,8 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
                                 message: "User Created Successfully",
                                 onSubmit: () {
                                   view.resetState();
-                                  Provider.of<AllPackagesAndPaymentViewModel>(
-                                          myContext!,
-                                          listen: false)
-                                      .getAllPackages(completion: () {
-                                    Navigator.of(myContext!)
-                                        .pushReplacementNamed(
-                                            PackagesScreen.id);
+                                  Provider.of<AllPackagesAndPaymentViewModel>(myContext!, listen: false).getAllPackages(completion: () {
+                                    Navigator.of(myContext!).pushReplacementNamed(PackagesScreen.id);
                                   });
                                 });
                           });

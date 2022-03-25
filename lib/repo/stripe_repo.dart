@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:dio/dio.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/network.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 
 class StripeRepo{
   static Future<dynamic> stripeInfo() async {
@@ -20,10 +21,10 @@ class StripeRepo{
 
   }
 
-  Future<dynamic> payForMySubscription(int subscriptionId) async {
+  Future<dynamic> payForMySubscription(int packageId) async {
 
     Map data = {
-      'subscription_id': subscriptionId,
+      'package_id': packageId,
     };
 
     String body = json.encode(data);
@@ -32,11 +33,30 @@ class StripeRepo{
         validateStatus: (status) => true,
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Accept':'application/json'
+          'Accept':'application/json',
+          'Authorization': 'Bearer ${UserDefaults.getToken() ?? ""}'
         }
     ));
     return response;
 
+  }
+
+  static Future<dynamic> confirmSubscriptionPayment(int? packageID,String? price, String paymentId) async {
+
+    Map<String, dynamic> data = Map<String, dynamic>();
+    data['package_id'] = packageID;
+    data['amount'] = price;
+    data['payment_method'] = 'Stripe';
+    data['payment_reference'] = paymentId;
+
+    return await NetworkService().post(url: ApiConstants.baseUrl + ApiConstants.confirm_subs_payment, body: data).then((response) {
+      if (response.statusCode == 200) {
+        var encodedOrder = json.decode(response.body);
+        return encodedOrder;
+      } else {
+        return [];
+      }
+    });
   }
 
 }
