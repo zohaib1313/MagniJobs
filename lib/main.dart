@@ -3,7 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:magnijobs_rnr/repo/stripe_repo.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
@@ -19,10 +21,19 @@ class MyHttpOverrides extends HttpOverrides {
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  getStripeDetails();
   HttpOverrides.global = MyHttpOverrides();
   await UserDefaults.getPref();
 
   runApp(const MyApp());
+}
+
+Future<void> getStripeDetails() async {
+  await StripeRepo.stripeInfo().then((response) {
+    Stripe.publishableKey = response['publish'];
+    Stripe.merchantIdentifier = 'MagniJobs';
+    Stripe.instance.applySettings();
+  });
 }
 
 class MyApp extends StatefulWidget {
