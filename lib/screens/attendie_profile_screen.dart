@@ -83,9 +83,12 @@ class _AttendieCandidateProfileScreenState
                         getRowProfileItem(
                           "assets/icons/ic_edit_person.svg",
                           "Profile",
-                          onTap: () {
-                            Navigator.of(myContext!).push(MaterialPageRoute(
-                                builder: (context) => UpdateCandidateScreen()));
+                          onTap: () async {
+                            await Navigator.of(myContext!).push(
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        UpdateCandidateScreen()));
+                            setState(() {});
                           },
                         ),
                         getRowProfileItem(

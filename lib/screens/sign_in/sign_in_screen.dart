@@ -323,7 +323,7 @@ class _SigInScreenState extends State<SigInScreen> {
           }
         });
         break;
-      case "applicant": //candidate
+      case "applicant": //candidate //attendie
         view.signInCandidateUser(widget.userType,
             completion: (CandidateSignInModel? user) async {
           if ((user?.user?.verified ?? 0) != 0) {
@@ -389,7 +389,7 @@ class _SigInScreenState extends State<SigInScreen> {
           }
         });
         break;
-      case "attendie": //candidate
+      case "attendie": //candidate //candidate //applicant
         view.signInCandidateUser(widget.userType,
             completion: (CandidateSignInModel? user) async {
           if ((user?.user?.verified ?? 0) != 0) {

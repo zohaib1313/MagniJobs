@@ -21,7 +21,7 @@ import '../job_posted/job_posted_screen.dart';
 class CountryAndJobScreen extends StatefulWidget {
   static const id = "CountryAndJobScreen";
 
-  CountryAndJobScreen();
+  CountryAndJobScreen({Key? key}) : super(key: key);
 
   @override
   _CountryAndJobScreenState createState() => _CountryAndJobScreenState();
@@ -268,10 +268,20 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                                 textColor: AppColor.whiteColor,
                                                 onTap: () {
                                                   Navigator.of(myContext!).push(
-                                                      MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChatScreen(
-                                                                  candidate)));
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          ChatScreen(
+                                                        otherUserId: candidate!
+                                                            .id!
+                                                            .toString(),
+                                                        otherUserImage: '',
+                                                        otherUserName: candidate
+                                                            .firstName!,
+                                                        otherUserPhone:
+                                                            candidate.mobile!,
+                                                      ),
+                                                    ),
+                                                  );
                                                 },
                                               ),
                                             ),
@@ -293,8 +303,16 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                       buttonText: "Chat",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        Navigator.of(myContext!).push(MaterialPageRoute(
-                            builder: (context) => ChatScreen(candidate)));
+                        Navigator.of(myContext!).push(
+                          MaterialPageRoute(
+                            builder: (context) => ChatScreen(
+                              otherUserId: candidate!.id!.toString(),
+                              otherUserImage: '',
+                              otherUserName: candidate.firstName!,
+                              otherUserPhone: candidate.mobile!,
+                            ),
+                          ),
+                        );
                       },
                     ),
                   ],

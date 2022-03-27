@@ -12,6 +12,7 @@ import 'package:provider/provider.dart';
 
 import '../routes.dart';
 import '../view_models/country_list_view_model.dart';
+import 'attendie_profile_screen.dart';
 import 'company_profile/company_profile_screen.dart';
 import 'employee_portal_screen.dart';
 
@@ -57,6 +58,13 @@ class _SplashScreenState extends State<SplashScreen> {
     // && isPhoneVerified
     if (userType.isNotEmpty) {
       switch (userType) {
+        case 'attendie':
+          if (UserDefaults?.getCandidateUserSession()?.candidateModel != null) {
+            Navigator.of(myContext!)
+                .pushReplacementNamed(AttendieCandidateProfileScreen.id);
+          }
+          break;
+
         case 'employer':
           if (UserDefaults?.getEmployerUserSession()?.employerModel != null) {
             Navigator.of(myContext!)
@@ -76,6 +84,7 @@ class _SplashScreenState extends State<SplashScreen> {
                 .pushReplacementNamed(TutorProfileScreen.id);
           }
           break;
+
         default:
           Navigator.of(myContext!).pushReplacementNamed(OnBoardingScreen.id);
       }

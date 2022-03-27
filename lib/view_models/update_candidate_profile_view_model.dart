@@ -67,7 +67,7 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
   getFile() async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'pdf', 'doc'],
+        allowedExtensions: ['jpg'],
         allowMultiple: false);
     if (result != null) {
       File file = File(result.files.single.path!);

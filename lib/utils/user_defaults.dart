@@ -66,6 +66,7 @@ class UserDefaults {
 
   static Future<void> saveCandidateUserSession(
       CandidateSignInModel signInModel, String type) async {
+    setCurrentUserId(signInModel.user!.id!.toString());
     String user = json.encode(signInModel.toJson());
     return getPref().then((value) => value
       ..setString('userData', user)
@@ -85,6 +86,7 @@ class UserDefaults {
 
   static void saveEmployerUserSession(
       EmployerSignInModel signInModel, String type) async {
+    setCurrentUserId(signInModel.user!.id!.toString());
     String user = json.encode(signInModel.toJson());
     getPref().then((value) => value
       ..setString('userData', user)
@@ -102,13 +104,14 @@ class UserDefaults {
           jsonDecode(sharedPreferences!.getString('userData')!);
       user = EmployerSignInModel.fromJson(json);
 
-      printWrapped(user.toString());
+      //printWrapped(user.toString());
     }
     return user;
   }
 
   static Future<void> saveTutorSignInModel(
       TutorSignInModel signInModel, String type) async {
+    setCurrentUserId(signInModel.user!.id!.toString());
     String user = json.encode(signInModel.toJson());
     return getPref().then((value) => value
       ..setString('userData', user)
@@ -159,15 +162,15 @@ class UserDefaults {
     return sharedPreferences?.getString('ApiToken');
   }
 
+  static setCurrentUserId(String value) {
+    return sharedPreferences?.setString('userId', value);
+  }
+
+  static String? getCurrentUserId() {
+    return sharedPreferences?.getString('userId');
+  }
+
   static setApiToken(String value) {
     return sharedPreferences?.setString('ApiToken', value);
-  }
-
-  static setIsAttendie(bool value) {
-    return sharedPreferences?.setBool('isAttendie', value);
-  }
-
-  static bool getIsAttendie() {
-    return sharedPreferences?.getBool('isAttendie') ?? false;
   }
 }

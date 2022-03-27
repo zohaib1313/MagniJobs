@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "121975473323",
+    "project_id": "mangni-jobs",
+    "storage_bucket": "mangni-jobs.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:121975473323:android:e3564f5c68975e535d63ee",
+        "android_client_info": {
+          "package_name": "powerbpo.tech.magnijobs_rnr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "121975473323-hrdk8jn6d6l5vdg9iftossuklu87108t.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyA5fPr0BQ8GEXyCb5i4JzmV8orYeKS_gO8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "121975473323-hrdk8jn6d6l5vdg9iftossuklu87108t.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

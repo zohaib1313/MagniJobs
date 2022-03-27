@@ -64,7 +64,7 @@ class APIClient implements BaseAPIClient {
     final config = route!.getConfig();
     config.baseUrl = baseUrl;
     config.headers = headers;
-    config.connectTimeout = 60000;
+    config.connectTimeout = 3000;
     config.receiveTimeout = 60000;
     config.followRedirects = false;
     config.validateStatus = (status) {
@@ -76,8 +76,7 @@ class APIClient implements BaseAPIClient {
       print("error in response ${error.toString()}");
 
       if ((error as DioError).type == DioErrorType.connectTimeout) {
-        print('Connection TimeOut ${config.path}');
-        if (kDebugMode) {}
+        //  AppPopUps.showAlertDialog(message: 'No Internet Connection !');
 
         throw error;
       }

@@ -48,7 +48,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
           appBar: myAppBar(title: "Applicant Portal", actions: [
             InkWell(
               onTap: () async {
-                if (UserDefaults.getIsAttendie()) {
+                if (UserDefaults.getUserType() == 'attendie') {
                   await Navigator.of(myContext!).push(MaterialPageRoute(
                       builder: (context) => AttendieCandidateProfileScreen()));
                   setState(() {});
@@ -129,9 +129,10 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                       rightPading: 200.w,
                       buttonText: "Update Profile",
                       textColor: AppColor.whiteColor,
-                      onTap: () {
-                        Navigator.of(myContext!).push(MaterialPageRoute(
+                      onTap: () async {
+                        await Navigator.of(myContext!).push(MaterialPageRoute(
                             builder: (context) => UpdateCandidateScreen()));
+                        setState(() {});
                       },
                     ),
                     space,

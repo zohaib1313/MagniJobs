@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/screens/chat/all_chats_page.dart';
 import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
@@ -95,6 +96,12 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                               top: 10.h, bottom: 20.h, left: 20.h, right: 20.h),
                           child: Column(
                             children: [
+                              getRowProfileItem(
+                                  "assets/icons/ic_message.svg", "Chats",
+                                  onTap: () {
+                                Navigator.of(myContext!)
+                                    .pushNamed(AllChatPage.id);
+                              }),
                               getRowProfileItem(
                                   "assets/icons/ic_change_password.svg",
                                   "Change Password", onTap: () {

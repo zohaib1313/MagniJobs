@@ -1,4 +1,5 @@
-import 'package:flutter/cupertino.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_chat_bubble/bubble_type.dart';
@@ -8,8 +9,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/chat_model.dart';
-import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/view_models/chat_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -17,10 +18,17 @@ import 'package:url_launcher/url_launcher.dart';
 import '../../routes.dart';
 
 class ChatScreen extends StatefulWidget {
-  Candidates? candidate;
-
-  ChatScreen(this.candidate, {Key? key}) : super(key: key);
   static const id = "ChatScreen";
+  String otherUserName;
+  String otherUserId;
+  String otherUserImage;
+  String otherUserPhone;
+
+  ChatScreen(
+      {required this.otherUserName,
+      required this.otherUserId,
+      required this.otherUserImage,
+      required this.otherUserPhone});
 
   @override
   _ChatScreenState createState() => _ChatScreenState();
@@ -30,10 +38,20 @@ class _ChatScreenState extends State<ChatScreen> {
   final space = SizedBox(height: 20.h);
   var view = Provider.of<ChatViewModel>(myContext!, listen: false);
 
+  final String fromUserId =
+      (UserDefaults.getEmployerUserSession()?.user?.id ?? -1).toString();
+  var groupId = '';
+
   @override
   void initState() {
+    view.listScrollController = ScrollController();
+
+    if (fromUserId.hashCode <= widget.otherUserId.hashCode) {
+      groupId == '$fromUserId-${widget.otherUserId}';
+    } else {
+      groupId == '${widget.otherUserId}-$fromUserId';
+    }
     super.initState();
-    view.listOfChat.clear();
   }
 
   @override
@@ -72,7 +90,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(widget.candidate?.firstName ?? "",
+                        Text(widget.otherUserName,
                             style: AppTextStyles.textStyleBoldBodySmall),
                         Text("Active Now",
                             style: AppTextStyles.textStyleBoldBodySmall
@@ -94,7 +112,7 @@ class _ChatScreenState extends State<ChatScreen> {
                       onTap: () {
                         dialNumber(
                             context: context,
-                            phoneNumber: widget.candidate?.mobile ?? "00");
+                            phoneNumber: widget.otherUserPhone);
                       },
                       child: Padding(
                         padding: EdgeInsets.all(50.w),
@@ -125,18 +143,76 @@ class _ChatScreenState extends State<ChatScreen> {
                   ),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: ListView.builder(
-                        itemCount: view.listOfChat.length,
-                        shrinkWrap: true,
-                        itemBuilder: (contxt, index) {
-                          if (view.listOfChat[index].isSending) {
-                            return getChatBubble(BubbleType.sendBubble,
-                                view.listOfChat[index].message);
-                          } else {
-                            return getChatBubble(BubbleType.receiverBubble,
-                                view.listOfChat[index].message);
-                          }
-                        }),
+                    child: StreamBuilder(
+                      stream: FirebaseFirestore.instance
+                          .collection('Messages')
+                          .doc(fromUserId)
+                          .collection(widget.otherUserId)
+                          .orderBy('timeStamp', descending: true)
+                          .limit(view.limit)
+                          .snapshots(),
+                      builder: (BuildContext context,
+                          AsyncSnapshot<QuerySnapshot> snapshot) {
+                        if (snapshot.hasError) {
+                          return const Text('Something went wrong');
+                        }
+
+                        if (snapshot.connectionState ==
+                            ConnectionState.waiting) {
+                          return const Text("Loading");
+                        }
+                        return ListView.builder(
+                            itemCount: snapshot.data!.docs.length,
+                            shrinkWrap: true,
+                            controller: view.listScrollController,
+                            physics: const BouncingScrollPhysics(),
+                            reverse: true,
+                            itemBuilder: (contxt, index) {
+                              Map<String, dynamic> data =
+                                  snapshot.data!.docs[index].data()!
+                                      as Map<String, dynamic>;
+                              ChatModel chatModel = ChatModel.fromMap(data);
+                              if (chatModel.type == 0) {
+                                return textType(chatModel);
+                              } else if (chatModel.type == 1) {
+                                //image
+                                return _loadImage(chatModel);
+                              } else {
+                                //file
+                                return InkWell(
+                                  onTap: () {
+                                    view.launchUrl(chatModel);
+                                  },
+                                  child: Row(
+                                    mainAxisAlignment:
+                                        chatModel.fromId == fromUserId
+                                            ? MainAxisAlignment.end
+                                            : MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
+                                    children: [
+                                      Container(
+                                        width: 500.w,
+                                        height: 60.h,
+                                        decoration: BoxDecoration(
+                                            color: AppColor.blackColor
+                                                .withOpacity(0.2),
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        margin: const EdgeInsets.all(10),
+                                        child: Center(
+                                          child: Text('File',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodyMedium),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                            });
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -145,11 +221,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 color: AppColor.whiteColor,
                 child: Row(
                   children: [
-                    const Expanded(
-                      child: SvgViewer(
-                        height: 30,
-                        width: 30,
-                        svgPath: "assets/icons/ic_add.svg",
+                    Expanded(
+                      child: InkWell(
+                        onTap: () {
+                          view.pickFileAndSendMessage(
+                              fromUserId: fromUserId,
+                              otherUserMobile: widget.otherUserPhone,
+                              otherUserImage: widget.otherUserImage,
+                              otherUserName: widget.otherUserName,
+                              toId: widget.otherUserId);
+                        },
+                        child: const SvgViewer(
+                          height: 30,
+                          width: 30,
+                          svgPath: "assets/icons/ic_add.svg",
+                        ),
                       ),
                     ),
                     Expanded(
@@ -178,13 +264,6 @@ class _ChatScreenState extends State<ChatScreen> {
                     Expanded(
                       child: GestureDetector(
                         onTap: () {
-                          /*Provider.of<AllJobsViewModel>(myContext!,
-                                  listen: false)
-                              .getAllJobs(completion: (List<Jobs> jobs) {
-                            Navigator.of(myContext!).push(MaterialPageRoute(
-                                builder: (context) => JobPostedScreen()));
-                          });*/
-
                           sendMessage();
                         },
                         child: const SvgViewer(
@@ -204,7 +283,7 @@ class _ChatScreenState extends State<ChatScreen> {
     );
   }
 
-  getChatBubble(BubbleType bubbleType, String message) {
+  Widget getChatBubble(BubbleType bubbleType, String message) {
     if (bubbleType == BubbleType.sendBubble) {
       return ChatBubble(
         clipper: ChatBubbleClipper3(type: bubbleType),
@@ -243,9 +322,21 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void sendMessage() {
     if (view.chatSendTextController.text.isNotEmpty) {
-      view.listOfChat.add(ChatModel(view.chatSendTextController.text, true));
+      view.sendMessage(
+          otherUserPhone: widget.otherUserPhone,
+          otherUserName: widget.otherUserName,
+          otherUserImage: widget.otherUserImage,
+          mode: ChatModel(
+              message: view.chatSendTextController.text,
+              fromId: fromUserId,
+              toId: widget.otherUserId,
+              timeStamp: DateTime.now().millisecondsSinceEpoch.toString(),
+              //var dt = DateTime.fromMillisecondsSinceEpoch(millis);
+              type: 0));
+
+      /* view.listOfChat.add(ChatModel(view.chatSendTextController.text, true));
       view.chatSendTextController.clear();
-      setState(() {});
+      setState(() {});*/
     }
   }
 
@@ -260,5 +351,42 @@ class _ChatScreenState extends State<ChatScreen> {
     }
 
     return;
+  }
+
+  Widget textType(ChatModel chatModel) {
+    if (chatModel.fromId == fromUserId) {
+      return getChatBubble(BubbleType.sendBubble, chatModel.message);
+    } else {
+      return getChatBubble(BubbleType.receiverBubble, chatModel.message);
+    }
+  }
+
+  Widget _loadImage(ChatModel chatModel) {
+    return Row(
+      mainAxisAlignment: chatModel.fromId == fromUserId
+          ? MainAxisAlignment.end
+          : MainAxisAlignment.start,
+      children: [
+        Container(
+          color: AppColor.alphaGrey,
+          margin: const EdgeInsets.all(10),
+          width: MediaQuery.of(context).size.width * 0.5,
+          height: 300.h,
+          child: CachedNetworkImage(
+            imageUrl: chatModel.message,
+            imageBuilder: (context, imageProvider) => Container(
+              decoration: BoxDecoration(
+                image:
+                    DecorationImage(image: imageProvider, fit: BoxFit.fitWidth),
+              ),
+            ),
+            placeholder: (context, url) =>
+                Center(child: CircularProgressIndicator()),
+            errorWidget: (context, url, error) =>
+                Center(child: Icon(Icons.error)),
+          ),
+        ),
+      ],
+    );
   }
 }
