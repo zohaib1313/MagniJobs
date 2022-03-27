@@ -12,6 +12,7 @@ import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
 import 'package:magnijobs_rnr/models/countries_model.dart';
+import 'package:magnijobs_rnr/models/my_subscription_model.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:path/path.dart';
@@ -156,6 +157,39 @@ class CompanyProfileViewModel extends ChangeNotifier {
             Navigator.of(myContext!).pop();
           });
       return Future.value(null);
+    });
+  }
+
+  void getSubscriptions({onComplete}) {
+    AppPopUps().showProgressDialog(context: myContext);
+
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.my_subscriptions,
+              body: {},
+            ),
+            create: () => APIResponse<MySubScriptionModel>(
+                create: () => MySubScriptionModel()),
+            apiFunction: loadCountries)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+
+      if (response.response!.data!.subscriptions!.isEmpty) {
+        onComplete(false);
+      } else {
+        onComplete(true);
+      }
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
     });
   }
 }

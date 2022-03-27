@@ -214,22 +214,16 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          if ((UserDefaults.getEmployerUserSession()
-                                  ?.employerModel
-                                  ?.isSubscribed ??
-                              false)) {
-                            Navigator.of(myContext!).push(
-                              MaterialPageRoute(
-                                builder: (context) => JobPostScreen(
-                                  selectedCountryId: view.selectedCountryId,
-                                  updateId: null,
-                                ),
+                          /*   Navigator.of(myContext!).push(
+                            MaterialPageRoute(
+                              builder: (context) => JobPostScreen(
+                                selectedCountryId: view.selectedCountryId,
+                                updateId: null,
                               ),
-                            );
-                            /*        Provider.of<JobPostViewModel>(myContext!,
-                                  listen: false)
-                              .getAllCompanies(
-                            completion: () {
+                            ),
+                          );*/
+                          view.getSubscriptions(onComplete: (status) {
+                            if (status) {
                               Navigator.of(myContext!).push(
                                 MaterialPageRoute(
                                   builder: (context) => JobPostScreen(
@@ -238,31 +232,30 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                   ),
                                 ),
                               );
-                            },
-                          );*/
-                          } else {
-                            AppPopUps.showAlertDialog(
-                                message:
-                                    'You are not subscribed to any plan , kindly subscribe to post a job',
-                                onSubmit: () {
-                                  Navigator.of(myContext!).pop();
+                            } else {
+                              AppPopUps.showAlertDialog(
+                                  message:
+                                      'You are not subscribed to any plan , kindly subscribe to post a job',
+                                  onSubmit: () {
+                                    Navigator.of(myContext!).pop();
 
-                                  AppPopUps.showAlertDialog(
-                                      message:
-                                          'You will be logged out from application',
-                                      onSubmit: () {
-                                        Navigator.of(myContext!).pop();
-                                        Provider.of<AllPackagesAndPaymentViewModel>(
-                                                myContext!,
-                                                listen: false)
-                                            .getAllPackages(completion: () {
-                                          Navigator.of(myContext!)
-                                              .pushReplacementNamed(
-                                                  PackagesScreen.id);
+                                    AppPopUps.showAlertDialog(
+                                        message:
+                                            'You will be logged out from application',
+                                        onSubmit: () {
+                                          Navigator.of(myContext!).pop();
+                                          Provider.of<AllPackagesAndPaymentViewModel>(
+                                                  myContext!,
+                                                  listen: false)
+                                              .getAllPackages(completion: () {
+                                            Navigator.of(myContext!)
+                                                .pushReplacementNamed(
+                                                    PackagesScreen.id);
+                                          });
                                         });
-                                      });
-                                });
-                          }
+                                  });
+                            }
+                          });
                         },
                       ),
                       space,
