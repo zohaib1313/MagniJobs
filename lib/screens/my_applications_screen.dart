@@ -65,8 +65,7 @@ class _MyApplicationsScreenState extends State<MyApplicationsScreen> {
             ),
             child: view.myApplicaitons.isEmpty
                 ? const Center(
-                    child: Text(
-                        'No Job Found related to selected country and search'),
+                    child: Text('No Job Found'),
                   )
                 : ListView.builder(
                     physics: const BouncingScrollPhysics(),

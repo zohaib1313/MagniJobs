@@ -306,6 +306,13 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.get,
         );
+      case APIType.my_lessons:
+        return RequestOptions(
+          path: ApiConstants.my_lessons,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
       default:
         return RequestOptions(
           path: ApiConstants.loginUser,

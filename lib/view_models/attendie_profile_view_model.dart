@@ -5,6 +5,7 @@ import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
+import 'package:magnijobs_rnr/models/my_lesson_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 
 import '../models/all_jobs_model.dart';
@@ -125,6 +126,37 @@ class AttendieProfileViewModel extends ChangeNotifier {
       AppPopUps().dissmissDialog();
 
       completion();
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
+  }
+
+  MyLessonModel? myLessonModel;
+
+  void getMyLessonsBooking({completion}) {
+    AppPopUps().showProgressDialog(context: myContext);
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.my_lessons,
+              body: {},
+            ),
+            create: () =>
+                APIResponse<MyLessonModel>(create: () => MyLessonModel()),
+            apiFunction: getMyLessonsBooking)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      myLessonModel = response.response?.data;
+      completion(myLessonModel);
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();

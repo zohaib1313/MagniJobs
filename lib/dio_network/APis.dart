@@ -42,7 +42,8 @@ enum APIType {
   get_stripe_key,
   create_payment_intent,
   confirm_subs_payment,
-  my_subscriptions
+  my_subscriptions,
+  my_lessons
 }
 
 class ApiConstants {
@@ -91,7 +92,7 @@ class ApiConstants {
   static const create_payment_intent = "make-stripe-intent";
   static const confirm_subs_payment = "subscribe-plan";
   static const my_subscriptions = "my-subscriptions";
-
+  static const my_lessons = "my-lessons";
   static var profilePicsBaseUrl =
       'http://magnijobs.applypressure.co.uk/profile_pics/';
   static var employer_logos =

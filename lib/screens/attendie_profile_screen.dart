@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/my_lesson_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/update_candidate_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
@@ -16,6 +17,7 @@ import '../profile_settting_screen.dart';
 import '../utils/user_defaults.dart';
 import '../view_models/profile_settings_view_model.dart';
 import '../view_models/update_candidate_profile_view_model.dart';
+import 'attendie_booked_lessons_screen.dart';
 import 'attendie_calender.dart';
 import 'choose_signin/choose_signin_screen.dart';
 import 'my_applications_screen.dart';
@@ -47,9 +49,9 @@ class _AttendieCandidateProfileScreenState
           appBar: myAppBar(title: "Profile", actions: []),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.9,
+              //  height: MediaQuery.of(context).size.height * 0.9,
               padding: EdgeInsets.only(
                 left: 50.w,
                 right: 50.w,
@@ -68,9 +70,8 @@ class _AttendieCandidateProfileScreenState
                   space,
                   imageEditWidget(),
                   space,
-                  Spacer(),
                   Container(
-                    //height: MediaQuery.of(context).size.height,
+                    height: MediaQuery.of(context).size.height,
                     padding: EdgeInsets.only(
                         top: 20.h, bottom: 20.h, left: 20.h, right: 20.h),
                     margin: EdgeInsets.all(20.h),
@@ -130,6 +131,36 @@ class _AttendieCandidateProfileScreenState
                             Navigator.of(myContext!).push(MaterialPageRoute(
                                 builder: (myC) =>
                                     AttendieCalender.AttendieLessonBooking()));
+                          });
+                        }),
+                        /*    getRowProfileItem(
+                            "assets/icons/ic_calender.svg", "Calendar",
+                            onTap: () {
+                          Provider.of<AttendieProfileViewModel>(myContext!,
+                                  listen: false)
+                              .getAllLessions(completion: (lessons) {
+                            Navigator.of(myContext!).push(
+                              MaterialPageRoute(
+                                builder: (myC) =>
+                                    AttendieCalender.AttendieLessonBooking(
+                                  showBookButton: false,
+                                ),
+                              ),
+                            );
+                          });
+                        }),*/
+                        getRowProfileItem(
+                            "assets/icons/ic_calender.svg", "Calendar",
+                            onTap: () {
+                          Provider.of<AttendieProfileViewModel>(myContext!,
+                                  listen: false)
+                              .getMyLessonsBooking(
+                                  completion: (MyLessonModel myLesson) {
+                            Navigator.of(myContext!).push(
+                              MaterialPageRoute(
+                                builder: (myC) => AttendieBookedLessonScreen(),
+                              ),
+                            );
                           });
                         }),
                         getRowProfileItem(
