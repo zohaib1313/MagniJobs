@@ -14,7 +14,6 @@ import '../common_widgets/app_popups.dart';
 import '../models/expandable_tile_model.dart';
 import '../models/my_applications.dart';
 import '../utils/app_alert_bottom_sheet.dart';
-import '../view_models/all_jobs_view_model.dart';
 
 class MyApplicationsScreen extends StatefulWidget {
   List<Applications> allApplications;
@@ -206,6 +205,10 @@ class _MyApplicationsScreenState extends State<MyApplicationsScreen> {
                                               id: job.id ?? 0,
                                               completion: () {
                                                 Navigator.of(myContext!).pop();
+                                                AppPopUps.showAlertDialog(
+                                                    message:
+                                                        'Application Canceled');
+                                                /*   Navigator.of(myContext!).pop();
                                                 Provider.of<AllJobsViewModel>(
                                                         myContext!,
                                                         listen: false)
@@ -229,10 +232,7 @@ class _MyApplicationsScreenState extends State<MyApplicationsScreen> {
                                                                           allApplications)));
                                                     },
                                                   );
-                                                });
-                                                AppPopUps.showAlertDialog(
-                                                    message:
-                                                        'Application Canceled');
+                                                });*/
                                               });
                                         },
                                       ),
@@ -251,16 +251,13 @@ class _MyApplicationsScreenState extends State<MyApplicationsScreen> {
                       buttonText: "Cancel Application",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        Navigator.of(myContext!).pop();
                         view.cancelApplication(
                             id: job.id ?? 0,
                             completion: () {
                               AppPopUps.showAlertDialog(
                                   message: 'Application cancelled');
-                              Navigator.of(myContext!).pop();
-                              Navigator.of(myContext!).pop();
 
-                              Provider.of<AllJobsViewModel>(myContext!,
+                              /*   Provider.of<AllJobsViewModel>(myContext!,
                                       listen: false)
                                   .getAllJobs(completion: (allJobs) {
                                 Provider.of<AttendieProfileViewModel>(
@@ -282,7 +279,7 @@ class _MyApplicationsScreenState extends State<MyApplicationsScreen> {
                                     );
                                   },
                                 );
-                              });
+                              });*/
                             });
                       },
                     ),
