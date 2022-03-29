@@ -45,7 +45,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: "Applicant Portal", actions: [
+          appBar: myAppBar(title: "Applicant Portal", goBack: false, actions: [
             InkWell(
               onTap: () async {
                 if (UserDefaults.getUserType() == 'attendie') {
