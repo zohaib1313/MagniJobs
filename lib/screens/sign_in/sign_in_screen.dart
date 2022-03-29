@@ -435,20 +435,27 @@ class _SigInScreenState extends State<SigInScreen> {
     if (userType.isNotEmpty) {
       switch (userType) {
         case 'employer':
+          Navigator.of(myContext!).pop();
           Navigator.of(myContext!)
               .pushReplacementNamed(CompanyProfileScreen.id);
 
           break;
         case 'applicant':
+          Navigator.of(myContext!).pop();
           Navigator.of(myContext!)
               .pushReplacementNamed(EmployeePortalScreen.id);
+
           break;
         case 'tutor':
+          Navigator.of(myContext!).pop();
           Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
+
           break;
         case 'attendie':
+          Navigator.of(myContext!).pop();
           Navigator.of(myContext!)
               .pushReplacementNamed(AttendieCandidateProfileScreen.id);
+
           break;
       }
     } else {

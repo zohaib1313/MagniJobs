@@ -53,7 +53,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          appBar: myAppBar(title: 'Company & Profile', actions: [
+          appBar: myAppBar(title: 'Company & Profile', goBack: false, actions: [
             InkWell(
               onTap: () {
                 Navigator.of(myContext!).push(MaterialPageRoute(
@@ -293,9 +293,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
   getListOfJobs(AsyncSnapshot<List<Jobs?>> snapshot) {
     List<DropdownMenuItem<String>> list = [];
     list.add(DropdownMenuItem(
-      value: 'Nurse',
+      value: "Nurses",
       child: Text(
-        'Nurse',
+        "Nurse",
         style: AppTextStyles.textStyleBoldBodySmall,
       ),
     ));
