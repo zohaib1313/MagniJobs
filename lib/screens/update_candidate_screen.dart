@@ -287,7 +287,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                               if (snapshot.hasData) {
                                 return MyDropDown(
                                   onChange: (value) {
-                                    view.preferredlocationController.text =
+                                    view.pereferdLocation1.text =
                                         value.toString();
                                   },
                                   hintText: "Preferred Location",
@@ -309,13 +309,205 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                                           ))
                                       .toList(),
                                   validator: (string) {
-                                    if (((string ?? '').isEmpty ||
+                                    /*   if (((string ?? '').isEmpty ||
                                         view.preferredlocationController.text
                                             .isEmpty ||
                                         view.preferredlocationController.text ==
                                             '00')) {
                                       return 'Select Preferred Location';
-                                    }
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                          ),
+                          space,
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.pereferdLocation2.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Preferred Location",
+                                  labelText: "",
+                                  leftPadding: 0,
+                                  rightPadding: 0,
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.whiteColor,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    /*  if (((string ?? '').isEmpty ||
+                                        view.preferredlocationController.text
+                                            .isEmpty ||
+                                        view.preferredlocationController.text ==
+                                            '00')) {
+                                      return 'Select Preferred Location';
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                          ),
+                          space,
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.pereferdLocation3.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Preferred Location",
+                                  labelText: "",
+                                  leftPadding: 0,
+                                  rightPadding: 0,
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.whiteColor,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    /*  if (((string ?? '').isEmpty ||
+                                        view.preferredlocationController.text
+                                            .isEmpty ||
+                                        view.preferredlocationController.text ==
+                                            '00')) {
+                                      return 'Select Preferred Location';
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                          ),
+                          space,
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.pereferdLocation4.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Preferred Location",
+                                  labelText: "",
+                                  leftPadding: 0,
+                                  rightPadding: 0,
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.whiteColor,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    /*  if (((string ?? '').isEmpty ||
+                                        view.preferredlocationController.text
+                                            .isEmpty ||
+                                        view.preferredlocationController.text ==
+                                            '00')) {
+                                      return 'Select Preferred Location';
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const Center(
+                                  child: CircularProgressIndicator());
+                            },
+                          ),
+                          space,
+                          StreamBuilder(
+                            stream: Provider.of<CompanyProfileViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .loadCountries(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Countries?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.pereferdLocation5.text =
+                                        value.toString();
+                                  },
+                                  hintText: "Preferred Location",
+                                  labelText: "",
+                                  leftPadding: 0,
+                                  rightPadding: 0,
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.whiteColor,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  itemFuntion: snapshot.data!
+                                      .map((e) => DropdownMenuItem(
+                                            value: e?.id.toString() ?? '',
+                                            child: Text(
+                                              e?.name ?? '',
+                                              style: AppTextStyles
+                                                  .textStyleBoldBodySmall,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  validator: (string) {
+                                    /*  if (((string ?? '').isEmpty ||
+                                        view.preferredlocationController.text
+                                            .isEmpty ||
+                                        view.preferredlocationController.text ==
+                                            '00')) {
+                                      return 'Select Preferred Location';
+                                    }*/
                                     return null;
                                   },
                                 );

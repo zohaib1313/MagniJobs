@@ -495,15 +495,22 @@ class _ExpandAbleTileState extends State<ExpandAbleTile> {
                           .copyWith(color: AppColor.whiteColor),
                     ),
               children: [
-                Padding(
-                  padding:
-                      EdgeInsets.only(left: 50.w, right: 50.w, bottom: 10.h),
-                  child: widget.expandedWidgetChild ??
-                      Text(
-                        widget.model.message ?? "",
-                        style: AppTextStyles.textStyleNormalBodySmall
-                            .copyWith(color: AppColor.whiteColor),
+                Row(
+                  children: [
+                    Flexible(
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            left: 50.w, right: 50.w, bottom: 10.h),
+                        child: widget.expandedWidgetChild ??
+                            Text(
+                              widget.model.message ?? "",
+                              textAlign: TextAlign.start,
+                              style: AppTextStyles.textStyleNormalBodySmall
+                                  .copyWith(color: AppColor.whiteColor),
+                            ),
                       ),
+                    ),
+                  ],
                 )
               ],
             )

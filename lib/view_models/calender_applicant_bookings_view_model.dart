@@ -12,21 +12,26 @@ class CalenderApplicantBookingsViewModel extends ChangeNotifier {
   TextEditingController selectedTimeController = TextEditingController();
   TextEditingController examTypeController = TextEditingController();
   TextEditingController examSubTypeController = TextEditingController();
+  TextEditingController lessonLinkController = TextEditingController();
+  TextEditingController lessonNameController = TextEditingController();
 
   void resetDate() {
     selectedTimeController.clear();
     selectedDateController.clear();
     examTypeController.clear();
     examSubTypeController.clear();
+    lessonLinkController.clear();
+    lessonNameController.clear();
   }
 
-  placeBookings({required completion}) async {
+  placeBookings({required completion, required String id}) async {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
       "date": selectedDateController.text,
       "exam_type": examSubTypeController.text,
       "exam_sub_type": examSubTypeController.text,
-      "time": selectedTimeController.text
+      "time": selectedTimeController.text,
+      "lesson_id": id
     };
 
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);

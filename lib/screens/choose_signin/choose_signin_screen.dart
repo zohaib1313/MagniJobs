@@ -89,7 +89,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              "Don’t have not an account?",
+                              "Don’t have an account?",
                               style: AppTextStyles.textStyleBoldBodySmall,
                             ),
                           ),
@@ -157,7 +157,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              "Don’t have not an account?",
+                              "Don’t have an account?",
                               style: AppTextStyles.textStyleBoldBodySmall,
                             ),
                           ),
@@ -181,7 +181,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                 //NMC
                 SizedBox(height: 5.h),
                 Button(
-                  buttonText: "NMC OSCE",
+                  buttonText: "Healthcare Learning Program",
                   leftPadding: 200.w,
                   rightPading: 200.w,
                   textColor: AppColor.whiteColor,
@@ -238,7 +238,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              "Don’t have not an account?",
+                              "Don’t have an account?",
                               style: AppTextStyles.textStyleBoldBodySmall,
                             ),
                           ),
@@ -287,7 +287,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                         children: [
                           Flexible(
                             child: Text(
-                              "Don’t have not an account?",
+                              "Don’t have an account?",
                               style: AppTextStyles.textStyleBoldBodySmall,
                             ),
                           ),

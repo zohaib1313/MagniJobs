@@ -35,6 +35,7 @@ class _OnBoardingOurCompanyInfoState extends State<OnBoardingOurCompanyInfo> {
                   children: [
                     space,
                     space,
+                    space,
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Introduction",
@@ -104,7 +105,7 @@ class _OnBoardingForClientsState extends State<OnBoardingForClients> {
                         model: ExpandableTileModel(
                             title: "Benefits",
                             message:
-                                "For CLIENTS such as employers and recruitment/placement agencies, the company offers: \n•Reduced expenses on recruitment process.\n• High quality and trained applicant.\n• Easy access to and communication with qualified   candidates.\n• Flexibility in advertising positions.",
+                                "For CLIENTS such as employers and recruitment/placement agencies, the company offers: \n\n•Reduced expenses on recruitment process.\n• High quality and trained applicant.\n• Easy access to and communication with qualified candidates.\n• Flexibility in advertising positions.",
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(
@@ -211,13 +212,13 @@ finding jobs fitting their skills as soon as possible ''',
                             title: "Benefits",
                             message:
                                 '''For APPLICANTS, the company’s services are:
-    • Easy to use and communicate with clients.
-    • Allow applicants to receive multiple offers 
-      from clients.
-    • Increased visibility.
-    • Applicants have the option to apply for an
-      advertised job or just stand by until a client 
-      shows interest in their profile.  ''',
+• Easy to use and communicate with clients.
+• Allow applicants to receive multiple offers 
+  from clients.
+• Increased visibility.
+• Applicants have the option to apply for an
+  advertised job or just stand by until a client 
+  shows interest in their profile.  ''',
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(

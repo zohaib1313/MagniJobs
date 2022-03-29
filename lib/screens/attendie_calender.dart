@@ -5,6 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/models/all_lessons_model.dart';
+import 'package:magnijobs_rnr/screens/tutor_calender_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -13,7 +14,12 @@ import '../routes.dart';
 import '../view_models/attendie_profile_view_model.dart';
 
 class AttendieCalender extends StatefulWidget {
-  AttendieCalender.AttendieLessonBooking({Key? key}) : super(key: key);
+  bool showBookButton;
+  bool isBookingLesson;
+
+  AttendieCalender.AttendieLessonBooking(
+      {Key? key, this.showBookButton = true, this.isBookingLesson = true})
+      : super(key: key);
   static const id = "AttendieCalender";
 
   @override
@@ -86,16 +92,28 @@ class _AttendieCalenderState extends State<AttendieCalender> {
                 .toString()),
           ],
         ),
-        trailing: ElevatedButton(
-          child: const Text('Book Lesson'),
-          onPressed: () {
-            view.bookLesson(
-                id: lesson.id ?? 0,
-                completion: () {
-                  AppPopUps.showAlertDialog(message: 'Lesson Booked');
-                });
-          },
-        ),
+        trailing: (widget.showBookButton)
+            ? ElevatedButton(
+                child: const Text('Book Lesson'),
+                onPressed: () {
+                  if (widget.isBookingLesson) {
+                    view.bookLesson(
+                        id: lesson.id ?? 0,
+                        completion: () {
+                          AppPopUps.showAlertDialog(message: 'Lesson Booked');
+                        });
+                  } else {
+                    Navigator.of(myContext!).pushReplacement(
+                      MaterialPageRoute(
+                        builder: (context) => TutorCalenderScreen(
+                          lessonId: (lesson.id ?? -1).toString(),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              )
+            : null,
       ),
     );
   }

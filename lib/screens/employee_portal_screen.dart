@@ -289,15 +289,49 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
             .getFile();
       },
       child: Container(
-        padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
+        padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
         margin: EdgeInsets.all(20.h),
         decoration: BoxDecoration(
           color: AppColor.whiteColor,
           borderRadius: BorderRadius.circular(50.r),
         ),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+          crossAxisAlignment: CrossAxisAlignment.end,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(right: 18.0),
+              child: !(UserDefaults.getCandidateUserSession()
+                          ?.candidateModel
+                          ?.verified ??
+                      false)
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text('Not Verified'),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Icon(
+                          Icons.not_interested_outlined,
+                          color: Colors.red,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text('Verified'),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Icon(
+                          Icons.verified_outlined,
+                          color: Colors.green,
+                        ),
+                      ],
+                    ),
+            ),
+            space,
             Row(
               crossAxisAlignment: CrossAxisAlignment.center,
               mainAxisAlignment: MainAxisAlignment.center,
@@ -359,7 +393,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                   ],
                 ),
               ],
-            )
+            ),
           ],
         ),
       ),

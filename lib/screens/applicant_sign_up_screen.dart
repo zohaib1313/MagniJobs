@@ -13,6 +13,7 @@ import 'package:provider/provider.dart';
 
 import '../models/countries_model.dart';
 import '../routes.dart';
+import '../utils/app_alert_bottom_sheet.dart';
 import '../view_models/company_profile_view_model.dart';
 import 'verify_number/privacy_policy_screen.dart';
 
@@ -252,7 +253,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             onChange: (value) {
                               view.martialStatusController.text = value;
                             },
-                            hintText: "Material status",
+                            hintText: "Marital status",
                             labelText: "",
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
@@ -278,6 +279,21 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                               return null;
                             },
                           ),
+                          space,
+                          getEducationFiedls(
+                              title: 'Certifications',
+                              controller: view.certificatesController),
+                          space,
+                          getEducationFiedls(
+                              title: 'Exams', controller: view.examsController),
+                          space,
+                          getEducationFiedls(
+                              title: 'Work Experience',
+                              controller: view.workExperienceController),
+                          space,
+                          getEducationFiedls(
+                              title: 'Licenses',
+                              controller: view.licenseController),
                           space,
                           MyTextField(
                             suffixIconWidet: GestureDetector(
@@ -476,6 +492,120 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  void showSheet(
+      {required String title,
+      required TextEditingController textEditingControllerList}) {
+    List<TextEditingController> controllersField = [
+      TextEditingController(),
+      TextEditingController(),
+      TextEditingController(),
+      TextEditingController(),
+      TextEditingController()
+    ];
+
+    List<String?> initialText = textEditingControllerList.text.split(",");
+    for (int i = 0; i < initialText.length; i++) {
+      controllersField[i].text = initialText[i] ?? '';
+    }
+
+    BottomSheets().showBottomSheet(
+        context: context,
+        child: Container(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    title,
+                    style: AppTextStyles.textStyleNormalBodyMedium,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.blackColor,
+                    ),
+                  )
+                ],
+              ),
+              space,
+              ListView.builder(
+                  itemCount: controllersField.length,
+                  shrinkWrap: true,
+                  itemBuilder: (context, item) {
+                    return Column(
+                      children: [
+                        MyTextField(
+                          fillColor: AppColor.alphaGrey,
+                          hintText: "Enter $title",
+                          controller: controllersField[item],
+                          validator: (string) {
+                            return null;
+                          },
+                        ),
+                        space,
+                      ],
+                    );
+                  }),
+              space,
+              Padding(
+                padding: EdgeInsets.all(100.r),
+                child: Button(
+                  buttonText: "Save",
+                  textColor: AppColor.whiteColor,
+                  onTap: () {
+                    String certificates = '';
+                    for (int i = 0; i < controllersField.length; i++) {
+                      if (i != 0) {
+                        if (controllersField[i].text.isNotEmpty) {
+                          certificates = certificates +
+                              "," +
+                              controllersField[i].text.toString();
+                        }
+                      } else {
+                        if (controllersField[0].text.isNotEmpty) {
+                          certificates = controllersField[0].text;
+                        }
+                      }
+                    }
+
+                    textEditingControllerList.text = certificates;
+                    Navigator.pop(context);
+                  },
+                ),
+              )
+            ],
+          ),
+        ));
+  }
+
+  getEducationFiedls(
+      {required String title, required TextEditingController controller}) {
+    return InkWell(
+      onTap: () {
+        showSheet(title: title, textEditingControllerList: controller);
+      },
+      child: MyTextField(
+        enable: false,
+        fillColor: AppColor.alphaGrey,
+        hintText: title,
+        suffixIconWidet: const Icon(
+          Icons.add_circle,
+          color: AppColor.primaryBlueColor,
+        ),
+        controller: controller,
+        validator: (string) {
+          return null;
+        },
       ),
     );
   }

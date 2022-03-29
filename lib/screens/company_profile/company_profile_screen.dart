@@ -7,7 +7,6 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
 import 'package:magnijobs_rnr/models/countries_model.dart';
-import 'package:magnijobs_rnr/screens/job_post/job_post_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -19,6 +18,7 @@ import '../../routes.dart';
 import '../../view_models/all_packges_view_model.dart';
 import '../../view_models/country_and_job_view_model.dart';
 import '../country_and_job/country_and_job_screen.dart';
+import '../job_post/job_post_screen.dart';
 import '../packages_/packages_screen.dart';
 
 class CompanyProfileScreen extends StatefulWidget {
@@ -139,6 +139,37 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                           },
                         ),
                         space,
+                        StreamBuilder(
+                          stream: Provider.of<CompanyProfileViewModel>(
+                                  myContext!,
+                                  listen: false)
+                              .loadJobs(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Jobs?>> snapshot) {
+                            if (snapshot.hasData) {
+                              return MyDropDown(
+                                onChange: (value) {
+                                  view.queryEditingController.text =
+                                      value ?? "";
+                                },
+                                hintText: "Jobs",
+                                labelText: "",
+                                labelColor: AppColor.redColor,
+                                borderColor: AppColor.alphaGrey,
+                                fillColor: AppColor.whiteColor,
+                                suffixIcon: "assets/icons/drop_down_ic.svg",
+                                itemFuntion: getListOfJobs(snapshot),
+                                validator: (string) {
+                                  return null;
+                                },
+                              );
+                            }
+                            return Center(
+                                child: Container(
+                                    child: CircularProgressIndicator()));
+                          },
+                        ),
+
                         /* MyTextField(
                           fillColor: AppColor.whiteColor,
                           textColor: AppColor.blackColor,
@@ -153,8 +184,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                             }
                             return null;
                           },
-                        )*/
-                        MyDropDown(
+                        ),*/
+                        /* MyDropDown(
                           onChange: (value) {
                             view.queryEditingController.text = value ?? "";
                           },
@@ -176,7 +207,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                           validator: (string) {
                             return null;
                           },
-                        ),
+                        ),*/
                         space,
                         space,
                       ],
@@ -193,6 +224,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
+                          print(view.selectedCountryId);
+                          print(view.queryEditingController.text);
                           if (view.selectedCountryId.isNotEmpty &&
                               view.queryEditingController.text.isNotEmpty) {
                             Provider.of<CountryAndJobViewModel>(myContext!,
@@ -214,14 +247,6 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          /*   Navigator.of(myContext!).push(
-                            MaterialPageRoute(
-                              builder: (context) => JobPostScreen(
-                                selectedCountryId: view.selectedCountryId,
-                                updateId: null,
-                              ),
-                            ),
-                          );*/
                           view.getSubscriptions(onComplete: (status) {
                             if (status) {
                               Navigator.of(myContext!).push(
@@ -235,24 +260,17 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                             } else {
                               AppPopUps.showAlertDialog(
                                   message:
-                                      'You are not subscribed to any plan , kindly subscribe to post a job',
+                                      'You are not subscribed to any plan, kindly subscribe to post a job',
                                   onSubmit: () {
                                     Navigator.of(myContext!).pop();
 
-                                    AppPopUps.showAlertDialog(
-                                        message:
-                                            'You will be logged out from application',
-                                        onSubmit: () {
-                                          Navigator.of(myContext!).pop();
-                                          Provider.of<AllPackagesAndPaymentViewModel>(
-                                                  myContext!,
-                                                  listen: false)
-                                              .getAllPackages(completion: () {
-                                            Navigator.of(myContext!)
-                                                .pushReplacementNamed(
-                                                    PackagesScreen.id);
-                                          });
-                                        });
+                                    Provider.of<AllPackagesAndPaymentViewModel>(
+                                            myContext!,
+                                            listen: false)
+                                        .getAllPackages(completion: () {
+                                      Navigator.of(myContext!)
+                                          .pushNamed(PackagesScreen.id);
+                                    });
                                   });
                             }
                           });
@@ -270,6 +288,28 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
         ),
       ),
     );
+  }
+
+  getListOfJobs(AsyncSnapshot<List<Jobs?>> snapshot) {
+    List<DropdownMenuItem<String>> list = [];
+    list.add(DropdownMenuItem(
+      value: 'Nurse',
+      child: Text(
+        'Nurse',
+        style: AppTextStyles.textStyleBoldBodySmall,
+      ),
+    ));
+    for (var e in snapshot.data!) {
+      list.add(DropdownMenuItem(
+        value: e?.job ?? '',
+        child: Text(
+          e?.job ?? '',
+          style: AppTextStyles.textStyleBoldBodySmall,
+        ),
+      ));
+    }
+
+    return list;
   }
 
   imageEditWidget() {

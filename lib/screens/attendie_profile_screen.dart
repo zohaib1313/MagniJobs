@@ -122,7 +122,7 @@ class _AttendieCandidateProfileScreenState
                         getRowProfileItem(
                             "assets/icons/ic_location_black.svg", "Address"),
                         getRowProfileItem(
-                            "assets/icons/ic_calender.svg", "Calender",
+                            "assets/icons/ic_calender.svg", "Lessons",
                             onTap: () {
                           Provider.of<AttendieProfileViewModel>(myContext!,
                                   listen: false)

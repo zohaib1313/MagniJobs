@@ -34,8 +34,13 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
   TextEditingController workExperienceController = TextEditingController();
   TextEditingController certificationController = TextEditingController();
   TextEditingController examsController = TextEditingController();
-  TextEditingController preferredlocationController = TextEditingController();
   TextEditingController licenseController = TextEditingController();
+
+  TextEditingController pereferdLocation1 = TextEditingController();
+  TextEditingController pereferdLocation2 = TextEditingController();
+  TextEditingController pereferdLocation3 = TextEditingController();
+  TextEditingController pereferdLocation4 = TextEditingController();
+  TextEditingController pereferdLocation5 = TextEditingController();
 
   bool _hidePassword = true;
 
@@ -99,7 +104,14 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
     workExperienceController.clear();
     certificationController.clear();
     examsController.clear();
-    preferredlocationController.clear();
+    pereferdLocation1.clear();
+    pereferdLocation2.clear();
+
+    pereferdLocation3.clear();
+
+    pereferdLocation4.clear();
+    pereferdLocation5.clear();
+
     licenseController.clear();
   }
 
@@ -123,7 +135,11 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
       "certifications": certificationController.text,
       "exams": examsController.text,
       "license": licenseController.text,
-      "preferred_location": preferredlocationController.text,
+      "preferred_location": pereferdLocation1.text,
+      "preferred_location2": pereferdLocation2.text,
+      "preferred_location3": pereferdLocation3.text,
+      "preferred_location4": pereferdLocation4.text,
+      "preferred_location5": pereferdLocation5.text,
       'profile': profilePicImage?.path != null
           ? await MultipartFile.fromFile(
               profilePicImage!.path,
@@ -179,8 +195,8 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
     workExperienceController.text = user?.candidateModel?.workExperience ?? '';
     certificationController.text = user?.candidateModel?.certifications ?? '';
     examsController.text = user?.candidateModel?.exams ?? '';
-    preferredlocationController.text =
-        user?.candidateModel?.preferredLocation ?? '00';
+    /* pereferdLocation1.text =
+        getCountryNameFromId(0).id.toString();*/
     licenseController.text = user?.candidateModel?.license ?? '';
   }
 }

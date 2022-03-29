@@ -234,6 +234,7 @@ class CandidateModel {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
+  bool? verified;
 
   CandidateModel(
       {this.id,
@@ -249,6 +250,7 @@ class CandidateModel {
       this.certifications,
       this.exams,
       this.license,
+      this.verified = false,
       this.preferredLocation,
       this.uploadedDocs,
       this.resume,
@@ -267,6 +269,7 @@ class CandidateModel {
     address = json['address'];
     location = json['location'];
     dob = json['dob'];
+    verified = json['verified'];
     nationality = json['nationality'];
     gender = json['gender'];
     maritalStatus = json['marital_status'];
@@ -303,6 +306,7 @@ class CandidateModel {
     data['certifications'] = this.certifications;
     data['exams'] = this.exams;
     data['license'] = this.license;
+    data['verified'] = this.verified;
     data['preferred_location'] = this.preferredLocation;
     data['uploaded_docs'] = this.uploadedDocs;
     data['resume'] = this.resume;

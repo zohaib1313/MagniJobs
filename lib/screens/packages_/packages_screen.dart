@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
-import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:provider/provider.dart';
 
@@ -28,7 +26,6 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
   late String secretKey, pubKey;
   bool isInProgress = false;
   late Map<String, dynamic> paymentIntentData;
-
 
   @override
   void initState() {
@@ -57,31 +54,26 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
         isInProgress = false;
       });
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: const SystemUiOverlayStyle(
-            statusBarColor: AppColor.primaryBlueDarkColor,
-            statusBarIconBrightness: Brightness.light,
-            systemNavigationBarColor:
-                AppColor.primaryBlueDarkColor //or the color you prefer
-            ),
-        child: Scaffold(
-          body: Container(
-            padding: EdgeInsets.only(left: 100.w, right: 100.w, top: 100.h),
-            color: AppColor.primaryBlueColor,
-            child: Column(
-              children: [
-                Text("Packages",
-                    style: AppTextStyles.textStyleBoldTitleLarge
-                        .copyWith(color: AppColor.whiteColor)),
-                Expanded(
-                  child: SingleChildScrollView(
-                    physics: const BouncingScrollPhysics(),
+      child: Scaffold(
+        body: Container(
+          padding: EdgeInsets.only(
+              left: 100.w, right: 100.w, top: 100.h, bottom: 10.h),
+          color: AppColor.primaryBlueColor,
+          child: Column(
+            children: [
+              Text("Packages",
+                  style: AppTextStyles.textStyleBoldTitleLarge
+                      .copyWith(color: AppColor.whiteColor)),
+              Expanded(
+                child: SingleChildScrollView(
+                  physics: const BouncingScrollPhysics(),
+                  child: Padding(
+                    padding: const EdgeInsets.only(bottom: 28.0),
                     child: Column(
                       children: [
                         space,
@@ -89,6 +81,7 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                         ListView.builder(
                             itemCount: view.allPackages?.packages?.length ?? 0,
                             shrinkWrap: true,
+                            physics: const NeverScrollableScrollPhysics(),
                             itemBuilder: (context, index) {
                               return Column(
                                 children: [
@@ -110,7 +103,7 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                             "",
                                         message: view.allPackages
                                                 ?.packages?[index].details ??
-                                            "",
+                                            "".trim(),
                                         isExpanded: false),
                                   ),
                                 ],
@@ -176,7 +169,7 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                                   width: 50.w,
                                                 ),
                                                 Text(
-                                                  "Selected Package ",
+                                                  "Agree",
                                                   style: AppTextStyles
                                                       .textStyleNormalBodySmall
                                                       .copyWith(
@@ -197,25 +190,224 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                         ),
                         space,
                         ExpandAbleTile(
-                            model: ExpandableTileModel(
-                                title: "Non-Disclosure Agreement",
-                                message:
-                                    "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
-                                isExpanded: false)),
+                          model: ExpandableTileModel(
+                              title: "Non-Disclosure Agreement",
+                              isExpanded: false),
+                          expandedWidgetChild: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                            style: AppTextStyles
+                                                .textStyleNormalBodySmall
+                                                .copyWith(
+                                                    color: AppColor.whiteColor),
+                                          ),
+                                          space,
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {});
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(8.r),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.whiteColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                  ),
+                                                  child: true
+                                                      ? const Icon(
+                                                          Icons.check,
+                                                          size: 15.0,
+                                                          color: Colors.black,
+                                                        )
+                                                      : Icon(
+                                                          null,
+                                                          size: 30.0,
+                                                        ),
+                                                ),
+                                                SizedBox(
+                                                  width: 50.w,
+                                                ),
+                                                Text(
+                                                  "Agree",
+                                                  style: AppTextStyles
+                                                      .textStyleNormalBodySmall
+                                                      .copyWith(
+                                                          color: AppColor
+                                                              .whiteColor),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                         space,
                         ExpandAbleTile(
-                            model: ExpandableTileModel(
-                                title: "No Refund Policy",
-                                message:
-                                    "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
-                                isExpanded: false)),
+                          model: ExpandableTileModel(
+                              title: "No Refund Policy", isExpanded: false),
+                          expandedWidgetChild: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                            style: AppTextStyles
+                                                .textStyleNormalBodySmall
+                                                .copyWith(
+                                                    color: AppColor.whiteColor),
+                                          ),
+                                          space,
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {});
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(8.r),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.whiteColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                  ),
+                                                  child: true
+                                                      ? const Icon(
+                                                          Icons.check,
+                                                          size: 15.0,
+                                                          color: Colors.black,
+                                                        )
+                                                      : Icon(
+                                                          null,
+                                                          size: 30.0,
+                                                        ),
+                                                ),
+                                                SizedBox(
+                                                  width: 50.w,
+                                                ),
+                                                Text(
+                                                  "Agree",
+                                                  style: AppTextStyles
+                                                      .textStyleNormalBodySmall
+                                                      .copyWith(
+                                                          color: AppColor
+                                                              .whiteColor),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                         space,
                         ExpandAbleTile(
-                            model: ExpandableTileModel(
-                                title: "Other Disclaimers",
-                                message:
-                                    "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
-                                isExpanded: false)),
+                          model: ExpandableTileModel(
+                              title: "Other Disclaimers", isExpanded: false),
+                          expandedWidgetChild: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                            style: AppTextStyles
+                                                .textStyleNormalBodySmall
+                                                .copyWith(
+                                                    color: AppColor.whiteColor),
+                                          ),
+                                          space,
+                                          InkWell(
+                                            onTap: () {
+                                              setState(() {});
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(8.r),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.whiteColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                  ),
+                                                  child: true
+                                                      ? const Icon(
+                                                          Icons.check,
+                                                          size: 15.0,
+                                                          color: Colors.black,
+                                                        )
+                                                      : Icon(
+                                                          null,
+                                                          size: 30.0,
+                                                        ),
+                                                ),
+                                                SizedBox(
+                                                  width: 50.w,
+                                                ),
+                                                Text(
+                                                  "Agree",
+                                                  style: AppTextStyles
+                                                      .textStyleNormalBodySmall
+                                                      .copyWith(
+                                                          color: AppColor
+                                                              .whiteColor),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                         space,
                         space,
                         space,
@@ -223,26 +415,26 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                     ),
                   ),
                 ),
-                Padding(
-                  padding: EdgeInsets.all(100.r),
-                  child: Button(
-                    buttonText: "Payment",
-                    textColor: AppColor.primaryBlueDarkColor,
-                    color: AppColor.whiteColor,
-                    onTap: () {
-                      if (view.selectedPaymentMethod != null) {
-                        print(view.selectedPaymentMethod?.name);
-                        _initiateThePayment(view.selectedPaymentMethod?.id);
+              ),
+              Padding(
+                padding: EdgeInsets.all(100.r),
+                child: Button(
+                  buttonText: "Payment",
+                  textColor: AppColor.primaryBlueDarkColor,
+                  color: AppColor.whiteColor,
+                  onTap: () {
+                    if (view.selectedPaymentMethod != null) {
+                      print(view.selectedPaymentMethod?.name);
+                      _initiateThePayment(view.selectedPaymentMethod?.id);
 
-                        //Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
-                      } else {
-                        AppPopUps.showAlertDialog(message: 'Select Package');
-                      }
-                    },
-                  ),
+                      //Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
+                    } else {
+                      AppPopUps.showAlertDialog(message: 'Select Package');
+                    }
+                  },
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
         ),
       ),
@@ -272,8 +464,7 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
             googlePay: true,
             style: ThemeMode.dark,
             merchantCountryCode: 'UK',
-            merchantDisplayName: 'MagniJobs'
-        ));
+            merchantDisplayName: 'MagniJobs'));
 
     setState(() {});
 
@@ -284,7 +475,6 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
         isInProgress = false;
       });
     }
-
   }
 
   Future<void> displaySheet() async {
@@ -302,7 +492,7 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
           ),
         );
       });
-    } catch (e){
+    } catch (e) {
       AppPopUps.showAlertDialog(message: 'Failed to make the payment.');
     }
   }
@@ -314,10 +504,10 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
       });
     }
 
-    await StripeRepo.confirmSubscriptionPayment(view.selectedPaymentMethod?.id,view.selectedPaymentMethod?.price,paymentID).then((response) {
-
+    await StripeRepo.confirmSubscriptionPayment(view.selectedPaymentMethod?.id,
+            view.selectedPaymentMethod?.price, paymentID)
+        .then((response) {
       AppPopUps.showAlertDialog(message: 'Subscription payment received.');
-
     });
 
     setState(() {});
@@ -327,7 +517,5 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
         isInProgress = false;
       });
     }
-
   }
-
 }

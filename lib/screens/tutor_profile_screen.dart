@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
+import 'package:magnijobs_rnr/screens/attendie_calender.dart';
 import 'package:magnijobs_rnr/screens/tutor_bookings_job_history_screen.dart';
 import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
@@ -13,10 +14,10 @@ import 'package:provider/provider.dart';
 
 import '../dio_network/APis.dart';
 import '../profile_settting_screen.dart';
+import '../view_models/attendie_profile_view_model.dart';
 import '../view_models/tutor_booking_job_view_model.dart';
 import '../view_models/update_tutor_profile_view_model.dart';
 import 'choose_signin/choose_signin_screen.dart';
-import 'tutor_calender_screen.dart';
 
 class TutorProfileScreen extends StatefulWidget {
   TutorProfileScreen({Key? key}) : super(key: key);
@@ -30,6 +31,7 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
   final space = SizedBox(height: 20.h);
   var view =
       Provider.of<UpdateTutorProfileViewModel>(myContext!, listen: false);
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -115,11 +117,44 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               "assets/icons/ic_heart_filled.svg", "Favourite"),
                           getRowProfileItem(
                               "assets/icons/ic_location_black.svg", "Address"),
+                          // getRowProfileItem(
+                          //     "assets/icons/ic_calender.svg", "Add a Lesson",
+                          //     onTap: () {
+                          //   Navigator.of(myContext!).push(MaterialPageRoute(
+                          //       builder: (context) => TutorCalenderScreen()));
+                          // }),
                           getRowProfileItem(
-                              "assets/icons/ic_calender.svg", "Calender",
+                              "assets/icons/ic_calender.svg", "Add a lesson",
                               onTap: () {
-                            Navigator.of(myContext!).push(MaterialPageRoute(
-                                builder: (context) => TutorCalenderScreen()));
+                            Provider.of<AttendieProfileViewModel>(myContext!,
+                                    listen: false)
+                                .getAllLessions(completion: (lessons) {
+                              Navigator.of(myContext!).push(
+                                MaterialPageRoute(
+                                  builder: (myC) =>
+                                      AttendieCalender.AttendieLessonBooking(
+                                    showBookButton: true,
+                                    isBookingLesson: false,
+                                  ),
+                                ),
+                              );
+                            });
+                          }),
+                          getRowProfileItem(
+                              "assets/icons/ic_calender.svg", "Calendar",
+                              onTap: () {
+                            Provider.of<AttendieProfileViewModel>(myContext!,
+                                    listen: false)
+                                .getAllLessions(completion: (lessons) {
+                              Navigator.of(myContext!).push(
+                                MaterialPageRoute(
+                                  builder: (myC) =>
+                                      AttendieCalender.AttendieLessonBooking(
+                                    showBookButton: false,
+                                  ),
+                                ),
+                              );
+                            });
                           }),
                           getRowProfileItem(
                               "assets/icons/ic_file.svg", "Terms & Conditions"),

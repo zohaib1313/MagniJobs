@@ -29,9 +29,11 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   TextEditingController nationalityController = TextEditingController();
   TextEditingController genderController = TextEditingController();
   TextEditingController martialStatusController = TextEditingController();
-  /* TextEditingController companynameController = TextEditingController();
-  TextEditingController contactnumberController = TextEditingController();
-  TextEditingController contactemailController = TextEditingController();*/
+  TextEditingController certificatesController = TextEditingController();
+  TextEditingController examsController = TextEditingController();
+  TextEditingController licenseController = TextEditingController();
+  TextEditingController workExperienceController = TextEditingController();
+
   bool _hidePassword = true;
 
   bool termsConditionAccepted = false;
@@ -145,9 +147,15 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
     nationalityController.clear();
     genderController.clear();
     martialStatusController.clear();
-    /*  companynameController.clear();
-    contactnumberController.clear();
-    contactemailController.clear();*/
+    certificatesController.clear();
+    examsController.clear();
+    licenseController.clear();
+    workExperienceController.clear();
     nationalIdImage = null;
+  }
+
+  void addCertificates() {
+    print('adding');
+    certificatesController.text = 'abc';
   }
 }
