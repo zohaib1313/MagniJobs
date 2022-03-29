@@ -12,8 +12,10 @@ import 'package:provider/provider.dart';
 
 class TutorCalenderScreen extends StatefulWidget {
   String lessonId;
-
-  TutorCalenderScreen({Key? key, required this.lessonId}) : super(key: key);
+  String lessonLink;
+  TutorCalenderScreen(
+      {Key? key, required this.lessonId, required this.lessonLink})
+      : super(key: key);
   static const id = "TutorCalenderScreen";
 
   @override
@@ -23,6 +25,12 @@ class TutorCalenderScreen extends StatefulWidget {
 class _TutorCalenderScreenState extends State<TutorCalenderScreen> {
   final space = SizedBox(height: 20.h);
   var view = Provider.of<CalenderApplicantBookingsViewModel>(myContext!);
+
+  @override
+  void initState() {
+    super.initState();
+    view.lessonLinkController.text = widget.lessonLink;
+  }
 
   @override
   Widget build(BuildContext context) {

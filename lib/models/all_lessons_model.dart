@@ -43,6 +43,7 @@ class Lessons {
   String? lessonTime;
   String? createdAt;
   String? updatedAt;
+  String? meeting_link;
 
   Lessons(
       {this.id,
@@ -52,6 +53,7 @@ class Lessons {
       this.lessonDate,
       this.lessonTime,
       this.createdAt,
+      this.meeting_link,
       this.updatedAt});
 
   Lessons.fromJson(Map<String, dynamic> json) {
@@ -61,6 +63,8 @@ class Lessons {
     description = json['description'];
     lessonDate = json['lesson_date'];
     lessonTime = json['lesson_time'];
+    meeting_link = json['meeting_link'];
+
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -74,6 +78,8 @@ class Lessons {
     data['lesson_date'] = this.lessonDate;
     data['lesson_time'] = this.lessonTime;
     data['created_at'] = this.createdAt;
+    data['meeting_link'] = this.meeting_link;
+
     data['updated_at'] = this.updatedAt;
     return data;
   }

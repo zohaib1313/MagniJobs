@@ -107,6 +107,7 @@ class _AttendieCalenderState extends State<AttendieCalender> {
                       MaterialPageRoute(
                         builder: (context) => TutorCalenderScreen(
                           lessonId: (lesson.id ?? -1).toString(),
+                          lessonLink: lesson.meeting_link ?? '',
                         ),
                       ),
                     );
