@@ -161,7 +161,7 @@ class CompanyProfileViewModel extends ChangeNotifier {
             apiFunction: updateProfile)
         .then((response) async {
       AppPopUps().dissmissDialog();
-      UserDefaults.saveEmployerUserSession(
+      await UserDefaults.saveEmployerUserSession(
           response.response!.data!, UserDefaults.getUserType() ?? '');
       onComplete();
     }).catchError((error) {

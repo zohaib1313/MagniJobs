@@ -295,7 +295,7 @@ class _SigInScreenState extends State<SigInScreen> {
             completion: (EmployerSignInModel? user) async {
           if ((user?.user?.verified ?? 0) != 0) {
             if (user != null) {
-              UserDefaults.saveEmployerUserSession(user, widget.userType);
+              await UserDefaults.saveEmployerUserSession(user, widget.userType);
               view.resetState();
               gotoRelevantScreenOnUserType(userType: widget.userType);
             }
@@ -308,7 +308,8 @@ class _SigInScreenState extends State<SigInScreen> {
             ));
             if (isVerified ?? false) {
               if (user != null) {
-                UserDefaults.saveEmployerUserSession(user, widget.userType);
+                await UserDefaults.saveEmployerUserSession(
+                    user, widget.userType);
                 view.resetState();
                 gotoRelevantScreenOnUserType(userType: widget.userType);
               }
@@ -328,7 +329,8 @@ class _SigInScreenState extends State<SigInScreen> {
             completion: (CandidateSignInModel? user) async {
           if ((user?.user?.verified ?? 0) != 0) {
             if (user != null) {
-              UserDefaults.saveCandidateUserSession(user, widget.userType);
+              await UserDefaults.saveCandidateUserSession(
+                  user, widget.userType);
               view.resetState();
               gotoRelevantScreenOnUserType(userType: widget.userType);
             }
@@ -341,7 +343,8 @@ class _SigInScreenState extends State<SigInScreen> {
             ));
             if (isVerified ?? false) {
               if (user != null) {
-                UserDefaults.saveCandidateUserSession(user, widget.userType);
+                await UserDefaults.saveCandidateUserSession(
+                    user, widget.userType);
                 view.resetState();
                 gotoRelevantScreenOnUserType(userType: widget.userType);
               }
@@ -361,7 +364,7 @@ class _SigInScreenState extends State<SigInScreen> {
             completion: (TutorSignInModel? user) async {
           if ((user?.user?.verified ?? 0) != 0) {
             if (user != null) {
-              UserDefaults.saveTutorSignInModel(user, widget.userType);
+              await UserDefaults.saveTutorSignInModel(user, widget.userType);
               view.resetState();
               gotoRelevantScreenOnUserType(userType: widget.userType);
             }
@@ -374,7 +377,7 @@ class _SigInScreenState extends State<SigInScreen> {
             ));
             if (isVerified ?? false) {
               if (user != null) {
-                UserDefaults.saveTutorSignInModel(user, widget.userType);
+                await UserDefaults.saveTutorSignInModel(user, widget.userType);
                 view.resetState();
                 gotoRelevantScreenOnUserType(userType: widget.userType);
               }
@@ -394,7 +397,8 @@ class _SigInScreenState extends State<SigInScreen> {
             completion: (CandidateSignInModel? user) async {
           if ((user?.user?.verified ?? 0) != 0) {
             if (user != null) {
-              UserDefaults.saveCandidateUserSession(user, widget.userType);
+              await UserDefaults.saveCandidateUserSession(
+                  user, widget.userType);
               view.resetState();
               gotoRelevantScreenOnUserType(userType: widget.userType);
             }
@@ -407,7 +411,8 @@ class _SigInScreenState extends State<SigInScreen> {
             ));
             if (isVerified ?? false) {
               if (user != null) {
-                UserDefaults.saveCandidateUserSession(user, widget.userType);
+                await UserDefaults.saveCandidateUserSession(
+                    user, widget.userType);
                 view.resetState();
                 gotoRelevantScreenOnUserType(userType: widget.userType);
               }

@@ -68,13 +68,18 @@ class UserDefaults {
       CandidateSignInModel signInModel, String type) async {
     setCurrentUserId(signInModel.user!.id!.toString());
     String user = json.encode(signInModel.toJson());
-    return getPref().then((value) => value
+    await getPref().then((value) => value
       ..setString('userData', user)
       ..setString('type', type));
+    if (kDebugMode) {
+      printWrapped("xxxxxxxxxxx");
+      print(sharedPreferences!.getString('userData').toString());
+    }
   }
 
   static CandidateSignInModel? getCandidateUserSession() {
     CandidateSignInModel? user;
+
     if (sharedPreferences!.getString('userData') != null) {
       Map<String, dynamic> json =
           jsonDecode(sharedPreferences!.getString('userData')!);
@@ -84,11 +89,11 @@ class UserDefaults {
     return user;
   }
 
-  static void saveEmployerUserSession(
+  static Future<void> saveEmployerUserSession(
       EmployerSignInModel signInModel, String type) async {
     setCurrentUserId(signInModel.user!.id!.toString());
     String user = json.encode(signInModel.toJson());
-    getPref().then((value) => value
+    await getPref().then((value) => value
       ..setString('userData', user)
       ..setString('type', type));
     if (kDebugMode) {
@@ -113,7 +118,7 @@ class UserDefaults {
       TutorSignInModel signInModel, String type) async {
     setCurrentUserId(signInModel.user!.id!.toString());
     String user = json.encode(signInModel.toJson());
-    return getPref().then((value) => value
+    await getPref().then((value) => value
       ..setString('userData', user)
       ..setString('type', type));
     if (kDebugMode) {
