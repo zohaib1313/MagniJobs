@@ -69,7 +69,7 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  getFile() async {
+  getFile({onCompleteA}) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['jpg'],
@@ -82,6 +82,7 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
         profilePicImage = null;
         setValuesWithSharedPref();
         AppPopUps.showAlertDialog(message: 'Profile updated');
+        onCompleteA();
       });
     } else {
       // User canceled the picker
@@ -182,7 +183,7 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
     emailController.text = user?.user?.email ?? "";
     mobileController.text = user?.user?.mobile ?? "";
     addressController.text = user?.candidateModel?.address ?? '';
-    locationController.text = user?.candidateModel?.location ?? '00';
+
     dobController.text = user?.candidateModel?.dob != null
         ? DateFormat('yyyy-MM-dd')
             .format(DateTime.parse(user!.candidateModel!.dob!))
@@ -195,8 +196,13 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
     workExperienceController.text = user?.candidateModel?.workExperience ?? '';
     certificationController.text = user?.candidateModel?.certifications ?? '';
     examsController.text = user?.candidateModel?.exams ?? '';
-    /* pereferdLocation1.text =
-        getCountryNameFromId(0).id.toString();*/
+
     licenseController.text = user?.candidateModel?.license ?? '';
+    locationController.text = user?.candidateModel?.location ?? '00';
+    pereferdLocation1.text = user?.candidateModel?.preferredLocation ?? '00';
+    pereferdLocation2.text = user?.candidateModel?.preferredLocation2 ?? '00';
+    pereferdLocation3.text = user?.candidateModel?.preferredLocation3 ?? '00';
+    pereferdLocation4.text = user?.candidateModel?.preferredLocation4 ?? '00';
+    pereferdLocation5.text = user?.candidateModel?.preferredLocation5 ?? '00';
   }
 }

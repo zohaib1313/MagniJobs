@@ -28,25 +28,40 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<CountriesListViewModel>(myContext!, listen: false)
-        .loadCountries(completion: (countryModel) {
-      if (countryModel != null) {
-        UserDefaults.saveCountries(countryModel!);
-        Timer(
-            const Duration(seconds: 1),
-            () => {
-                  if (UserDefaults.getUserType() != null)
-                    {gotoRelevantScreenOnUserType()}
-                  else
-                    {
-                      Navigator.of(myContext!)
-                          .pushReplacementNamed(OnBoardingScreen.id)
-                    }
-                });
-      } else {
-        AppPopUps.showAlertDialog(message: "No Internet Connection");
-      }
-    });
+
+    if (UserDefaults.getCountriesList()?.countries != null) {
+      Timer(
+          const Duration(seconds: 3),
+          () => {
+                if (UserDefaults.getUserType() != null)
+                  {gotoRelevantScreenOnUserType()}
+                else
+                  {
+                    Navigator.of(myContext!)
+                        .pushReplacementNamed(OnBoardingScreen.id)
+                  }
+              });
+    } else {
+      Provider.of<CountriesListViewModel>(myContext!, listen: false)
+          .loadCountries(completion: (countryModel) {
+        if (countryModel != null) {
+          UserDefaults.saveCountries(countryModel!);
+          Timer(
+              const Duration(seconds: 1),
+              () => {
+                    if (UserDefaults.getUserType() != null)
+                      {gotoRelevantScreenOnUserType()}
+                    else
+                      {
+                        Navigator.of(myContext!)
+                            .pushReplacementNamed(OnBoardingScreen.id)
+                      }
+                  });
+        } else {
+          AppPopUps.showAlertDialog(message: "No Internet Connection");
+        }
+      });
+    }
   }
 
   void gotoRelevantScreenOnUserType() {

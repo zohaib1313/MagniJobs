@@ -350,7 +350,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                           !view.termsConditionAccepted;
                                       setState(() {});
                                     }),
-                                SizedBox(
+                                const SizedBox(
                                   width: 5,
                                 ),
                                 InkWell(

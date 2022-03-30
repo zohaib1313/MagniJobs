@@ -224,6 +224,10 @@ class CandidateModel {
   String? exams;
   String? license;
   String? preferredLocation;
+  String? preferredLocation2;
+  String? preferredLocation3;
+  String? preferredLocation4;
+  String? preferredLocation5;
   String? uploadedDocs;
   String? resume;
   String? nurseCertificate;
@@ -278,7 +282,6 @@ class CandidateModel {
     certifications = json['certifications'];
     exams = json['exams'];
     license = json['license'];
-    preferredLocation = json['preferred_location'];
     uploadedDocs = json['uploaded_docs'];
     resume = json['resume'];
     nurseCertificate = json['nurse_certificate'];
@@ -289,6 +292,11 @@ class CandidateModel {
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     deletedAt = json['deleted_at'];
+    preferredLocation = json['preferred_location'];
+    preferredLocation2 = json['preferred_location2'];
+    preferredLocation3 = json['preferred_location3'];
+    preferredLocation4 = json['preferred_location4'];
+    preferredLocation5 = json['preferred_location5'];
   }
 
   Map<String, dynamic> toJson() {
@@ -307,7 +315,6 @@ class CandidateModel {
     data['exams'] = this.exams;
     data['license'] = this.license;
     data['verified'] = this.verified;
-    data['preferred_location'] = this.preferredLocation;
     data['uploaded_docs'] = this.uploadedDocs;
     data['resume'] = this.resume;
     data['nurse_certificate'] = this.nurseCertificate;
@@ -318,6 +325,12 @@ class CandidateModel {
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     data['deleted_at'] = this.deletedAt;
+    data['preferred_location'] = this.preferredLocation;
+    data['preferred_location2'] = this.preferredLocation2;
+    data['preferred_location3'] = this.preferredLocation3;
+    data['preferred_location4'] = this.preferredLocation4;
+    data['preferred_location5'] = this.preferredLocation5;
+
     return data;
   }
 }
@@ -325,6 +338,7 @@ class CandidateModel {
 class EmployerModel {
   int? id;
   String? userId;
+  bool? verified;
   String? fullName;
   bool? isSubscribed;
   String? subscribedPlan;
@@ -338,16 +352,22 @@ class EmployerModel {
   String? website;
   String? location;
   String? logo;
+  String? preferredLocation;
+  String? preferredLocation2;
+  String? preferredLocation3;
+  String? preferredLocation4;
+  String? preferredLocation5;
   String? createdAt;
   String? updatedAt;
 
   EmployerModel(
       {this.id,
       this.userId,
+      this.verified,
+      this.fullName,
       this.isSubscribed,
       this.subscribedPlan,
       this.subExpiryDate,
-      this.fullName,
       this.companyName,
       this.address,
       this.contactNumber,
@@ -357,16 +377,22 @@ class EmployerModel {
       this.website,
       this.location,
       this.logo,
+      this.preferredLocation,
+      this.preferredLocation2,
+      this.preferredLocation3,
+      this.preferredLocation4,
+      this.preferredLocation5,
       this.createdAt,
       this.updatedAt});
 
   EmployerModel.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     userId = json['user_id'];
+    verified = json['verified'];
+    fullName = json['full_name'];
     isSubscribed = json['is_subscribed'];
     subscribedPlan = json['subscribed_plan'];
     subExpiryDate = json['sub_expiry_date'];
-    fullName = json['full_name'];
     companyName = json['company_name'];
     address = json['address'];
     contactNumber = json['contact_number'];
@@ -376,6 +402,11 @@ class EmployerModel {
     website = json['website'];
     location = json['location'];
     logo = json['logo'];
+    preferredLocation = json['preferred_location'];
+    preferredLocation2 = json['preferred_location2'];
+    preferredLocation3 = json['preferred_location3'];
+    preferredLocation4 = json['preferred_location4'];
+    preferredLocation5 = json['preferred_location5'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
   }
@@ -384,10 +415,11 @@ class EmployerModel {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
     data['user_id'] = this.userId;
+    data['verified'] = this.verified;
+    data['full_name'] = this.fullName;
     data['is_subscribed'] = this.isSubscribed;
     data['subscribed_plan'] = this.subscribedPlan;
     data['sub_expiry_date'] = this.subExpiryDate;
-    data['full_name'] = this.fullName;
     data['company_name'] = this.companyName;
     data['address'] = this.address;
     data['contact_number'] = this.contactNumber;
@@ -397,6 +429,11 @@ class EmployerModel {
     data['website'] = this.website;
     data['location'] = this.location;
     data['logo'] = this.logo;
+    data['preferred_location'] = this.preferredLocation;
+    data['preferred_location2'] = this.preferredLocation2;
+    data['preferred_location3'] = this.preferredLocation3;
+    data['preferred_location4'] = this.preferredLocation4;
+    data['preferred_location5'] = this.preferredLocation5;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     return data;

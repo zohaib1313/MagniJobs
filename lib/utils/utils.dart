@@ -151,6 +151,12 @@ Future<void> showMyTimePicker(
 
 Countries? getCountryNameFromId(int id) {
   CountriesModel? countriesModel = UserDefaults.getCountriesList();
-  return countriesModel?.countries
-      ?.firstWhere((element) => ((element.id ?? 0) == (id)));
+  Countries? countries;
+  countriesModel?.countries?.forEach((element) {
+    if (element.id == id) {
+      countries = element;
+    }
+  });
+
+  return countries;
 }

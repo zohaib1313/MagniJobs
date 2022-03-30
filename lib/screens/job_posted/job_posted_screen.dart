@@ -169,9 +169,14 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                           children: [
                             const Icon(Icons.filter_alt_rounded),
                             Expanded(
-                              child: Text(
-                                "Filter",
-                                style: AppTextStyles.textStyleBoldBodyMedium,
+                              child: GestureDetector(
+                                onTap: () {
+                                  showDialogg();
+                                },
+                                child: Text(
+                                  "Filter",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
                               ),
                             ),
                           ],
@@ -293,5 +298,103 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
         ),
       ),
     );
+  }
+
+  int selected = 1;
+
+  void showDialogg() {
+    showDialog(
+        context: myContext!,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              'Apply Filter ',
+              style: AppTextStyles.textStyleNormalBodyMedium,
+            ),
+            content: Row(
+              children: [
+                Flexible(
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selected = 1;
+                      });
+
+                      Navigator.pop(context);
+                      view.getMyJobs(completion: (aa) {
+                        setState(() {});
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: selected == 1
+                            ? AppColor.greenColor
+                            : AppColor.alphaGrey,
+                      ),
+                      child: Text(
+                        'My Job',
+                        style: TextStyle(
+                            color: selected == 1
+                                ? AppColor.whiteColor
+                                : AppColor.blackColor),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Flexible(
+                  child: InkWell(
+                    onTap: () {
+                      setState(() {
+                        selected = 2;
+                      });
+                      Navigator.pop(context);
+                      view.getAllJobs(completion: (aa) {
+                        setState(() {});
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: selected == 2
+                            ? AppColor.greenColor
+                            : AppColor.alphaGrey,
+                      ),
+                      child: Text(
+                        'All Job',
+                        style: TextStyle(
+                            color: selected == 2
+                                ? AppColor.whiteColor
+                                : AppColor.blackColor),
+                      ),
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 5),
+                Flexible(
+                  child: InkWell(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: AppColor.alphaGrey,
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style: TextStyle(color: AppColor.blackColor),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          );
+        });
   }
 }

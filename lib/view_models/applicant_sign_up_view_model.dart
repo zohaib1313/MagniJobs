@@ -94,14 +94,9 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
       "nationality": nationalityController.text,
       "gender": genderController.text,
       "marital_status": martialStatusController.text,
-      /*  "company_name":
-          companynameController.text.isEmpty ? "" : companynameController.text,
-      "contact_number": contactnumberController.text.isEmpty
-          ? ''
-          : contactnumberController.text,
-      "contact_email": contactemailController.text.isEmpty
-          ? ""
-          : contactemailController.text,*/
+      "certifications": certificatesController.text,
+      "exams": examsController.text,
+      "license": licenseController.text,
       "national_id": await MultipartFile.fromFile(
         nationalIdImage!.path,
         filename: basename(nationalIdImage!.path),

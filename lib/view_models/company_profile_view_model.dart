@@ -32,6 +32,12 @@ class CompanyProfileViewModel extends ChangeNotifier {
 
   String get selectedCountryId => _selectedCountryId;
 
+  TextEditingController pereferdLocation1 = TextEditingController();
+  TextEditingController pereferdLocation2 = TextEditingController();
+  TextEditingController pereferdLocation3 = TextEditingController();
+  TextEditingController pereferdLocation4 = TextEditingController();
+  TextEditingController pereferdLocation5 = TextEditingController();
+
   set selectedCountryId(String value) {
     _selectedCountryId = value;
   }
@@ -81,14 +87,19 @@ class CompanyProfileViewModel extends ChangeNotifier {
   void resetState() {
     _selectedCountryId = '';
     queryEditingController.clear();
+    pereferdLocation1.clear();
+    pereferdLocation2.clear();
+    pereferdLocation3.clear();
+    pereferdLocation4.clear();
+    pereferdLocation5.clear();
   }
 
   var profilePicImage;
 
-  getFile() async {
+  getFile({onCompleteA}) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
-        allowedExtensions: ['jpg', 'pdf', 'doc'],
+        allowedExtensions: ['jpg'],
         allowMultiple: false);
     if (result != null) {
       File file = File(result.files.single.path!);
@@ -96,6 +107,7 @@ class CompanyProfileViewModel extends ChangeNotifier {
       updateProfile(onComplete: () {
         profilePicImage = null;
         AppPopUps.showAlertDialog(message: 'Profile updated');
+        onCompleteA();
       });
     } else {
       // User canceled the picker
@@ -131,6 +143,11 @@ class CompanyProfileViewModel extends ChangeNotifier {
               filename: basename(profilePicImage!.path),
             )
           : "",
+      "preferred_location": pereferdLocation1.text,
+      "preferred_location2": pereferdLocation2.text,
+      "preferred_location3": pereferdLocation3.text,
+      "preferred_location4": pereferdLocation4.text,
+      "preferred_location5": pereferdLocation5.text,
     });
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -191,5 +208,35 @@ class CompanyProfileViewModel extends ChangeNotifier {
             Navigator.of(myContext!).pop();
           });
     });
+  }
+
+  void setPreferedLocations() {
+    pereferdLocation1.text = (UserDefaults.getEmployerUserSession()
+                ?.employerModel
+                ?.preferredLocation ??
+            1)
+        .toString();
+    pereferdLocation2.text = (UserDefaults.getEmployerUserSession()
+                ?.employerModel
+                ?.preferredLocation2 ??
+            1)
+        .toString();
+    pereferdLocation3.text = (UserDefaults.getEmployerUserSession()
+                ?.employerModel
+                ?.preferredLocation3 ??
+            1)
+        .toString();
+
+    pereferdLocation4.text = (UserDefaults.getEmployerUserSession()
+                ?.employerModel
+                ?.preferredLocation4 ??
+            1)
+        .toString();
+
+    pereferdLocation5.text = (UserDefaults.getEmployerUserSession()
+                ?.employerModel
+                ?.preferredLocation5 ??
+            1)
+        .toString();
   }
 }

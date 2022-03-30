@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_countdown_timer/flutter_countdown_timer.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -115,11 +116,17 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
             ///todo
-            Navigator.of(myContext!).pop(true);
-/*            view.checkMyNumber(completion: () {
-              view.setIsVerificationSent(true);
-              setState(() {});
-            });*/
+            // Navigator.of(myContext!).pop(true);
+
+            if (view.phonenumberController.text.isNotEmpty) {
+              view.checkMyNumber(completion: () {
+                view.setIsVerificationSent(true);
+                setState(() {});
+              });
+            } else {
+              AppPopUps.showSnackvBar(
+                  message: 'Enter Number', context: context);
+            }
           },
         ),
         space,

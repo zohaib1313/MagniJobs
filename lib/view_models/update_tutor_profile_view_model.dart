@@ -53,7 +53,7 @@ class UpdateTutorProfileViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  getFile() async {
+  getFile({onCompleteA}) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['jpg', 'pdf', 'doc'],
@@ -64,6 +64,7 @@ class UpdateTutorProfileViewModel extends ChangeNotifier {
       setValuesWithSharedPref();
       updateProfile(onComplete: () {
         AppPopUps.showAlertDialog(message: 'Profile updated');
+        onCompleteA();
       });
     } else {
       // User canceled the picker

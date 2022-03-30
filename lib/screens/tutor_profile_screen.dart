@@ -243,7 +243,11 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
   imageEditWidget() {
     return GestureDetector(
       onTap: () {
-        view.getFile();
+        view.getFile(onCompleteA: () {
+          imageCache?.clear();
+          imageCache?.clearLiveImages();
+          setState(() {});
+        });
       },
       child: Container(
         padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
@@ -267,16 +271,19 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                       backgroundColor: Colors.grey.shade200,
                       child: CircleAvatar(
                         radius: 250.r,
+                        key: UniqueKey(),
                         backgroundImage: (UserDefaults.getCandidateUserSession()
                                     ?.user
                                     ?.profile !=
                                 null)
-                            ? Image.network(ApiConstants.profilePicsBaseUrl +
+                            ? Image.network(
+                                ApiConstants.profilePicsBaseUrl +
                                     (UserDefaults.getTutorUserSession()
                                             ?.user
                                             ?.profile ??
-                                        ""))
-                                .image
+                                        ""),
+                                key: UniqueKey(),
+                              ).image
                             : const AssetImage(
                                 'assets/images/place_your_image.png'),
                       ),

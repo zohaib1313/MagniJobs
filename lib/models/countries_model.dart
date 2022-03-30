@@ -1,7 +1,7 @@
 import 'package:magnijobs_rnr/dio_network/decodable.dart';
 
 class CountriesModel implements Decodable {
-  List<Countries>? countries;
+  List<Countries>? countries = [];
 
   CountriesModel({this.countries});
 

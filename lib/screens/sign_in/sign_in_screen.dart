@@ -435,26 +435,63 @@ class _SigInScreenState extends State<SigInScreen> {
     if (userType.isNotEmpty) {
       switch (userType) {
         case 'employer':
-          Navigator.of(myContext!).pop();
-          Navigator.of(myContext!)
-              .pushReplacementNamed(CompanyProfileScreen.id);
+          if (UserDefaults.getEmployerUserSession()?.employerModel != null) {
+            Navigator.of(myContext!).pop();
+            Navigator.of(myContext!)
+                .pushReplacementNamed(CompanyProfileScreen.id);
+          } else {
+            AppPopUps.showAlertDialog(
+                message: 'Not Employer User',
+                onSubmit: () {
+                  UserDefaults().clearAll();
+                  Navigator.pop(context);
+                });
+          }
 
           break;
         case 'applicant':
-          Navigator.of(myContext!).pop();
-          Navigator.of(myContext!)
-              .pushReplacementNamed(EmployeePortalScreen.id);
+          if (UserDefaults.getCandidateUserSession()?.candidateModel != null) {
+            Navigator.of(myContext!).pop();
+            Navigator.of(myContext!)
+                .pushReplacementNamed(EmployeePortalScreen.id);
+          } else {
+            AppPopUps.showAlertDialog(
+                message: 'Not Applicant User',
+                onSubmit: () {
+                  UserDefaults().clearAll();
+                  Navigator.pop(context);
+                });
+          }
 
           break;
         case 'tutor':
-          Navigator.of(myContext!).pop();
-          Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
+          if (UserDefaults.getTutorUserSession()?.tutorModel != null) {
+            Navigator.of(myContext!).pop();
+            Navigator.of(myContext!)
+                .pushReplacementNamed(TutorProfileScreen.id);
+          } else {
+            AppPopUps.showAlertDialog(
+                message: 'Not Tutor User',
+                onSubmit: () {
+                  UserDefaults().clearAll();
+                  Navigator.pop(context);
+                });
+          }
 
           break;
         case 'attendie':
-          Navigator.of(myContext!).pop();
-          Navigator.of(myContext!)
-              .pushReplacementNamed(AttendieCandidateProfileScreen.id);
+          if (UserDefaults.getCandidateUserSession()?.candidateModel != null) {
+            Navigator.of(myContext!).pop();
+            Navigator.of(myContext!)
+                .pushReplacementNamed(AttendieCandidateProfileScreen.id);
+          } else {
+            AppPopUps.showAlertDialog(
+                message: 'Not Attendie User',
+                onSubmit: () {
+                  UserDefaults().clearAll();
+                  Navigator.pop(context);
+                });
+          }
 
           break;
       }

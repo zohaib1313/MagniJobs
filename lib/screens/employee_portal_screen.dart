@@ -286,7 +286,11 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
     return InkWell(
       onTap: () {
         Provider.of<UpdateCandidateProfileViewModel>(myContext!, listen: false)
-            .getFile();
+            .getFile(onCompleteA: () {
+          imageCache?.clear();
+          imageCache?.clearLiveImages();
+          setState(() {});
+        });
       },
       child: Container(
         padding: EdgeInsets.only(top: 30.h, bottom: 50.h),
@@ -343,27 +347,31 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                       backgroundColor: Colors.grey.shade200,
                       child: CircleAvatar(
                         radius: 250.r,
-                        backgroundImage: Provider.of<UpdateCandidateProfileViewModel>(
+                        key: UniqueKey(),
+                        backgroundImage: Provider.of<
+                                            UpdateCandidateProfileViewModel>(
                                         myContext!,
                                         listen: false)
                                     .profilePicImage !=
                                 null
-                            ? (Image.file(
-                                    Provider.of<UpdateCandidateProfileViewModel>(
-                                            myContext!,
-                                            listen: false)
-                                        .profilePicImage!)
+                            ? (Image.file(Provider.of<
+                                            UpdateCandidateProfileViewModel>(
+                                        myContext!,
+                                        listen: false)
+                                    .profilePicImage!)
                                 .image)
                             : (UserDefaults.getCandidateUserSession()
                                         ?.user
                                         ?.profile !=
                                     null)
-                                ? Image.network(ApiConstants.profilePicsBaseUrl +
+                                ? Image.network(
+                                    ApiConstants.profilePicsBaseUrl +
                                         (UserDefaults.getCandidateUserSession()
                                                 ?.user
                                                 ?.profile ??
-                                            ""))
-                                    .image
+                                            ""),
+                                    key: UniqueKey(),
+                                  ).image
                                 : const AssetImage(
                                     'assets/images/place_your_image.png'),
                       ),

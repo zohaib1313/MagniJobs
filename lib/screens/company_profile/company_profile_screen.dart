@@ -15,6 +15,7 @@ import 'package:provider/provider.dart';
 
 import '../../profile_settting_screen.dart';
 import '../../routes.dart';
+import '../../utils/app_alert_bottom_sheet.dart';
 import '../../view_models/all_packges_view_model.dart';
 import '../../view_models/country_and_job_view_model.dart';
 import '../country_and_job/country_and_job_screen.dart';
@@ -22,7 +23,7 @@ import '../job_post/job_post_screen.dart';
 import '../packages_/packages_screen.dart';
 
 class CompanyProfileScreen extends StatefulWidget {
-  CompanyProfileScreen({Key? key}) : super(key: key);
+  const CompanyProfileScreen({Key? key}) : super(key: key);
   static const id = "CompanyProfileScreen";
 
   @override
@@ -34,12 +35,14 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
   final space = SizedBox(height: 20.h);
   late Stream<List<Countries?>> streamCountries;
   late Stream<List<Jobs?>> streamJobs;
+  String? logo = UserDefaults.getEmployerUserSession()?.employerModel?.logo;
 
   @override
   void initState() {
-    super.initState();
     streamCountries = view.loadCountries();
     streamJobs = view.loadJobs();
+    view.setPreferedLocations();
+    super.initState();
   }
 
   @override
@@ -278,6 +281,232 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                       ),
                       space,
                       space,
+                      Button(
+                        buttonText: 'Preferred Locations',
+                        textColor: AppColor.whiteColor,
+                        onTap: () {
+                          BottomSheets().showBottomSheet(
+                              context: context,
+                              child: Padding(
+                                padding: const EdgeInsets.all(18.0),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Text(
+                                          "",
+                                          style: AppTextStyles
+                                              .textStyleNormalBodyMedium,
+                                        ),
+                                        GestureDetector(
+                                          onTap: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: const Icon(
+                                            Icons.cancel,
+                                            color: AppColor.blackColor,
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                    space,
+                                    space,
+                                    MyDropDown(
+                                      onChange: (value) {
+                                        view.pereferdLocation1.text =
+                                            value.toString();
+                                      },
+                                      hintText: getCountryNameFromId(
+                                            (int.parse(
+                                                view.pereferdLocation1.text)),
+                                          )?.name ??
+                                          "Preferred Location",
+                                      labelText: "",
+                                      leftPadding: 0,
+                                      rightPadding: 0,
+                                      labelColor: AppColor.redColor,
+                                      borderColor: AppColor.alphaGrey,
+                                      fillColor: AppColor.alphaGrey,
+                                      suffixIcon:
+                                          "assets/icons/drop_down_ic.svg",
+                                      itemFuntion:
+                                          UserDefaults.getCountriesList()
+                                              ?.countries!
+                                              .map((e) => DropdownMenuItem(
+                                                    value: e.id.toString(),
+                                                    child: Text(
+                                                      e.name ?? '',
+                                                      style: AppTextStyles
+                                                          .textStyleBoldBodySmall,
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                      validator: (string) {
+                                        return null;
+                                      },
+                                    ),
+                                    space,
+                                    MyDropDown(
+                                      onChange: (value) {
+                                        view.pereferdLocation2.text =
+                                            value.toString();
+                                      },
+                                      hintText: getCountryNameFromId(
+                                            (int.parse(
+                                                view.pereferdLocation2.text)),
+                                          )?.name ??
+                                          "Preferred Location",
+                                      labelText: "",
+                                      leftPadding: 0,
+                                      rightPadding: 0,
+                                      labelColor: AppColor.redColor,
+                                      borderColor: AppColor.alphaGrey,
+                                      fillColor: AppColor.alphaGrey,
+                                      suffixIcon:
+                                          "assets/icons/drop_down_ic.svg",
+                                      itemFuntion:
+                                          UserDefaults.getCountriesList()
+                                              ?.countries!
+                                              .map((e) => DropdownMenuItem(
+                                                    value: e.id.toString(),
+                                                    child: Text(
+                                                      e.name ?? '',
+                                                      style: AppTextStyles
+                                                          .textStyleBoldBodySmall,
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                      validator: (string) {
+                                        return null;
+                                      },
+                                    ),
+                                    space,
+                                    MyDropDown(
+                                      onChange: (value) {
+                                        view.pereferdLocation3.text =
+                                            value.toString();
+                                      },
+                                      hintText: getCountryNameFromId(
+                                            (int.parse(
+                                                view.pereferdLocation3.text)),
+                                          )?.name ??
+                                          "Preferred Location",
+                                      labelText: "",
+                                      leftPadding: 0,
+                                      rightPadding: 0,
+                                      labelColor: AppColor.redColor,
+                                      borderColor: AppColor.alphaGrey,
+                                      fillColor: AppColor.alphaGrey,
+                                      suffixIcon:
+                                          "assets/icons/drop_down_ic.svg",
+                                      itemFuntion:
+                                          UserDefaults.getCountriesList()
+                                              ?.countries!
+                                              .map((e) => DropdownMenuItem(
+                                                    value: e.id.toString(),
+                                                    child: Text(
+                                                      e.name ?? '',
+                                                      style: AppTextStyles
+                                                          .textStyleBoldBodySmall,
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                      validator: (string) {
+                                        return null;
+                                      },
+                                    ),
+                                    space,
+                                    MyDropDown(
+                                      onChange: (value) {
+                                        view.pereferdLocation4.text =
+                                            value.toString();
+                                      },
+                                      hintText: getCountryNameFromId(
+                                            (int.parse(
+                                                view.pereferdLocation4.text)),
+                                          )?.name ??
+                                          "Preferred Location",
+                                      labelText: "",
+                                      leftPadding: 0,
+                                      rightPadding: 0,
+                                      labelColor: AppColor.redColor,
+                                      borderColor: AppColor.alphaGrey,
+                                      fillColor: AppColor.alphaGrey,
+                                      suffixIcon:
+                                          "assets/icons/drop_down_ic.svg",
+                                      itemFuntion:
+                                          UserDefaults.getCountriesList()
+                                              ?.countries!
+                                              .map((e) => DropdownMenuItem(
+                                                    value: e.id.toString(),
+                                                    child: Text(
+                                                      e.name ?? '',
+                                                      style: AppTextStyles
+                                                          .textStyleBoldBodySmall,
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                      validator: (string) {
+                                        return null;
+                                      },
+                                    ),
+                                    space,
+                                    MyDropDown(
+                                      onChange: (value) {
+                                        view.pereferdLocation5.text =
+                                            value.toString();
+                                      },
+                                      hintText: getCountryNameFromId(
+                                            (int.parse(
+                                                view.pereferdLocation5.text)),
+                                          )?.name ??
+                                          "Preferred Location",
+                                      labelText: "",
+                                      leftPadding: 0,
+                                      rightPadding: 0,
+                                      labelColor: AppColor.redColor,
+                                      borderColor: AppColor.alphaGrey,
+                                      fillColor: AppColor.alphaGrey,
+                                      suffixIcon:
+                                          "assets/icons/drop_down_ic.svg",
+                                      itemFuntion:
+                                          UserDefaults.getCountriesList()
+                                              ?.countries!
+                                              .map((e) => DropdownMenuItem(
+                                                    value: e.id.toString(),
+                                                    child: Text(
+                                                      e.name ?? '',
+                                                      style: AppTextStyles
+                                                          .textStyleBoldBodySmall,
+                                                    ),
+                                                  ))
+                                              .toList(),
+                                      validator: (string) {
+                                        return null;
+                                      },
+                                    ),
+                                    space,
+                                    space,
+                                    Button(
+                                      buttonText: 'Save',
+                                      textColor: AppColor.whiteColor,
+                                      onTap: () {
+                                        view.updateProfile(onComplete: () {
+                                          Navigator.pop(context);
+                                        });
+                                      },
+                                    ),
+                                    space,
+                                    space,
+                                  ],
+                                ),
+                              ));
+                        },
+                      ),
+                      space,
                       space,
                     ],
                   )
@@ -313,9 +542,16 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
   }
 
   imageEditWidget() {
+    print("vvvv");
     return GestureDetector(
       onTap: () {
-        view.getFile();
+        view.getFile(onCompleteA: () {
+          if (mounted) {
+            imageCache?.clear();
+            imageCache?.clearLiveImages();
+            loadLogo();
+          }
+        });
       },
       child: Container(
         padding: EdgeInsets.only(top: 50.h, bottom: 50.h),
@@ -338,16 +574,11 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                       backgroundColor: Colors.grey.shade200,
                       child: CircleAvatar(
                         radius: 250.r,
-                        backgroundImage: (UserDefaults.getEmployerUserSession()
-                                    ?.employerModel
-                                    ?.logo !=
-                                null)
+                        key: UniqueKey(),
+                        backgroundImage: (logo != null)
                             ? Image.network(
-                                ApiConstants.employer_logos +
-                                    (UserDefaults.getEmployerUserSession()
-                                            ?.employerModel
-                                            ?.logo ??
-                                        ''),
+                                ApiConstants.employer_logos + (logo ?? ''),
+                                key: UniqueKey(),
                               ).image
                             : const AssetImage(
                                 'assets/images/place_your_image.png'),
@@ -390,5 +621,11 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
         ),
       ),
     );
+  }
+
+  void loadLogo() {
+    setState(() {
+      logo = UserDefaults.getEmployerUserSession()?.employerModel?.logo;
+    });
   }
 }

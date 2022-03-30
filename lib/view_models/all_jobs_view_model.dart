@@ -223,4 +223,36 @@ class AllJobsViewModel extends ChangeNotifier {
       return Future.value(null);
     });
   }
+
+  void getMyJobs({completion}) {
+    AppPopUps().showProgressDialog(context: myContext);
+    Map<String, dynamic> body = {};
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.get_my_jobs_as_an_employer,
+              body: body,
+            ),
+            create: () =>
+                APIResponse<AllJobsModel>(create: () => AllJobsModel()),
+            apiFunction: getAllJobs)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      filteredJobs.clear();
+      alJobs = response.response?.data?.jobs?.jobs ?? [];
+      filteredJobs.addAll(alJobs);
+      completion(alJobs);
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
+  }
 }

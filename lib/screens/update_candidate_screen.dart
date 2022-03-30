@@ -5,13 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/styles.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/update_candidate_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
-import '../models/countries_model.dart';
-import '../view_models/company_profile_view_model.dart';
 
 class UpdateCandidateScreen extends StatefulWidget {
   UpdateCandidateScreen({Key? key}) : super(key: key);
@@ -118,49 +117,39 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                               validateDate: true,
                               controller: view.addressController),
                           space,
-                          StreamBuilder(
-                            stream: Provider.of<CompanyProfileViewModel>(
-                                    myContext!,
-                                    listen: false)
-                                .loadCountries(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Countries?>> snapshot) {
-                              if (snapshot.hasData) {
-                                return MyDropDown(
-                                  onChange: (value) {
-                                    view.locationController.text =
-                                        value.toString();
-                                  },
-                                  hintText: "Location",
-                                  labelText: "",
-                                  leftPadding: 0,
-                                  rightPadding: 0,
-                                  labelColor: AppColor.redColor,
-                                  borderColor: AppColor.alphaGrey,
-                                  fillColor: AppColor.whiteColor,
-                                  suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  validator: (string) {
-                                    if (((string ?? '').isEmpty) ||
-                                        view.locationController.text.isEmpty ||
-                                        view.locationController.text == '00') {
-                                      return 'Select Location';
-                                    }
-                                    return null;
-                                  },
-                                );
+                          MyDropDown(
+                            onChange: (value) {
+                              view.locationController.text = value.toString();
+                            },
+                            hintText: getCountryNameFromId(
+                                  (int.parse(view.locationController.text)),
+                                )?.name ??
+                                "Location",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: UserDefaults.getCountriesList()
+                                ?.countries!
+                                .map((e) => DropdownMenuItem(
+                                      value: e.id.toString(),
+                                      child: Text(
+                                        e.name ?? '',
+                                        style: AppTextStyles
+                                            .textStyleBoldBodySmall,
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (string) {
+                              if (((string ?? '').isEmpty) ||
+                                  view.locationController.text.isEmpty ||
+                                  view.locationController.text == '00') {
+                                return 'Select Location';
                               }
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                              return null;
                             },
                           ),
                           space,
@@ -203,39 +192,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             },
                             hintText: "Gender",
                             labelText: "",
-                            leftPadding: 0,
-                            rightPadding: 0,
-                            labelColor: AppColor.redColor,
-                            borderColor: AppColor.whiteColor,
-                            fillColor: AppColor.whiteColor,
-                            suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Single",
-                                child: Text(
-                                  "Single",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Married",
-                                child: Text(
-                                  "Married",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
-                            validator: (string) {
-                              return null;
-                            },
-                          ),
-                          space,
-                          MyDropDown(
-                            onChange: (value) {
-                              view.martialStatusController.text = value;
-                            },
-                            hintText: "Marital Status",
-                            labelText: "",
+                            value: view.genderController.text,
                             leftPadding: 0,
                             rightPadding: 0,
                             labelColor: AppColor.redColor,
@@ -262,6 +219,40 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                               return null;
                             },
                           ),
+                          space,
+                          MyDropDown(
+                            onChange: (value) {
+                              view.martialStatusController.text = value;
+                            },
+                            hintText: "Marital Status",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            value: view.martialStatusController.text,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.whiteColor,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: 'assets/icons/drop_down_ic.svg',
+                            itemFuntion: [
+                              DropdownMenuItem(
+                                value: "Single",
+                                child: Text(
+                                  "Single",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
+                              ),
+                              DropdownMenuItem(
+                                value: "Married",
+                                child: Text(
+                                  "Married",
+                                  style: AppTextStyles.textStyleBoldBodySmall,
+                                ),
+                              ),
+                            ],
+                            validator: (string) {
+                              return null;
+                            },
+                          ),
                           getInputItem(
                               hint: "School",
                               controller: view.schoolController),
@@ -277,245 +268,161 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                               hint: "License",
                               controller: view.licenseController),
                           space,
-                          StreamBuilder(
-                            stream: Provider.of<CompanyProfileViewModel>(
-                                    myContext!,
-                                    listen: false)
-                                .loadCountries(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Countries?>> snapshot) {
-                              if (snapshot.hasData) {
-                                return MyDropDown(
-                                  onChange: (value) {
-                                    view.pereferdLocation1.text =
-                                        value.toString();
-                                  },
-                                  hintText: "Preferred Location",
-                                  labelText: "",
-                                  leftPadding: 0,
-                                  rightPadding: 0,
-                                  labelColor: AppColor.redColor,
-                                  borderColor: AppColor.alphaGrey,
-                                  fillColor: AppColor.whiteColor,
-                                  suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  validator: (string) {
-                                    /*   if (((string ?? '').isEmpty ||
-                                        view.preferredlocationController.text
-                                            .isEmpty ||
-                                        view.preferredlocationController.text ==
-                                            '00')) {
-                                      return 'Select Preferred Location';
-                                    }*/
-                                    return null;
-                                  },
-                                );
-                              }
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                          MyDropDown(
+                            onChange: (value) {
+                              view.pereferdLocation1.text = value.toString();
+                            },
+                            hintText: getCountryNameFromId(
+                                  (int.parse(view.pereferdLocation1.text)),
+                                )?.name ??
+                                "Preferred Location",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: UserDefaults.getCountriesList()
+                                ?.countries!
+                                .map((e) => DropdownMenuItem(
+                                      value: e.id.toString(),
+                                      child: Text(
+                                        e.name ?? '',
+                                        style: AppTextStyles
+                                            .textStyleBoldBodySmall,
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (string) {
+                              return null;
                             },
                           ),
                           space,
-                          StreamBuilder(
-                            stream: Provider.of<CompanyProfileViewModel>(
-                                    myContext!,
-                                    listen: false)
-                                .loadCountries(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Countries?>> snapshot) {
-                              if (snapshot.hasData) {
-                                return MyDropDown(
-                                  onChange: (value) {
-                                    view.pereferdLocation2.text =
-                                        value.toString();
-                                  },
-                                  hintText: "Preferred Location",
-                                  labelText: "",
-                                  leftPadding: 0,
-                                  rightPadding: 0,
-                                  labelColor: AppColor.redColor,
-                                  borderColor: AppColor.alphaGrey,
-                                  fillColor: AppColor.whiteColor,
-                                  suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  validator: (string) {
-                                    /*  if (((string ?? '').isEmpty ||
-                                        view.preferredlocationController.text
-                                            .isEmpty ||
-                                        view.preferredlocationController.text ==
-                                            '00')) {
-                                      return 'Select Preferred Location';
-                                    }*/
-                                    return null;
-                                  },
-                                );
-                              }
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                          MyDropDown(
+                            onChange: (value) {
+                              view.pereferdLocation2.text = value.toString();
+                            },
+                            hintText: getCountryNameFromId(
+                                  (int.parse(view.pereferdLocation2.text)),
+                                )?.name ??
+                                "Preferred Location",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: UserDefaults.getCountriesList()
+                                ?.countries!
+                                .map((e) => DropdownMenuItem(
+                                      value: e.id.toString(),
+                                      child: Text(
+                                        e.name ?? '',
+                                        style: AppTextStyles
+                                            .textStyleBoldBodySmall,
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (string) {
+                              return null;
                             },
                           ),
                           space,
-                          StreamBuilder(
-                            stream: Provider.of<CompanyProfileViewModel>(
-                                    myContext!,
-                                    listen: false)
-                                .loadCountries(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Countries?>> snapshot) {
-                              if (snapshot.hasData) {
-                                return MyDropDown(
-                                  onChange: (value) {
-                                    view.pereferdLocation3.text =
-                                        value.toString();
-                                  },
-                                  hintText: "Preferred Location",
-                                  labelText: "",
-                                  leftPadding: 0,
-                                  rightPadding: 0,
-                                  labelColor: AppColor.redColor,
-                                  borderColor: AppColor.alphaGrey,
-                                  fillColor: AppColor.whiteColor,
-                                  suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  validator: (string) {
-                                    /*  if (((string ?? '').isEmpty ||
-                                        view.preferredlocationController.text
-                                            .isEmpty ||
-                                        view.preferredlocationController.text ==
-                                            '00')) {
-                                      return 'Select Preferred Location';
-                                    }*/
-                                    return null;
-                                  },
-                                );
-                              }
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                          MyDropDown(
+                            onChange: (value) {
+                              view.pereferdLocation3.text = value.toString();
+                            },
+                            hintText: getCountryNameFromId(
+                                  (int.parse(view.pereferdLocation3.text)),
+                                )?.name ??
+                                "Preferred Location",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: UserDefaults.getCountriesList()
+                                ?.countries!
+                                .map((e) => DropdownMenuItem(
+                                      value: e.id.toString(),
+                                      child: Text(
+                                        e.name ?? '',
+                                        style: AppTextStyles
+                                            .textStyleBoldBodySmall,
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (string) {
+                              return null;
                             },
                           ),
                           space,
-                          StreamBuilder(
-                            stream: Provider.of<CompanyProfileViewModel>(
-                                    myContext!,
-                                    listen: false)
-                                .loadCountries(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Countries?>> snapshot) {
-                              if (snapshot.hasData) {
-                                return MyDropDown(
-                                  onChange: (value) {
-                                    view.pereferdLocation4.text =
-                                        value.toString();
-                                  },
-                                  hintText: "Preferred Location",
-                                  labelText: "",
-                                  leftPadding: 0,
-                                  rightPadding: 0,
-                                  labelColor: AppColor.redColor,
-                                  borderColor: AppColor.alphaGrey,
-                                  fillColor: AppColor.whiteColor,
-                                  suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  validator: (string) {
-                                    /*  if (((string ?? '').isEmpty ||
-                                        view.preferredlocationController.text
-                                            .isEmpty ||
-                                        view.preferredlocationController.text ==
-                                            '00')) {
-                                      return 'Select Preferred Location';
-                                    }*/
-                                    return null;
-                                  },
-                                );
-                              }
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                          MyDropDown(
+                            onChange: (value) {
+                              view.pereferdLocation4.text = value.toString();
+                            },
+                            hintText: getCountryNameFromId(
+                                  (int.parse(view.pereferdLocation4.text)),
+                                )?.name ??
+                                "Preferred Location",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: UserDefaults.getCountriesList()
+                                ?.countries!
+                                .map((e) => DropdownMenuItem(
+                                      value: e.id.toString(),
+                                      child: Text(
+                                        e.name ?? '',
+                                        style: AppTextStyles
+                                            .textStyleBoldBodySmall,
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (string) {
+                              return null;
                             },
                           ),
                           space,
-                          StreamBuilder(
-                            stream: Provider.of<CompanyProfileViewModel>(
-                                    myContext!,
-                                    listen: false)
-                                .loadCountries(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<List<Countries?>> snapshot) {
-                              if (snapshot.hasData) {
-                                return MyDropDown(
-                                  onChange: (value) {
-                                    view.pereferdLocation5.text =
-                                        value.toString();
-                                  },
-                                  hintText: "Preferred Location",
-                                  labelText: "",
-                                  leftPadding: 0,
-                                  rightPadding: 0,
-                                  labelColor: AppColor.redColor,
-                                  borderColor: AppColor.alphaGrey,
-                                  fillColor: AppColor.whiteColor,
-                                  suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  validator: (string) {
-                                    /*  if (((string ?? '').isEmpty ||
-                                        view.preferredlocationController.text
-                                            .isEmpty ||
-                                        view.preferredlocationController.text ==
-                                            '00')) {
-                                      return 'Select Preferred Location';
-                                    }*/
-                                    return null;
-                                  },
-                                );
-                              }
-                              return const Center(
-                                  child: CircularProgressIndicator());
+                          MyDropDown(
+                            onChange: (value) {
+                              view.pereferdLocation5.text = value.toString();
+                            },
+                            hintText: getCountryNameFromId(
+                                  (int.parse(view.pereferdLocation5.text)),
+                                )?.name ??
+                                "Preferred Location",
+                            labelText: "",
+                            leftPadding: 0,
+                            rightPadding: 0,
+                            labelColor: AppColor.redColor,
+                            borderColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
+                            suffixIcon: "assets/icons/drop_down_ic.svg",
+                            itemFuntion: UserDefaults.getCountriesList()
+                                ?.countries!
+                                .map((e) => DropdownMenuItem(
+                                      value: e.id.toString(),
+                                      child: Text(
+                                        e.name ?? '',
+                                        style: AppTextStyles
+                                            .textStyleBoldBodySmall,
+                                      ),
+                                    ))
+                                .toList(),
+                            validator: (string) {
+                              return null;
                             },
                           ),
+                          space,
                           space,
                         ],
                       ),
