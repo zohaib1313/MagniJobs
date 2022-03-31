@@ -22,6 +22,10 @@ class AllJobsViewModel extends ChangeNotifier {
 
   bool _toogle = true;
 
+  TextEditingController countryFilterJobSalaryController =
+      TextEditingController();
+  TextEditingController dueDateFilterController = TextEditingController();
+
   bool get toogle => _toogle;
 
   TextEditingController searchJobPostedController = TextEditingController();
@@ -134,23 +138,18 @@ class AllJobsViewModel extends ChangeNotifier {
   }
 
   void searchJobPosted() {
-    printWrapped(alJobs.length.toString());
     filteredJobs.clear();
     if (searchJobPostedController.text.isEmpty) {
       printWrapped("empty");
       filteredJobs.addAll(alJobs);
     } else {
+      String query = searchJobPostedController.text.toLowerCase();
+
       for (var element in alJobs) {
-        if (searchJobPostedController.text
-                .toLowerCase()
-                .contains(element.job ?? "".toLowerCase()) ||
-            searchJobPostedController.text
-                .toLowerCase()
-                .contains(element.jobDescription ?? "".toLowerCase()) ||
-            searchJobPostedController.text
-                .toLowerCase()
-                .contains(element.poster ?? "".toLowerCase())) {
+        if (((element.job ?? "").toLowerCase()).contains(query) ||
+            ((element.jobDescription ?? "").toLowerCase()).contains(query)) {
           filteredJobs.add(element);
+          printWrapped("notify");
         }
       }
     }
@@ -206,7 +205,7 @@ class AllJobsViewModel extends ChangeNotifier {
             apiFunction: deleteJob)
         .then((response) {
       AppPopUps().dissmissDialog();
-      getAllJobs(completion: (jobs) {
+      getMyJobs(completion: (jobs) {
         completion();
       });
 
@@ -236,12 +235,12 @@ class AllJobsViewModel extends ChangeNotifier {
             ),
             create: () =>
                 APIResponse<AllJobsModel>(create: () => AllJobsModel()),
-            apiFunction: getAllJobs)
+            apiFunction: getMyJobs)
         .then((response) {
       AppPopUps().dissmissDialog();
       filteredJobs.clear();
       alJobs = response.response?.data?.jobs?.jobs ?? [];
-      filteredJobs.addAll(alJobs);
+      getAppliedFilterJob(alJobs);
       completion(alJobs);
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -254,5 +253,22 @@ class AllJobsViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
+  }
+
+  void getAppliedFilterJob(List<Jobs> jobs) {
+    List<Jobs> filteringJobs = [];
+
+    if (countryFilterJobSalaryController.text.isNotEmpty) {
+      for (var job in jobs) {
+        if (int.parse(countryFilterJobSalaryController.text) <=
+            (double.parse(job.salary ?? "0.0")).toInt()) {
+          filteringJobs.add(job);
+        }
+      }
+
+      filteredJobs.addAll(filteringJobs);
+    } else {
+      filteredJobs.addAll(jobs);
+    }
   }
 }

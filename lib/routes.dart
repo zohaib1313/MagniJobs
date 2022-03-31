@@ -1,7 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:magnijobs_rnr/screens/addpayment/add_payment_screen.dart';
 import 'package:magnijobs_rnr/screens/all_jobs_screen.dart';
-import 'package:magnijobs_rnr/screens/applicant_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/attendie_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/chat/all_chats_page.dart';
 import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
@@ -12,7 +11,6 @@ import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
 import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
-import 'package:magnijobs_rnr/screens/tutor_sign_up_screen.dart';
 import 'package:magnijobs_rnr/screens/update_candidate_screen.dart';
 import 'package:magnijobs_rnr/screens/update_employer_screen.dart';
 import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
@@ -65,12 +63,10 @@ final Map<String, Widget Function(BuildContext)> routes = {
   VerifyNumberScreen.id: (context) => VerifyNumberScreen(),
   CompanyProfileScreen.id: (context) => CompanyProfileScreen(),
   AllJobScreen.id: (context) => AllJobScreen(),
-  ApplicantSignUp.id: (context) => ApplicantSignUp(),
   EmployeePortalScreen.id: (context) => const EmployeePortalScreen(),
   UpdateCandidateScreen.id: (context) => UpdateCandidateScreen(),
   UpdateEmployerProfileScreen.id: (context) => UpdateEmployerProfileScreen(),
   UpdateTutorProfileScreen.id: (context) => UpdateTutorProfileScreen(),
-  TutorSignUpScreen.id: (context) => TutorSignUpScreen(),
   TutorProfileScreen.id: (context) => TutorProfileScreen(),
   AttendieCandidateProfileScreen.id: (context) =>
       AttendieCandidateProfileScreen(),

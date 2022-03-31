@@ -47,6 +47,35 @@ class AttendieProfileViewModel extends ChangeNotifier {
     });
   }
 
+  void cancelLesson({required int id, completion}) {
+    AppPopUps().showProgressDialog(context: myContext);
+    String url =
+        ApiConstants.baseUrl + ApiConstants.cancel_lesson + "/" + id.toString();
+    var client = APIClient(isCache: false, baseUrl: url);
+    client
+        .request(
+            route: APIRoute(
+              APIType.cancel_lesson,
+              body: {},
+            ),
+            create: () => APIResponse(decoding: false),
+            apiFunction: cancelLesson)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      completion();
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+      return Future.value(null);
+    });
+  }
+
   void cancelApplication({required int id, completion}) {
     AppPopUps().showProgressDialog(context: myContext);
     String url = ApiConstants.baseUrl +
@@ -79,9 +108,11 @@ class AttendieProfileViewModel extends ChangeNotifier {
     });
   }
 
-  List<Lessons>? allLessonsList;
+  List<Lessons?> allLessonsList = [];
 
   void getAllLessions({completion}) {
+    allLessonsList.clear();
+    notifyListeners();
     AppPopUps().showProgressDialog(context: myContext);
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -95,7 +126,8 @@ class AttendieProfileViewModel extends ChangeNotifier {
             apiFunction: getAllLessions)
         .then((response) {
       AppPopUps().dissmissDialog();
-      allLessonsList = response.response?.data?.lessons ?? [];
+      allLessonsList.addAll(response.response?.data?.lessons ?? []);
+      notifyListeners();
       completion(allLessonsList);
     }).catchError((error) {
       print("error=  ${error.toString()}");

@@ -4,7 +4,7 @@ import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
-import 'package:magnijobs_rnr/models/employer_model.dart';
+import 'package:magnijobs_rnr/models/signin_model.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 
 import '../routes.dart';
@@ -81,14 +81,16 @@ class EmployerSignUpViewModel extends ChangeNotifier {
               APIType.register_new_employer,
               body: body,
             ),
-            create: () => APIResponse<EmployerSignUpModel>(
-                create: () => EmployerSignUpModel()),
+            create: () => APIResponse<EmployerSignInModel>(
+                create: () => EmployerSignInModel()),
             apiFunction: registerUser)
         .then((response) {
-      UserDefaults.setApiToken(response.response!.data!.token!);
-      AppPopUps().dissmissDialog();
+      if (response.response?.data?.token != null) {
+        UserDefaults.setApiToken(response.response?.data?.token ?? '');
+      }
+
       resetState();
-      completion();
+      completion(response.response?.data);
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();

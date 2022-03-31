@@ -6,6 +6,7 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/attendie_calender.dart';
 import 'package:magnijobs_rnr/screens/tutor_bookings_job_history_screen.dart';
+import 'package:magnijobs_rnr/screens/tutor_calender_screen.dart';
 import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
@@ -13,6 +14,7 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../dio_network/APis.dart';
+import '../models/all_lessons_model.dart';
 import '../profile_settting_screen.dart';
 import '../view_models/attendie_profile_view_model.dart';
 import '../view_models/tutor_booking_job_view_model.dart';
@@ -71,12 +73,11 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     space,
                     space,
                     imageEditWidget(),
-                    Spacer(),
                     Container(
                       //height: MediaQuery.of(context).size.height,
                       padding: EdgeInsets.only(
@@ -87,6 +88,9 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                         borderRadius: BorderRadius.circular(50.r),
                       ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           getRowProfileItem(
                               "assets/icons/ic_edit_person.svg", "Profile",
@@ -113,28 +117,22 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                                       TutorBookingJobHistory()));
                             });
                           }),
-                          getRowProfileItem(
+                          /* getRowProfileItem(
                               "assets/icons/ic_heart_filled.svg", "Favourite"),
                           getRowProfileItem(
-                              "assets/icons/ic_location_black.svg", "Address"),
-                          // getRowProfileItem(
-                          //     "assets/icons/ic_calender.svg", "Add a Lesson",
-                          //     onTap: () {
-                          //   Navigator.of(myContext!).push(MaterialPageRoute(
-                          //       builder: (context) => TutorCalenderScreen()));
-                          // }),
+                              "assets/icons/ic_location_black.svg", "Address"),*/
+
                           getRowProfileItem(
                               "assets/icons/ic_calender.svg", "Add a lesson",
                               onTap: () {
                             Provider.of<AttendieProfileViewModel>(myContext!,
                                     listen: false)
-                                .getAllLessions(completion: (lessons) {
+                                .getAllLessions(
+                                    completion: (List<Lessons?> lessons) {
                               Navigator.of(myContext!).push(
                                 MaterialPageRoute(
-                                  builder: (myC) =>
-                                      AttendieCalender.AttendieLessonBooking(
-                                    showBookButton: true,
-                                    isBookingLesson: false,
+                                  builder: (context) => TutorCalenderScreen(
+                                    lessons: lessons,
                                   ),
                                 ),
                               );
@@ -156,9 +154,9 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               );
                             });
                           }),
-                          getRowProfileItem(
+                          /*           getRowProfileItem(
                               "assets/icons/ic_file.svg", "Terms & Conditions"),
-                          getRowProfileItem("assets/icons/ic_chat.svg", "Help"),
+                          getRowProfileItem("assets/icons/ic_chat.svg", "Help"),*/
                           SizedBox(
                             height: 10.h,
                           ),

@@ -5,6 +5,8 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/signin_model.dart';
+import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_constants.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
@@ -14,12 +16,19 @@ import 'package:provider/provider.dart';
 import '../models/countries_model.dart';
 import '../routes.dart';
 import '../utils/app_alert_bottom_sheet.dart';
+import '../utils/user_defaults.dart';
 import '../view_models/company_profile_view_model.dart';
+import '../view_models/verify_number_view_model.dart';
+import 'attendie_profile_screen.dart';
+import 'employee_portal_screen.dart';
 import 'verify_number/privacy_policy_screen.dart';
 
 class ApplicantSignUp extends StatefulWidget {
-  ApplicantSignUp({Key? key}) : super(key: key);
   static const id = "ApplicantSignUp";
+
+  String userType;
+
+  ApplicantSignUp({required this.userType});
 
   @override
   _ApplicantSignUpState createState() => _ApplicantSignUpState();
@@ -466,12 +475,12 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                     if (view.formKey.currentState!.validate()) {
                       if (view.nationalIdImage != null) {
                         if (view.termsConditionAccepted) {
-                          view.registerApplicant(completion: () {
+                          view.registerApplicant(
+                              completion: (CandidateSignInModel? model) {
                             AppPopUps.showAlertDialog(
-                                message:
-                                    "User created Successfully go to login",
-                                onSubmit: () {
-                                  Navigator.of(myContext!).pop();
+                                message: "User created Successfully",
+                                onSubmit: () async {
+                                  startVerification(model);
                                 });
                             view.resetState();
                           });
@@ -608,5 +617,60 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
         },
       ),
     );
+  }
+
+  Future<void> startVerification(CandidateSignInModel? model) async {
+    Provider.of<VerifyNumberViewModel>(myContext!, listen: false).resetState();
+    bool? isVerified = await Navigator.of(myContext!).push(MaterialPageRoute(
+      builder: (myContext) => VerifyNumberScreen(),
+    ));
+    if (isVerified ?? false) {
+      if (model != null) {
+        switch (widget.userType) {
+          case 'applicant':
+            await UserDefaults.saveCandidateUserSession(model, widget.userType);
+            view.resetState();
+            if (UserDefaults.getCandidateUserSession()?.candidateModel !=
+                null) {
+              Navigator.of(myContext!).pop();
+              Navigator.of(myContext!)
+                  .pushReplacementNamed(EmployeePortalScreen.id);
+            } else {
+              AppPopUps.showAlertDialog(
+                  message: 'Not Applicant User',
+                  onSubmit: () {
+                    UserDefaults().clearAll();
+                    Navigator.pop(context);
+                  });
+            }
+            break;
+
+          case 'attendie':
+            await UserDefaults.saveCandidateUserSession(model, widget.userType);
+            view.resetState();
+            if (UserDefaults.getCandidateUserSession()?.candidateModel !=
+                null) {
+              Navigator.of(myContext!).pop();
+              Navigator.of(myContext!)
+                  .pushReplacementNamed(AttendieCandidateProfileScreen.id);
+            } else {
+              AppPopUps.showAlertDialog(
+                  message: 'Not Attendie User',
+                  onSubmit: () {
+                    UserDefaults().clearAll();
+                    Navigator.pop(context);
+                  });
+            }
+            break;
+        }
+      }
+    } else {
+      AppPopUps.showConfirmDialog(
+          title: 'Alert',
+          message: 'Verifications failed, retry?',
+          onSubmit: () {
+            startVerification(model);
+          });
+    }
   }
 }

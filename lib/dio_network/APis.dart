@@ -43,7 +43,8 @@ enum APIType {
   create_payment_intent,
   confirm_subs_payment,
   my_subscriptions,
-  my_lessons
+  my_lessons,
+  cancel_lesson
 }
 
 class ApiConstants {
@@ -93,6 +94,8 @@ class ApiConstants {
   static const confirm_subs_payment = "subscribe-plan";
   static const my_subscriptions = "my-subscriptions";
   static const my_lessons = "my-lessons";
+  static const cancel_lesson = "cancel-lesson";
+
   static var profilePicsBaseUrl =
       'http://magnijobs.applypressure.co.uk/profile_pics/';
   static var employer_logos =

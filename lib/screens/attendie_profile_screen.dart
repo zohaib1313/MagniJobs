@@ -118,10 +118,10 @@ class _AttendieCandidateProfileScreenState
                             );
                           });
                         }),
-                        getRowProfileItem(
+                        /* getRowProfileItem(
                             "assets/icons/ic_heart_filled.svg", "Favourite"),
                         getRowProfileItem(
-                            "assets/icons/ic_location_black.svg", "Address"),
+                            "assets/icons/ic_location_black.svg", "Address"),*/
                         getRowProfileItem(
                             "assets/icons/ic_calender.svg", "Lessons",
                             onTap: () {
@@ -163,9 +163,9 @@ class _AttendieCandidateProfileScreenState
                             );
                           });
                         }),
-                        getRowProfileItem(
+                        /* getRowProfileItem(
                             "assets/icons/ic_file.svg", "Terms & Conditions"),
-                        getRowProfileItem("assets/icons/ic_chat.svg", "Help"),
+                        getRowProfileItem("assets/icons/ic_chat.svg", "Help"),*/
                         SizedBox(
                           height: 10.h,
                         ),

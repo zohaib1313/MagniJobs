@@ -3,9 +3,12 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:magnijobs_rnr/models/signin_model.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/countries_model.dart';
+import '../routes.dart';
+import '../view_models/country_list_view_model.dart';
 
 class UserDefaults {
   static SharedPreferences? sharedPreferences;
@@ -143,6 +146,13 @@ class UserDefaults {
       countriesModel = CountriesModel.fromJson(json);
 
       printWrapped(countriesModel.toString());
+    } else {
+      Provider.of<CountriesListViewModel>(myContext!, listen: false)
+          .loadCountries(completion: (countryModel) {
+        if (countryModel != null) {
+          UserDefaults.saveCountries(countryModel!);
+        }
+      });
     }
     return countriesModel;
   }

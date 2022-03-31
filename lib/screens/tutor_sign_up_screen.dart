@@ -5,7 +5,10 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/signin_model.dart';
+import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/verify_number/privacy_policy_screen.dart';
+import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/tutor_signup_view_model.dart';
@@ -14,11 +17,16 @@ import 'package:provider/provider.dart';
 import '../models/countries_model.dart';
 import '../routes.dart';
 import '../utils/app_constants.dart';
+import '../utils/user_defaults.dart';
 import '../view_models/company_profile_view_model.dart';
+import '../view_models/verify_number_view_model.dart';
 
 class TutorSignUpScreen extends StatefulWidget {
-  TutorSignUpScreen({Key? key}) : super(key: key);
   static const id = "TutorSignUpScreen";
+
+  String userType;
+
+  TutorSignUpScreen({required this.userType});
 
   @override
   _TutorSignUpScreenState createState() => _TutorSignUpScreenState();
@@ -354,12 +362,11 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                       if (view.nationalIdImage != null) {
                         if (view.termsConditionAccepted) {
                           view.registerTutor(
-                            completion: () async {
+                            completion: (TutorSignInModel? model) async {
                               AppPopUps.showAlertDialog(
                                   message: "User created Successfully",
                                   onSubmit: () {
-                                    Navigator.pop(context);
-                                    Navigator.pop(context);
+                                    startVerification(model);
                                   });
                             },
                           );
@@ -382,5 +389,35 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> startVerification(TutorSignInModel? model) async {
+    Provider.of<VerifyNumberViewModel>(myContext!, listen: false).resetState();
+    bool? isVerified = await Navigator.of(myContext!).push(MaterialPageRoute(
+      builder: (myContext) => VerifyNumberScreen(),
+    ));
+    if (isVerified ?? false) {
+      if (model != null) {
+        await UserDefaults.saveTutorSignInModel(model, widget.userType);
+        if (UserDefaults.getTutorUserSession()?.tutorModel != null) {
+          Navigator.of(myContext!).pop();
+          Navigator.of(myContext!).pushReplacementNamed(TutorProfileScreen.id);
+        } else {
+          AppPopUps.showAlertDialog(
+              message: 'Not Tutor User',
+              onSubmit: () {
+                UserDefaults().clearAll();
+                Navigator.pop(context);
+              });
+        }
+      }
+    } else {
+      AppPopUps.showConfirmDialog(
+          title: 'Alert',
+          message: 'Verifications failed, retry?',
+          onSubmit: () {
+            startVerification(model);
+          });
+    }
   }
 }

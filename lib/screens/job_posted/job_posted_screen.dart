@@ -11,6 +11,7 @@ import 'package:provider/provider.dart';
 
 import '../../common_widgets/common_widgets.dart';
 import '../../profile_settting_screen.dart';
+import '../../utils/app_alert_bottom_sheet.dart';
 import '../../utils/my_app_bar.dart';
 import '../../utils/utils.dart';
 import '../../view_models/job_post_view_model.dart';
@@ -33,6 +34,7 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
   void initState() {
     super.initState();
 
+    view.searchJobPostedController.clear();
     view.searchJobPostedController.addListener(() {
       view.searchJobPosted();
     });
@@ -76,7 +78,6 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
             padding: const EdgeInsets.all(18.0),
             child: Column(
               children: [
-                space,
                 space,
                 space,
                 Container(
@@ -171,7 +172,7 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                             Expanded(
                               child: GestureDetector(
                                 onTap: () {
-                                  showDialogg();
+                                  showBottom();
                                 },
                                 child: Text(
                                   "Filter",
@@ -186,15 +187,25 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                   ),
                 ),
                 space,
-                Expanded(
-                  child: ListView.builder(
-                      physics: const BouncingScrollPhysics(),
-                      itemCount: view.filteredJobs.length,
-                      itemBuilder: (context, index) {
-                        return getRowJob(
-                            job: view.filteredJobs[index], context: context);
-                      }),
-                ),
+                view.filteredJobs.isNotEmpty
+                    ? Expanded(
+                        child: ListView.builder(
+                            physics: const BouncingScrollPhysics(),
+                            itemCount: view.filteredJobs.length,
+                            itemBuilder: (context, index) {
+                              return getRowJob(
+                                  job: view.filteredJobs[index],
+                                  context: context);
+                            }),
+                      )
+                    : Expanded(
+                        child: Center(
+                          child: Text(
+                            'No Job Found',
+                            style: AppTextStyles.textStyleBoldBodyMedium,
+                          ),
+                        ),
+                      ),
               ],
             ),
           ),
@@ -231,7 +242,7 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
                       ),
                     ),
                   );
-                  view.getAllJobs(completion: (aa) {
+                  view.getMyJobs(completion: (aa) {
                     setState(() {});
                   });
                 },
@@ -302,99 +313,80 @@ class _JobPostedScreenState extends State<JobPostedScreen> {
 
   int selected = 1;
 
-  void showDialogg() {
-    showDialog(
-        context: myContext!,
-        builder: (context) {
-          return AlertDialog(
-            title: Text(
-              'Apply Filter ',
-              style: AppTextStyles.textStyleNormalBodyMedium,
-            ),
-            content: Row(
-              children: [
-                Flexible(
-                  child: InkWell(
-                    onTap: () {
-                      setState(() {
-                        selected = 1;
-                      });
-
-                      Navigator.pop(context);
-                      view.getMyJobs(completion: (aa) {
-                        setState(() {});
-                      });
-                    },
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: selected == 1
-                            ? AppColor.greenColor
-                            : AppColor.alphaGrey,
-                      ),
-                      child: Text(
-                        'My Job',
-                        style: TextStyle(
-                            color: selected == 1
-                                ? AppColor.whiteColor
-                                : AppColor.blackColor),
-                      ),
-                    ),
+  void showBottom() {
+    BottomSheets().showBottomSheet(
+        context: context,
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Apply Filter",
+                    style: AppTextStyles.textStyleNormalBodyMedium,
                   ),
-                ),
-                const SizedBox(width: 5),
-                Flexible(
-                  child: InkWell(
+                  GestureDetector(
                     onTap: () {
-                      setState(() {
-                        selected = 2;
-                      });
-                      Navigator.pop(context);
-                      view.getAllJobs(completion: (aa) {
-                        setState(() {});
-                      });
+                      Navigator.of(context).pop();
                     },
-                    child: Container(
-                      padding: EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: selected == 2
-                            ? AppColor.greenColor
-                            : AppColor.alphaGrey,
-                      ),
-                      child: Text(
-                        'All Job',
-                        style: TextStyle(
-                            color: selected == 2
-                                ? AppColor.whiteColor
-                                : AppColor.blackColor),
-                      ),
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.blackColor,
                     ),
-                  ),
-                ),
-                const SizedBox(width: 5),
-                Flexible(
-                  child: InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      padding: const EdgeInsets.all(8),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        color: AppColor.alphaGrey,
-                      ),
-                      child: const Text(
-                        'Cancel',
-                        style: TextStyle(color: AppColor.blackColor),
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          );
-        });
+                  )
+                ],
+              ),
+              space,
+              space,
+              MyTextField(
+                fillColor: AppColor.alphaGrey,
+                hintText: "Minimum Salary",
+                keyboardType: TextInputType.number,
+                controller: view.countryFilterJobSalaryController,
+                validator: (string) {
+                  return null;
+                },
+              ),
+              space,
+              // InkWell(
+              //   onTap: () {
+              //     showDatePickerDialog(
+              //         context: context,
+              //         onDateSelected: ((value) {
+              //           print(value.toString());
+              //           view.dueDateFilterController.text = value.toString();
+              //         }));
+              //   },
+              //   child: MyTextField(
+              //     fillColor: AppColor.alphaGrey,
+              //     hintText: "Due Date",
+              //     enable: false,
+              //     controller: view.dueDateFilterController,
+              //     validator: (string) {
+              //       return null;
+              //     },
+              //   ),
+              // ),
+              // space,
+              space,
+              space,
+              Button(
+                buttonText: 'Apply',
+                textColor: AppColor.whiteColor,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  view.getMyJobs(completion: (jobs) {
+                    setState(() {});
+                  });
+                },
+              ),
+              space,
+              space,
+            ],
+          ),
+        ));
   }
 }

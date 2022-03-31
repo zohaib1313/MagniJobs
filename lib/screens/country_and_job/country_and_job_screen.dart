@@ -58,10 +58,12 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                 backgroundColor: AppColor.primaryBlueColor,
                 onPressed: () {
                   Provider.of<AllJobsViewModel>(myContext!, listen: false)
-                      .getAllJobs(completion: (List<Jobs> jobs) {
-                    Navigator.of(myContext!).push(MaterialPageRoute(
-                        builder: (context) => JobPostedScreen()));
-                  });
+                    ..countryFilterJobSalaryController.clear()
+                    ..searchJobPostedController.clear()
+                    ..getMyJobs(completion: (List<Jobs> jobs) {
+                      Navigator.of(myContext!).push(MaterialPageRoute(
+                          builder: (context) => JobPostedScreen()));
+                    });
                 },
                 child: const Icon(Icons.arrow_forward)),
           ),
@@ -91,7 +93,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           // ignore: prefer_is_empty
           body: (view.showingListOfCandidates.length) != 0
               ? SingleChildScrollView(
-                  physics: BouncingScrollPhysics(),
+                  physics: const BouncingScrollPhysics(),
                   child: Container(
                       //  height: MediaQuery.of(context).size.height,
                       padding: EdgeInsets.only(
@@ -129,15 +131,49 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
       decoration: BoxDecoration(
-        color: AppColor.whiteColor,
+        color: (candidate?.verified ?? 0) == 1
+            ? AppColor.gold
+            : AppColor.whiteColor,
         borderRadius: BorderRadius.circular(50.r),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Text(
-            "Job Seeker",
-            style: AppTextStyles.textStyleBoldBodySmall,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Job Seeker",
+                style: AppTextStyles.textStyleBoldBodySmall,
+              ),
+              (candidate?.verified ?? 0) != 1
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text('Not Verified'),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Icon(
+                          Icons.not_interested_outlined,
+                          color: Colors.red,
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: const [
+                        Text('Verified'),
+                        SizedBox(
+                          width: 4,
+                        ),
+                        Icon(
+                          Icons.verified_outlined,
+                          color: AppColor.greenColor,
+                        ),
+                      ],
+                    ),
+            ],
           ),
           space,
           Text(
@@ -250,6 +286,14 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                             'Mobile', candidate?.mobile ?? "-"),
                                         getBottomSheetRowInfo('Address',
                                             candidate?.address ?? "-"),
+                                        getBottomSheetRowInfo('Certifications',
+                                            candidate?.certifications ?? "-"),
+                                        getBottomSheetRowInfo(
+                                            'Exams', candidate?.exams ?? "-"),
+                                        getBottomSheetRowInfo('Work Experience',
+                                            candidate?.workExperience ?? "-"),
+                                        getBottomSheetRowInfo('License',
+                                            candidate?.license ?? "-"),
                                         space,
                                         space,
                                         Row(

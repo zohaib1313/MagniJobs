@@ -323,14 +323,14 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     )
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
+                      children: [
                         Text('Verified'),
                         SizedBox(
                           width: 4,
                         ),
                         Icon(
                           Icons.verified_outlined,
-                          color: Colors.green,
+                          color: AppColor.gold,
                         ),
                       ],
                     ),

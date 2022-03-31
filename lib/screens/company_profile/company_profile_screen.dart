@@ -227,8 +227,6 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          print(view.selectedCountryId);
-                          print(view.queryEditingController.text);
                           if (view.selectedCountryId.isNotEmpty &&
                               view.queryEditingController.text.isNotEmpty) {
                             Provider.of<CountryAndJobViewModel>(myContext!,
@@ -284,6 +282,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                       Button(
                         buttonText: 'Preferred Locations',
                         textColor: AppColor.whiteColor,
+                        color: AppColor.primaryBlueDarkColor,
                         onTap: () {
                           BottomSheets().showBottomSheet(
                               context: context,

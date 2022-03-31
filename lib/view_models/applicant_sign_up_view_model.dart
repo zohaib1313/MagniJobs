@@ -10,7 +10,9 @@ import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:path/path.dart';
 
+import '../models/signin_model.dart';
 import '../routes.dart';
+import '../utils/user_defaults.dart';
 
 class ApplicantSignUpViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -109,14 +111,18 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
         APIType.register_new_applicant,
         body: body,
       ),
-      create: () => APIResponse(decoding: false),
+      create: () => APIResponse<CandidateSignInModel>(
+          create: () => CandidateSignInModel()),
       // apiFunction: registerApplicant()
     )
         .then((response) {
       AppPopUps().dissmissDialog();
+      if (response.response?.data?.token != null) {
+        UserDefaults.setApiToken(response.response?.data?.token ?? '');
+      }
 
       resetState();
-      completion();
+      completion(response.response?.data);
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();

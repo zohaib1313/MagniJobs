@@ -36,37 +36,45 @@ class MyLessonModel implements Decodable {
 
 class Bookings {
   int? id;
-  String? lessonId;
   String? userId;
   String? notes;
-  String? createdAt;
-  String? updatedAt;
+  String? category;
+  String? description;
+  String? lessonDate;
+  String? lessonTime;
+  String? meetingLink;
 
   Bookings(
       {this.id,
-      this.lessonId,
       this.userId,
       this.notes,
-      this.createdAt,
-      this.updatedAt});
+      this.category,
+      this.description,
+      this.lessonDate,
+      this.lessonTime,
+      this.meetingLink});
 
   Bookings.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    lessonId = json['lesson_id'];
     userId = json['user_id'];
     notes = json['notes'];
-    createdAt = json['created_at'];
-    updatedAt = json['updated_at'];
+    category = json['category'];
+    description = json['description'];
+    lessonDate = json['lesson_date'];
+    lessonTime = json['lesson_time'];
+    meetingLink = json['meeting_link'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['id'] = this.id;
-    data['lesson_id'] = this.lessonId;
     data['user_id'] = this.userId;
     data['notes'] = this.notes;
-    data['created_at'] = this.createdAt;
-    data['updated_at'] = this.updatedAt;
+    data['category'] = this.category;
+    data['description'] = this.description;
+    data['lesson_date'] = this.lessonDate;
+    data['lesson_time'] = this.lessonTime;
+    data['meeting_link'] = this.meetingLink;
     return data;
   }
 }

@@ -93,7 +93,9 @@ class _JobPostScreenState extends State<JobPostScreen> {
                           children: [
                             space,
                             Text(
-                              "Post A Job",
+                              widget.updateId != null
+                                  ? 'Update Job'
+                                  : "Post A Job",
                               textAlign: TextAlign.center,
                               style: AppTextStyles.textStyleBoldBodyMedium
                                   .copyWith(color: AppColor.blackColor),

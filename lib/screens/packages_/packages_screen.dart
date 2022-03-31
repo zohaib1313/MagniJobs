@@ -6,6 +6,7 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:simple_rich_text/simple_rich_text.dart';
 
 import '../../repo/stripe_repo.dart';
 import '../../routes.dart';
@@ -26,6 +27,13 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
   late String secretKey, pubKey;
   bool isInProgress = false;
   late Map<String, dynamic> paymentIntentData;
+
+  bool isTermsAccepted = false;
+
+  bool isNonDisclouserAcceepted = false;
+  bool isNonRefundAccepted = false;
+
+  bool isOtherDisclaimerAccepted = false;
 
   @override
   void initState() {
@@ -132,16 +140,22 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            "Your submission of information, Including personal information is governed by the terms of our privacy policy as updated from time to time, and any additional privacy notice issued by your employer. We grant you a non-exclusive, non-transferable",
-                                            style: AppTextStyles
-                                                .textStyleNormalBodySmall
-                                                .copyWith(
-                                                    color: AppColor.whiteColor),
-                                          ),
+                                          SimpleRichText(
+                                              '''Your submission of information, including personal information, is governed by the terms of our privacy policy as updated from time to time, and any additional privacy notice issued by your employer.
+We grant you a non-exclusive, non-transferable, non-sublicensable, personal, limited, revocable license to use the App for the purpose of gaining employment with one of our clients. Any other use of the App is strictly prohibited. We reserve all rights in and to the App, and we reserve the right to revoke this license at any time, in our sole discretion. 
+You may nor rent, lease, sub-license, or translate the App in any way, and may not make any alterations to or modifications of the whole or any part of the App, or permit the App or any part if it is to be combined with or become incorporated in, any other programs.
+You agree not to use the App in any unlawful manner, for any unlawful, or criminal purpose, or in any manner inconsistent with these terms, and not to use the App to record, post, or transmit any information that is defamatory, threatening, abusive, offensive, obscene, indecent, discriminatory, or otherwise objectionable. You also agree not to use the App in any way that could damage, impair, or compromise our systems or security or interfere with other users, or restrict or inhibit any other users from using the App, and you agree not to collect or harvest any information or data from the App or its systems, including, without limitation, by using any robot, spider, or other manual or automatic device to retrieve, index, “scrape”, “data mine”, or in any way father App content without our prior written consent.
+''',
+                                              style: AppTextStyles
+                                                  .textStyleNormalBodySmall
+                                                  .copyWith(
+                                                color: AppColor.whiteColor,
+                                              )),
                                           space,
                                           InkWell(
                                             onTap: () {
+                                              isTermsAccepted =
+                                                  !isTermsAccepted;
                                               setState(() {});
                                             },
                                             child: Row(
@@ -154,15 +168,15 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                                         BorderRadius.circular(
                                                             4),
                                                   ),
-                                                  child: true
+                                                  child: isTermsAccepted
                                                       ? const Icon(
                                                           Icons.check,
                                                           size: 15.0,
                                                           color: Colors.black,
                                                         )
-                                                      : Icon(
+                                                      : const Icon(
                                                           null,
-                                                          size: 30.0,
+                                                          size: 15.0,
                                                         ),
                                                 ),
                                                 SizedBox(
@@ -216,6 +230,8 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                           space,
                                           InkWell(
                                             onTap: () {
+                                              isNonDisclouserAcceepted =
+                                                  !isNonDisclouserAcceepted;
                                               setState(() {});
                                             },
                                             child: Row(
@@ -228,16 +244,18 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                                         BorderRadius.circular(
                                                             4),
                                                   ),
-                                                  child: true
-                                                      ? const Icon(
-                                                          Icons.check,
-                                                          size: 15.0,
-                                                          color: Colors.black,
-                                                        )
-                                                      : Icon(
-                                                          null,
-                                                          size: 30.0,
-                                                        ),
+                                                  child:
+                                                      isNonDisclouserAcceepted
+                                                          ? const Icon(
+                                                              Icons.check,
+                                                              size: 15.0,
+                                                              color:
+                                                                  Colors.black,
+                                                            )
+                                                          : const Icon(
+                                                              null,
+                                                              size: 15.0,
+                                                            ),
                                                 ),
                                                 SizedBox(
                                                   width: 50.w,
@@ -289,6 +307,8 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                           space,
                                           InkWell(
                                             onTap: () {
+                                              isNonRefundAccepted =
+                                                  !isNonRefundAccepted;
                                               setState(() {});
                                             },
                                             child: Row(
@@ -301,15 +321,15 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                                         BorderRadius.circular(
                                                             4),
                                                   ),
-                                                  child: true
+                                                  child: isNonRefundAccepted
                                                       ? const Icon(
                                                           Icons.check,
                                                           size: 15.0,
                                                           color: Colors.black,
                                                         )
-                                                      : Icon(
+                                                      : const Icon(
                                                           null,
-                                                          size: 30.0,
+                                                          size: 15.0,
                                                         ),
                                                 ),
                                                 SizedBox(
@@ -362,6 +382,8 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                           space,
                                           InkWell(
                                             onTap: () {
+                                              isOtherDisclaimerAccepted =
+                                                  !isOtherDisclaimerAccepted;
                                               setState(() {});
                                             },
                                             child: Row(
@@ -374,16 +396,18 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                                                         BorderRadius.circular(
                                                             4),
                                                   ),
-                                                  child: true
-                                                      ? const Icon(
-                                                          Icons.check,
-                                                          size: 15.0,
-                                                          color: Colors.black,
-                                                        )
-                                                      : Icon(
-                                                          null,
-                                                          size: 30.0,
-                                                        ),
+                                                  child:
+                                                      isOtherDisclaimerAccepted
+                                                          ? const Icon(
+                                                              Icons.check,
+                                                              size: 15.0,
+                                                              color:
+                                                                  Colors.black,
+                                                            )
+                                                          : const Icon(
+                                                              null,
+                                                              size: 15.0,
+                                                            ),
                                                 ),
                                                 SizedBox(
                                                   width: 50.w,
@@ -424,10 +448,15 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
                   color: AppColor.whiteColor,
                   onTap: () {
                     if (view.selectedPaymentMethod != null) {
-                      print(view.selectedPaymentMethod?.name);
-                      _initiateThePayment(view.selectedPaymentMethod?.id);
-
-                      //Navigator.of(myContext!).pushNamed(AddPaymentScreen.id);
+                      if (isTermsAccepted &&
+                          isNonDisclouserAcceepted &&
+                          isNonRefundAccepted &&
+                          isOtherDisclaimerAccepted) {
+                        _initiateThePayment(view.selectedPaymentMethod?.id);
+                      } else {
+                        AppPopUps.showAlertDialog(
+                            message: 'Accept All Disclaimers');
+                      }
                     } else {
                       AppPopUps.showAlertDialog(message: 'Select Package');
                     }

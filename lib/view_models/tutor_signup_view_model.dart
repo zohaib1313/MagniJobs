@@ -8,10 +8,11 @@ import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
-import 'package:magnijobs_rnr/models/register_new_tutor.dart';
+import 'package:magnijobs_rnr/models/signin_model.dart';
 import 'package:path/path.dart';
 
 import '../routes.dart';
+import '../utils/user_defaults.dart';
 
 class TutorSignUpViewModel extends ChangeNotifier {
   var formKey = GlobalKey<FormState>();
@@ -124,12 +125,16 @@ class TutorSignUpViewModel extends ChangeNotifier {
               body: body,
             ),
             create: () =>
-                APIResponse<RegisterNewTutor>(create: () => RegisterNewTutor()),
+                APIResponse<TutorSignInModel>(create: () => TutorSignInModel()),
             apiFunction: registerTutor)
         .then((response) {
+      if (response.response?.data?.token != null) {
+        UserDefaults.setApiToken(response.response?.data?.token ?? '');
+      }
+
       AppPopUps().dissmissDialog();
       resetState();
-      completion();
+      completion(response.response?.data);
     }).catchError((error) {
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();

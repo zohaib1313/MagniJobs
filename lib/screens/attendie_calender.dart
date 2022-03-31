@@ -5,7 +5,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/models/all_lessons_model.dart';
-import 'package:magnijobs_rnr/screens/tutor_calender_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -60,9 +59,9 @@ class _AttendieCalenderState extends State<AttendieCalender> {
                   Expanded(
                     child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: view.allLessonsList?.length ?? 0,
+                        itemCount: view.allLessonsList.length,
                         itemBuilder: (context, index) {
-                          return rowItem(view.allLessonsList![index]);
+                          return rowItem(view.allLessonsList[index]!);
                         }),
                   ),
                   space,
@@ -75,20 +74,20 @@ class _AttendieCalenderState extends State<AttendieCalender> {
     );
   }
 
-  Widget rowItem(Lessons lesson) {
+  Widget rowItem(Lessons? lesson) {
     return Card(
       child: ListTile(
         isThreeLine: true,
-        title: Text(lesson.lesson ?? ''),
+        title: Text(lesson?.lesson ?? ''),
         subtitle: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(lesson.lessonTime ?? ''),
-            Text(lesson.category ?? ''),
-            Text(lesson.description ?? ''),
+            Text(lesson?.lessonTime ?? ''),
+            Text(lesson?.category ?? ''),
+            Text(lesson?.description ?? ''),
             Text(DateFormat('yyyy-MM-dd')
-                .format(DateTime.parse(lesson.lessonDate ?? ''))
+                .format(DateTime.parse(lesson?.lessonDate ?? ''))
                 .toString()),
           ],
         ),
@@ -98,19 +97,19 @@ class _AttendieCalenderState extends State<AttendieCalender> {
                 onPressed: () {
                   if (widget.isBookingLesson) {
                     view.bookLesson(
-                        id: lesson.id ?? 0,
+                        id: lesson?.id ?? 0,
                         completion: () {
                           AppPopUps.showAlertDialog(message: 'Lesson Booked');
                         });
                   } else {
-                    Navigator.of(myContext!).pushReplacement(
+                    /*  Navigator.of(myContext!).pushReplacement(
                       MaterialPageRoute(
                         builder: (context) => TutorCalenderScreen(
-                          lessonId: (lesson.id ?? -1).toString(),
-                          lessonLink: lesson.meeting_link ?? '',
+                          lessonId: (lesson?.id ?? -1).toString(),
+                          lessonLink: lesson?.meeting_link ?? '', lessons: null,
                         ),
                       ),
-                    );
+                    );*/
                   }
                 },
               )

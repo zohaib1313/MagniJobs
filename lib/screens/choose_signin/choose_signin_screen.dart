@@ -163,8 +163,10 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              Navigator.of(myContext!)
-                                  .pushNamed(ApplicantSignUp.id);
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (contxt) => ApplicantSignUp(
+                                        userType: 'applicant',
+                                      )));
                             },
                             child: Text(
                               " Sign up!",
@@ -259,7 +261,8 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                           GestureDetector(
                             onTap: () {
                               Navigator.of(myContext!).push(MaterialPageRoute(
-                                  builder: (contxt) => TutorSignUpScreen()));
+                                  builder: (contxt) =>
+                                      TutorSignUpScreen(userType: 'tutor')));
                             },
                             child: Text(
                               " Sign up!",
@@ -308,7 +311,9 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                           GestureDetector(
                             onTap: () {
                               Navigator.of(myContext!).push(MaterialPageRoute(
-                                  builder: (contxt) => ApplicantSignUp()));
+                                  builder: (contxt) => ApplicantSignUp(
+                                        userType: 'attendie',
+                                      )));
                             },
                             child: Text(
                               " Sign up!",

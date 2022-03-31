@@ -278,6 +278,15 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.delete,
         );
+
+      case APIType.cancel_lesson:
+        return RequestOptions(
+          path: '',
+          headers: headers,
+          data: body,
+          method: APIMethod.delete,
+        );
+
       case APIType.allLessons:
         return RequestOptions(
           path: ApiConstants.allLessons,

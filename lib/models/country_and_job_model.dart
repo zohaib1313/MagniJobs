@@ -46,11 +46,16 @@ class Candidates {
   String? email;
   String? mobile;
   String? address;
+  int? verified;
   int? location;
   String? dob;
   String? nationality;
   String? gender;
   String? maritalStatus;
+  String? certifications;
+  String? exams;
+  String? workExperience;
+  String? license;
 
   Candidates(
       {this.id,
@@ -59,11 +64,16 @@ class Candidates {
       this.email,
       this.mobile,
       this.address,
+      this.verified,
       this.location,
       this.dob,
       this.nationality,
       this.gender,
-      this.maritalStatus});
+      this.maritalStatus,
+      this.certifications,
+      this.exams,
+      this.workExperience,
+      this.license});
 
   Candidates.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -72,11 +82,16 @@ class Candidates {
     email = json['email'];
     mobile = json['mobile'];
     address = json['address'];
+    verified = json['verified'];
     location = json['location'];
     dob = json['dob'];
     nationality = json['nationality'];
     gender = json['gender'];
     maritalStatus = json['marital_status'];
+    certifications = json['certifications'];
+    exams = json['exams'];
+    workExperience = json['work_experience'];
+    license = json['license'];
   }
 
   Map<String, dynamic> toJson() {
@@ -87,16 +102,16 @@ class Candidates {
     data['email'] = this.email;
     data['mobile'] = this.mobile;
     data['address'] = this.address;
+    data['verified'] = this.verified;
     data['location'] = this.location;
     data['dob'] = this.dob;
     data['nationality'] = this.nationality;
     data['gender'] = this.gender;
     data['marital_status'] = this.maritalStatus;
+    data['certifications'] = this.certifications;
+    data['exams'] = this.exams;
+    data['work_experience'] = this.workExperience;
+    data['license'] = this.license;
     return data;
-  }
-
-  @override
-  String toString() {
-    return 'Candidates{id: $id, firstName: $firstName, lastName: $lastName, email: $email, mobile: $mobile, address: $address, location: $location, dob: $dob, nationality: $nationality, gender: $gender, maritalStatus: $maritalStatus}';
   }
 }

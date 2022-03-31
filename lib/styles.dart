@@ -17,6 +17,8 @@ class AppColor {
   static const alphaGrey = Color(0xffF5F3F3);
   static const whiteColor = Colors.white;
   static const greyColor = Colors.grey;
+
+  static const gold = Color(0xFFFFD700);
 }
 
 class AppAssets {

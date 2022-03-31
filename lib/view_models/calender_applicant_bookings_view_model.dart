@@ -15,6 +15,8 @@ class CalenderApplicantBookingsViewModel extends ChangeNotifier {
   TextEditingController lessonLinkController = TextEditingController();
   TextEditingController lessonNameController = TextEditingController();
 
+  final formKey = GlobalKey<FormState>();
+
   void resetDate() {
     selectedTimeController.clear();
     selectedDateController.clear();

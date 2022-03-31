@@ -12,6 +12,7 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:provider/provider.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'common_widgets/app_popups.dart';
 import 'forgot_password_enter_mail_screen.dart';
@@ -46,19 +47,114 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
           ]),
           backgroundColor: AppColor.alphaGrey,
           body: SingleChildScrollView(
-            physics: BouncingScrollPhysics(),
+            physics: const BouncingScrollPhysics(),
             child: Container(
               // height: MediaQuery.of(context).size.height * 0.9,
-              margin: EdgeInsets.only(top: 140.h, left: 20.h, right: 20.h),
+              margin: EdgeInsets.only(top: 10.h, left: 20.h, right: 20.h),
               decoration: const BoxDecoration(
                 color: AppColor.alphaGrey,
               ),
               child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
+                mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  space,
                   Container(
+                    /*   padding: EdgeInsets.only(
+                        top: 10.h, bottom: 20.h, left: 20.h, right: 20.h),*/
+                    child: Column(
+                      children: [
+                        getRowProfileItem(
+                            "assets/icons/ic_message.svg", "Chats", onTap: () {
+                          Navigator.of(myContext!).pushNamed(AllChatPage.id);
+                        }),
+                        getRowProfileItem("assets/icons/ic_change_password.svg",
+                            "Change Password", onTap: () {
+                          AppPopUps.displayTextInputDialog(
+                              title: "Enter mail where we will send OTP",
+                              message: "Send Otp",
+                              hint: "email",
+                              onSubmit: (String text) {
+                                if (text.isNotEmpty) {
+                                  Provider.of<SignInViewModel>(myContext!,
+                                          listen: false)
+                                      .sendForgotPassword(
+                                          completion: () {
+                                            Navigator.of(myContext!).push(
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    ForgotPasswordEnterMailScreen(
+                                                  mail: text,
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                          mail: text);
+                                }
+                              });
+                        }),
+                        getRowProfileItem(
+                            "assets/icons/ic_news_letter.svg", "Contact Us",
+                            onTap: () async {
+                          final Uri params = Uri(
+                            scheme: 'mailto',
+                            path: 'marketing1_rnr@magnijobs.com',
+                            query:
+                                'subject=MagniJobs', //add subject and body here
+                          );
+
+                          var url = params.toString();
+                          if (await canLaunch(url)) {
+                            await launch(url);
+                          } else {
+                            AppPopUps.showAlertDialog(
+                                message: 'Failed to launch mail');
+                          }
+                        }),
+
+                        /*   getRowProfileItem("assets/icons/ic_notifications.svg",
+                            "Notifications"),
+                        getRowProfileItem(
+                            "assets/icons/ic_settings.svg", "Privacy Settings"),
+                        getRowProfileItem(
+                            "assets/icons/ic_payment_.svg", "Payment"),*/
+                        SizedBox(
+                          height: 10.h,
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            Provider.of<ProfileSettingViewModel>(myContext!,
+                                    listen: false)
+                                .logout(onComplete: () {
+                              UserDefaults().clearAll();
+                              Navigator.of(context).pushReplacement(
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          ChooseSignInScreen()));
+                            });
+                          },
+                          child: Row(
+                            children: [
+                              const SvgViewer(
+                                  svgPath: "assets/icons/ic_logout.svg"),
+                              SizedBox(
+                                width: 35.w,
+                              ),
+                              Expanded(
+                                child: Text(
+                                  "Sign out",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
+                              ),
+                              SizedBox(
+                                width: 20.w,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  /* Container(
                     //height: MediaQuery.of(context).size.height,
 
                     decoration: BoxDecoration(
@@ -176,16 +272,16 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                         ),
                       ],
                     ),
-                  ),
-                  Padding(
+                  ),*/
+                  /* Padding(
                     padding: EdgeInsets.all(60.r),
                     child: Text(
                       "More Options",
                       style: AppTextStyles.textStyleBoldSubTitleLarge
                           .copyWith(color: AppColor.primaryBlueColor),
                     ),
-                  ),
-                  Container(
+                  ),*/
+                  /* Container(
                     //height: MediaQuery.of(context).size.height,
                     padding: EdgeInsets.only(
                         top: 20.h, bottom: 20.h, left: 20.h, right: 20.h),
@@ -216,42 +312,6 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             endText: "Facebook,Google,Twitter"),
                       ],
                     ),
-                  ),
-                  /*  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        "Rebeca James",
-                        style: AppTextStyles.textStyleBoldSubTitleLarge,
-                      ),
-                      SizedBox(
-                        width: 50.w,
-                      ),
-                      Container(
-                        child: const Padding(
-                          padding: EdgeInsets.all(4),
-                          child: Icon(
-                            Icons.edit,
-                            color: Colors.white,
-                            size: 12,
-                          ),
-                        ),
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(
-                              100.r,
-                            ),
-                          ),
-                          color: Colors.blue,
-                        ),
-                      ),
-                    ],
-                  ),
-                  space,
-                  Text(
-                    "Registered Nurse",
-                    style: AppTextStyles.textStyleNormalBodySmall
-                        .copyWith(color: AppColor.greyColor),
                   ),*/
                 ],
               ),
