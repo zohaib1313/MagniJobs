@@ -4,6 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
 class WebViewExample extends StatefulWidget {
+  String url;
+
+  WebViewExample(this.url);
+
   @override
   WebViewExampleState createState() => WebViewExampleState();
 }
@@ -22,7 +26,7 @@ class WebViewExampleState extends State<WebViewExample> {
     return Scaffold(
         body: IndexedStack(index: pos, children: <Widget>[
       WebView(
-        initialUrl: 'http://rnrnursing.applypressure.co.uk/nmc-osce/',
+        initialUrl: widget.url,
         javascriptMode: JavascriptMode.unrestricted,
         onPageStarted: (value) {
           setState(() {

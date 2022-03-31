@@ -234,7 +234,7 @@ class _SigInScreenState extends State<SigInScreen> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     Text(
-                                      "Don't have not an account? ",
+                                      "Don't have an account? ",
                                       style: AppTextStyles
                                           .textStyleNormalBodySmall,
                                     ),
