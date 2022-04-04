@@ -74,6 +74,9 @@ class _TutorCalenderScreenState extends State<TutorCalenderScreen> {
                                   selectedLessonId = value.toString();
                                 },
                                 labelText: "",
+                                itemAsString: (e) {
+                                  return e?.lesson ?? '';
+                                },
                                 hintText: 'Select Lesson',
                                 leftPadding: 0,
                                 rightPadding: 0,
@@ -81,8 +84,8 @@ class _TutorCalenderScreenState extends State<TutorCalenderScreen> {
                                 borderColor: AppColor.alphaGrey,
                                 fillColor: AppColor.greyColor.withOpacity(0.34),
                                 suffixIcon: "assets/icons/drop_down_ic.svg",
-                                itemFuntion: widget.lessons
-                                    .map((e) => DropdownMenuItem(
+                                items: widget.lessons
+                                /* .map((e) => DropdownMenuItem(
                                           value: e?.id.toString(),
                                           child: Text(
                                             e?.lesson ?? '',
@@ -90,7 +93,8 @@ class _TutorCalenderScreenState extends State<TutorCalenderScreen> {
                                                 .textStyleBoldBodySmall,
                                           ),
                                         ))
-                                    .toList(),
+                                    .toList()*/
+                                ,
                                 validator: (string) {
                                   return null;
                                 },

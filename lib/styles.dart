@@ -19,6 +19,7 @@ class AppColor {
   static const greyColor = Colors.grey;
 
   static const gold = Color(0xFFFFD700);
+  static const teal = Color(0xFF30D4C7);
 }
 
 class AppAssets {

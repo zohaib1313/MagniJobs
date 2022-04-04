@@ -136,25 +136,22 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                 return MyDropDown(
                                   onChange: (value) {
                                     view.locationController.text =
-                                        value.toString();
+                                        value.id.toString();
                                   },
                                   hintText: "Location",
                                   labelText: "",
+                                  itemAsString: (item) {
+                                    return item.name ?? '';
+                                  },
                                   labelColor: AppColor.redColor,
                                   borderColor: AppColor.alphaGrey,
                                   fillColor: AppColor.alphaGrey,
                                   suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
+                                  items: snapshot.data!,
                                   validator: (string) {
+                                    if (view.locationController.text.isEmpty) {
+                                      return 'select country';
+                                    }
                                     return null;
                                   },
                                 );
@@ -237,22 +234,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.alphaGrey,
                             suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Male",
-                                child: Text(
-                                  "Male",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Female",
-                                child: Text(
-                                  "Female",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
+                            items: const ["Male", "Female"],
                             validator: (string) {
                               return null;
                             },
@@ -268,22 +250,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.alphaGrey,
                             suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Single",
-                                child: Text(
-                                  "Single",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Married",
-                                child: Text(
-                                  "Married",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
+                            items: const ["Single", "Married"],
                             validator: (string) {
                               return null;
                             },

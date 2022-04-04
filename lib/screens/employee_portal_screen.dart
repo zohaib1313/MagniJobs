@@ -151,30 +151,29 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                         if (snapshot.hasData) {
                           return MyDropDown(
                             onChange: (value) {
-                              view.selectedCountryId = value.toString();
+                              view.selectedCountryId = value.id.toString();
                             },
-                            hintText: "Country",
+                            hintText: "Location",
                             labelText: "",
+                            itemAsString: (item) {
+                              return item.name ?? '';
+                            },
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
-                            fillColor: AppColor.whiteColor,
+                            fillColor: AppColor.alphaGrey,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: snapshot.data!
-                                .map((e) => DropdownMenuItem(
-                                      value: e?.id.toString() ?? '',
-                                      child: Text(
-                                        e?.name ?? '',
-                                        style: AppTextStyles
-                                            .textStyleBoldBodySmall,
-                                      ),
-                                    ))
-                                .toList(),
+                            items: snapshot.data!,
                             validator: (string) {
+                              if (view.selectedCountryId == null) {
+                                return 'select country';
+                              }
                               return null;
                             },
                           );
                         }
-                        return const Center(child: CircularProgressIndicator());
+                        return Center(
+                            child:
+                                Container(child: CircularProgressIndicator()));
                       },
                     ),
                     space,
@@ -197,11 +196,14 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                             },
                             hintText: "Jobs",
                             labelText: "",
+                            itemAsString: (a) {
+                              return a.job ?? '';
+                            },
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: getListOfJobs(snapshot),
+                            items: getListOfJobs(snapshot),
                             validator: (string) {
                               return null;
                             },
@@ -409,22 +411,11 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
   }
 
   getListOfJobs(AsyncSnapshot<List<Jobs?>> snapshot) {
-    List<DropdownMenuItem<Jobs>> list = [];
-    list.add(DropdownMenuItem(
-      value: Jobs(id: -1),
-      child: Text(
-        'Others',
-        style: AppTextStyles.textStyleBoldBodySmall,
-      ),
-    ));
+    List<Jobs> list = [];
+    list.add(Jobs(job: "Other", id: -1));
+
     for (var e in snapshot.data!) {
-      list.add(DropdownMenuItem(
-        value: e,
-        child: Text(
-          e?.job ?? '',
-          style: AppTextStyles.textStyleBoldBodySmall,
-        ),
-      ));
+      list.add(e!);
     }
 
     return list;

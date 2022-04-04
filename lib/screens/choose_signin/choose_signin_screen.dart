@@ -183,7 +183,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                 //NMC
                 SizedBox(height: 5.h),
                 Button(
-                  buttonText: "Healthcare Learning Program",
+                  buttonText: "Healthworker Learning Program",
                   leftPadding: 200.w,
                   rightPading: 200.w,
                   textColor: AppColor.whiteColor,
@@ -196,7 +196,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                 SizedBox(height: 5.h),
                 SizedBox(height: 5.h),
                 Button(
-                  buttonText: "NMSCE",
+                  buttonText: "NMC OSCE",
                   leftPadding: 200.w,
                   rightPading: 200.w,
                   textColor: AppColor.whiteColor,

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
+import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:provider/provider.dart';
@@ -111,13 +112,13 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return AnnotatedRegion<SystemUiOverlayStyle>(
         value: const SystemUiOverlayStyle(
-            statusBarColor: Colors.teal,
+            statusBarColor: AppColor.teal,
             statusBarIconBrightness: Brightness.light,
-            systemNavigationBarColor: Colors.teal //or the color you prefer
+            systemNavigationBarColor: AppColor.teal //or the color you prefer
             ),
         child: SafeArea(
           child: Container(
-            color: Colors.teal,
+            color: AppColor.teal,
             child: Center(
               child: Padding(
                 padding: const EdgeInsets.all(8.0),

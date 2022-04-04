@@ -147,7 +147,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                 style: AppTextStyles.textStyleBoldBodySmall,
               ),
               (candidate?.verified ?? 0) != 1
-                  ? Row(
+                  ? /* Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: const [
                         Text('Not Verified'),
@@ -159,7 +159,8 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                           color: Colors.red,
                         ),
                       ],
-                    )
+                    )*/
+                  IgnorePointer()
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: const [
@@ -167,10 +168,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                         SizedBox(
                           width: 4,
                         ),
-                        Icon(
-                          Icons.verified_outlined,
-                          color: AppColor.greenColor,
-                        ),
+                        Image.asset(''),
                       ],
                     ),
             ],

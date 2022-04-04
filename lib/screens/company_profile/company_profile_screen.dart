@@ -107,30 +107,27 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         space,
                         space,
                         StreamBuilder(
-                          stream: streamCountries,
+                          stream: Provider.of<CompanyProfileViewModel>(
+                                  myContext!,
+                                  listen: false)
+                              .loadCountries(),
                           builder: (BuildContext context,
                               AsyncSnapshot<List<Countries?>> snapshot) {
                             if (snapshot.hasData) {
                               return MyDropDown(
                                 onChange: (value) {
-                                  view.selectedCountryId = value.toString();
+                                  view.selectedCountryId = value.id.toString();
                                 },
                                 hintText: "Country",
                                 labelText: "",
+                                itemAsString: (item) {
+                                  return item.name ?? '';
+                                },
                                 labelColor: AppColor.redColor,
                                 borderColor: AppColor.alphaGrey,
                                 fillColor: AppColor.whiteColor,
                                 suffixIcon: "assets/icons/drop_down_ic.svg",
-                                itemFuntion: snapshot.data!
-                                    .map((e) => DropdownMenuItem(
-                                          value: e?.id.toString() ?? '',
-                                          child: Text(
-                                            e?.name ?? '',
-                                            style: AppTextStyles
-                                                .textStyleBoldBodySmall,
-                                          ),
-                                        ))
-                                    .toList(),
+                                items: snapshot.data!,
                                 validator: (string) {
                                   return null;
                                 },
@@ -153,15 +150,18 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                               return MyDropDown(
                                 onChange: (value) {
                                   view.queryEditingController.text =
-                                      value ?? "";
+                                      value.job ?? "";
                                 },
                                 hintText: "Jobs",
                                 labelText: "",
+                                itemAsString: (a) {
+                                  return a.job ?? '';
+                                },
                                 labelColor: AppColor.redColor,
                                 borderColor: AppColor.alphaGrey,
                                 fillColor: AppColor.whiteColor,
                                 suffixIcon: "assets/icons/drop_down_ic.svg",
-                                itemFuntion: getListOfJobs(snapshot),
+                                items: getListOfJobs(snapshot),
                                 validator: (string) {
                                   return null;
                                 },
@@ -324,6 +324,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                           )?.name ??
                                           "Preferred Location",
                                       labelText: "",
+                                      itemAsString: (item) {
+                                        return item.name ?? '';
+                                      },
                                       leftPadding: 0,
                                       rightPadding: 0,
                                       labelColor: AppColor.redColor,
@@ -331,18 +334,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                       fillColor: AppColor.alphaGrey,
                                       suffixIcon:
                                           "assets/icons/drop_down_ic.svg",
-                                      itemFuntion:
-                                          UserDefaults.getCountriesList()
-                                              ?.countries!
-                                              .map((e) => DropdownMenuItem(
-                                                    value: e.id.toString(),
-                                                    child: Text(
-                                                      e.name ?? '',
-                                                      style: AppTextStyles
-                                                          .textStyleBoldBodySmall,
-                                                    ),
-                                                  ))
-                                              .toList(),
+                                      items: UserDefaults.getCountriesList()
+                                          ?.countries!,
                                       validator: (string) {
                                         return null;
                                       },
@@ -359,6 +352,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                           )?.name ??
                                           "Preferred Location",
                                       labelText: "",
+                                      itemAsString: (item) {
+                                        return item.name ?? '';
+                                      },
                                       leftPadding: 0,
                                       rightPadding: 0,
                                       labelColor: AppColor.redColor,
@@ -366,18 +362,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                       fillColor: AppColor.alphaGrey,
                                       suffixIcon:
                                           "assets/icons/drop_down_ic.svg",
-                                      itemFuntion:
-                                          UserDefaults.getCountriesList()
-                                              ?.countries!
-                                              .map((e) => DropdownMenuItem(
-                                                    value: e.id.toString(),
-                                                    child: Text(
-                                                      e.name ?? '',
-                                                      style: AppTextStyles
-                                                          .textStyleBoldBodySmall,
-                                                    ),
-                                                  ))
-                                              .toList(),
+                                      items: UserDefaults.getCountriesList()
+                                          ?.countries!,
                                       validator: (string) {
                                         return null;
                                       },
@@ -394,6 +380,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                           )?.name ??
                                           "Preferred Location",
                                       labelText: "",
+                                      itemAsString: (item) {
+                                        return item.name ?? '';
+                                      },
                                       leftPadding: 0,
                                       rightPadding: 0,
                                       labelColor: AppColor.redColor,
@@ -401,18 +390,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                       fillColor: AppColor.alphaGrey,
                                       suffixIcon:
                                           "assets/icons/drop_down_ic.svg",
-                                      itemFuntion:
-                                          UserDefaults.getCountriesList()
-                                              ?.countries!
-                                              .map((e) => DropdownMenuItem(
-                                                    value: e.id.toString(),
-                                                    child: Text(
-                                                      e.name ?? '',
-                                                      style: AppTextStyles
-                                                          .textStyleBoldBodySmall,
-                                                    ),
-                                                  ))
-                                              .toList(),
+                                      items: UserDefaults.getCountriesList()
+                                          ?.countries!,
                                       validator: (string) {
                                         return null;
                                       },
@@ -429,6 +408,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                           )?.name ??
                                           "Preferred Location",
                                       labelText: "",
+                                      itemAsString: (item) {
+                                        return item.name ?? '';
+                                      },
                                       leftPadding: 0,
                                       rightPadding: 0,
                                       labelColor: AppColor.redColor,
@@ -436,18 +418,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                       fillColor: AppColor.alphaGrey,
                                       suffixIcon:
                                           "assets/icons/drop_down_ic.svg",
-                                      itemFuntion:
-                                          UserDefaults.getCountriesList()
-                                              ?.countries!
-                                              .map((e) => DropdownMenuItem(
-                                                    value: e.id.toString(),
-                                                    child: Text(
-                                                      e.name ?? '',
-                                                      style: AppTextStyles
-                                                          .textStyleBoldBodySmall,
-                                                    ),
-                                                  ))
-                                              .toList(),
+                                      items: UserDefaults.getCountriesList()
+                                          ?.countries!,
                                       validator: (string) {
                                         return null;
                                       },
@@ -464,6 +436,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                           )?.name ??
                                           "Preferred Location",
                                       labelText: "",
+                                      itemAsString: (item) {
+                                        return item?.name ?? '';
+                                      },
                                       leftPadding: 0,
                                       rightPadding: 0,
                                       labelColor: AppColor.redColor,
@@ -471,18 +446,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                       fillColor: AppColor.alphaGrey,
                                       suffixIcon:
                                           "assets/icons/drop_down_ic.svg",
-                                      itemFuntion:
-                                          UserDefaults.getCountriesList()
-                                              ?.countries!
-                                              .map((e) => DropdownMenuItem(
-                                                    value: e.id.toString(),
-                                                    child: Text(
-                                                      e.name ?? '',
-                                                      style: AppTextStyles
-                                                          .textStyleBoldBodySmall,
-                                                    ),
-                                                  ))
-                                              .toList(),
+                                      items: UserDefaults.getCountriesList()
+                                          ?.countries!,
                                       validator: (string) {
                                         return null;
                                       },
@@ -519,22 +484,11 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
   }
 
   getListOfJobs(AsyncSnapshot<List<Jobs?>> snapshot) {
-    List<DropdownMenuItem<String>> list = [];
-    list.add(DropdownMenuItem(
-      value: "Nurses",
-      child: Text(
-        "Nurse",
-        style: AppTextStyles.textStyleBoldBodySmall,
-      ),
-    ));
+    List<Jobs> list = [];
+    list.add(Jobs(job: "Other", id: -1));
+
     for (var e in snapshot.data!) {
-      list.add(DropdownMenuItem(
-        value: e?.job ?? '',
-        child: Text(
-          e?.job ?? '',
-          style: AppTextStyles.textStyleBoldBodySmall,
-        ),
-      ));
+      list.add(e!);
     }
 
     return list;

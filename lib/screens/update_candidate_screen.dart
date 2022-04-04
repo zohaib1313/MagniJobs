@@ -128,13 +128,15 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             labelText: "",
                             leftPadding: 0,
                             rightPadding: 0,
+                            itemAsString: (item) {
+                              return item?.name ?? '';
+                            },
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: UserDefaults.getCountriesList()
-                                ?.countries!
-                                .map((e) => DropdownMenuItem(
+                            items: UserDefaults.getCountriesList()?.countries!
+                            /* .map((e) => DropdownMenuItem(
                                       value: e.id.toString(),
                                       child: Text(
                                         e.name ?? '',
@@ -142,7 +144,8 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                                             .textStyleBoldBodySmall,
                                       ),
                                     ))
-                                .toList(),
+                                .toList()*/
+                            ,
                             validator: (string) {
                               if (((string ?? '').isEmpty) ||
                                   view.locationController.text.isEmpty ||
@@ -199,22 +202,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             borderColor: AppColor.whiteColor,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Male",
-                                child: Text(
-                                  "Male",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Female",
-                                child: Text(
-                                  "Female",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
+                            items: ["Male", "Female"],
                             validator: (string) {
                               return null;
                             },
@@ -233,22 +221,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             borderColor: AppColor.whiteColor,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Single",
-                                child: Text(
-                                  "Single",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Married",
-                                child: Text(
-                                  "Married",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
+                            items: ["Single", "Married"],
                             validator: (string) {
                               return null;
                             },
@@ -279,13 +252,15 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             labelText: "",
                             leftPadding: 0,
                             rightPadding: 0,
+                            itemAsString: (item) {
+                              return item?.name ?? '';
+                            },
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: UserDefaults.getCountriesList()
-                                ?.countries!
-                                .map((e) => DropdownMenuItem(
+                            items: UserDefaults.getCountriesList()?.countries!
+                            /*  .map((e) => DropdownMenuItem(
                                       value: e.id.toString(),
                                       child: Text(
                                         e.name ?? '',
@@ -293,7 +268,8 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                                             .textStyleBoldBodySmall,
                                       ),
                                     ))
-                                .toList(),
+                                .toList()*/
+                            ,
                             validator: (string) {
                               return null;
                             },
@@ -313,10 +289,12 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
+                            itemAsString: (item) {
+                              return item?.name ?? '';
+                            },
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: UserDefaults.getCountriesList()
-                                ?.countries!
-                                .map((e) => DropdownMenuItem(
+                            items: UserDefaults.getCountriesList()?.countries!
+                            /* .map((e) => DropdownMenuItem(
                                       value: e.id.toString(),
                                       child: Text(
                                         e.name ?? '',
@@ -324,7 +302,8 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                                             .textStyleBoldBodySmall,
                                       ),
                                     ))
-                                .toList(),
+                                .toList()*/
+                            ,
                             validator: (string) {
                               return null;
                             },
@@ -345,9 +324,11 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: UserDefaults.getCountriesList()
-                                ?.countries!
-                                .map((e) => DropdownMenuItem(
+                            itemAsString: (item) {
+                              return item?.name ?? '';
+                            },
+                            items: UserDefaults.getCountriesList()?.countries!
+                            /*.map((e) => DropdownMenuItem(
                                       value: e.id.toString(),
                                       child: Text(
                                         e.name ?? '',
@@ -355,7 +336,8 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                                             .textStyleBoldBodySmall,
                                       ),
                                     ))
-                                .toList(),
+                                .toList()*/
+                            ,
                             validator: (string) {
                               return null;
                             },
@@ -375,10 +357,12 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
+                            itemAsString: (item) {
+                              return item?.name ?? '';
+                            },
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: UserDefaults.getCountriesList()
-                                ?.countries!
-                                .map((e) => DropdownMenuItem(
+                            items: UserDefaults.getCountriesList()?.countries!
+                            /*  .map((e) => DropdownMenuItem(
                                       value: e.id.toString(),
                                       child: Text(
                                         e.name ?? '',
@@ -386,7 +370,8 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                                             .textStyleBoldBodySmall,
                                       ),
                                     ))
-                                .toList(),
+                                .toList()*/
+                            ,
                             validator: (string) {
                               return null;
                             },
@@ -403,13 +388,15 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                             labelText: "",
                             leftPadding: 0,
                             rightPadding: 0,
+                            itemAsString: (item) {
+                              return item?.name ?? '';
+                            },
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            itemFuntion: UserDefaults.getCountriesList()
-                                ?.countries!
-                                .map((e) => DropdownMenuItem(
+                            items: UserDefaults.getCountriesList()?.countries!
+                            /*.map((e) => DropdownMenuItem(
                                       value: e.id.toString(),
                                       child: Text(
                                         e.name ?? '',
@@ -417,7 +404,8 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                                             .textStyleBoldBodySmall,
                                       ),
                                     ))
-                                .toList(),
+                                .toList()*/
+                            ,
                             validator: (string) {
                               return null;
                             },

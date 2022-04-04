@@ -139,30 +139,24 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                   AsyncSnapshot<List<Countries?>> snapshot) {
                                 if (snapshot.hasData) {
                                   return MyDropDown(
-                                    leftPadding: 0,
-                                    rightPadding: 0,
                                     onChange: (value) {
-                                      view.selectedCountryId = value.toString();
+                                      view.selectedCountryId =
+                                          value.id.toString();
                                     },
                                     hintText: "Country",
                                     labelText: "",
+                                    itemAsString: (item) {
+                                      return item.name ?? '';
+                                    },
                                     labelColor: AppColor.redColor,
                                     borderColor: AppColor.alphaGrey,
-                                    fillColor: AppColor.whiteColor,
+                                    fillColor: AppColor.alphaGrey,
                                     suffixIcon: "assets/icons/drop_down_ic.svg",
-                                    itemFuntion: snapshot.data!
-                                        .map((e) => DropdownMenuItem(
-                                              value: e?.id.toString() ?? '',
-                                              child: Text(
-                                                e?.name ?? '',
-                                                style: AppTextStyles
-                                                    .textStyleBoldBodySmall,
-                                              ),
-                                            ))
-                                        .toList(),
+                                    items: snapshot.data!,
                                     validator: (string) {
-                                      /* if ((view.selectedCountryId).isEmpty) {
-                                        return "select country";
+                                      /*   if (view
+                                          .locationController.text.isEmpty) {
+                                        return 'select country';
                                       }*/
                                       return null;
                                     },

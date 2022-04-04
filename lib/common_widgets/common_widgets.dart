@@ -1,3 +1,4 @@
+import 'package:dropdown_search/dropdown_search.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -274,6 +275,8 @@ class Button extends StatelessWidget {
   }
 }
 
+typedef String ItemAsString(dynamic x);
+
 class MyDropDown extends StatefulWidget {
   Color? fillColor;
   Function(dynamic? value)? onChange;
@@ -290,9 +293,9 @@ class MyDropDown extends StatefulWidget {
   final double? leftPadding;
   final double? rightPadding;
   final FormFieldValidator<dynamic>? validator;
-  final List<DropdownMenuItem<Object>>? itemFuntion;
   bool isDense;
   bool isItalicHint;
+  ItemAsString? itemAsString;
 
   MyDropDown(
       {this.fillColor,
@@ -303,6 +306,7 @@ class MyDropDown extends StatefulWidget {
       this.borderColor,
       this.labelColor,
       this.prefixIcon,
+      this.itemAsString,
       this.suffixIcon,
       this.labelText,
       this.hintText,
@@ -310,7 +314,6 @@ class MyDropDown extends StatefulWidget {
       this.leftPadding,
       this.rightPadding,
       this.validator,
-      this.itemFuntion,
       this.isDense = true,
       this.isItalicHint = false});
 
@@ -326,19 +329,14 @@ class _MyDropDownState extends State<MyDropDown> {
         left: widget.leftPadding ?? 100.w,
         right: widget.rightPadding ?? 100.w,
       ),
-      child: DropdownButtonFormField(
-        icon: SvgViewer(
-            height: 12,
-            width: 12,
-            svgPath: widget.suffixIcon ?? 'assets/icons/ic_arrow_down.svg'),
-        isExpanded: true,
-        validator: widget.validator,
-        onTap: () {
-          print("on tap");
-          FocusScope.of(context).unfocus();
-        },
-        decoration: InputDecoration(
+      child: DropdownSearch<dynamic>(
+        showSearchBox: true,
+        selectedItem: widget.value,
+        itemAsString: widget.itemAsString,
+        label: widget.hintText ?? widget.labelText,
+        dropdownSearchDecoration: InputDecoration(
             labelText: widget.labelText,
+            isCollapsed: false,
             hintText: widget.hintText,
             hintStyle: AppTextStyles.textStyleBoldBodySmall.copyWith(
                 fontStyle:
@@ -349,10 +347,10 @@ class _MyDropDownState extends State<MyDropDown> {
                     child: SvgViewer(svgPath: widget.prefixIcon!),
                   )
                 : null,
-            contentPadding: EdgeInsets.all(20.h),
+            contentPadding: EdgeInsets.all(10.h),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(50.r),
-              borderSide: BorderSide(
+              borderSide: const BorderSide(
                 width: 0,
                 style: BorderStyle.none,
               ),
@@ -379,27 +377,7 @@ class _MyDropDownState extends State<MyDropDown> {
             filled: true,
             fillColor: widget.fillColor ?? Colors.transparent),
         onChanged: widget.onChange,
-        value: widget.value,
-        isDense: widget.isDense,
-        hint: Text(
-          widget.hintText ?? "",
-          style: AppTextStyles.textStyleBoldBodySmall.copyWith(
-              color: widget.hintColor,
-              fontStyle:
-                  widget.isItalicHint ? FontStyle.italic : FontStyle.normal),
-        ),
-        items: widget.items != null
-            ? widget.items?.map((dynamic value) {
-                return DropdownMenuItem<dynamic>(
-                    value: value,
-                    child: Text(
-                      value.toString(),
-                      style: TextStyle(
-                        color: widget.textColor,
-                      ),
-                    ));
-              }).toList()
-            : widget.itemFuntion,
+        items: widget.items,
       ),
     );
   }

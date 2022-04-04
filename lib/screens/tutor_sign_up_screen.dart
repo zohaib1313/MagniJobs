@@ -134,26 +134,20 @@ class _TutorSignUpScreenState extends State<TutorSignUpScreen> {
                                 return MyDropDown(
                                   onChange: (value) {
                                     view.locationController.text =
-                                        value.toString();
+                                        value.id.toString();
                                   },
-                                  hintText: "Country",
+                                  hintText: "Location",
                                   labelText: "",
+                                  itemAsString: (item) {
+                                    return item.name ?? '';
+                                  },
                                   labelColor: AppColor.redColor,
                                   borderColor: AppColor.alphaGrey,
                                   fillColor: AppColor.alphaGrey,
                                   suffixIcon: "assets/icons/drop_down_ic.svg",
-                                  itemFuntion: snapshot.data!
-                                      .map((e) => DropdownMenuItem(
-                                            value: e?.id.toString() ?? '',
-                                            child: Text(
-                                              e?.name ?? '',
-                                              style: AppTextStyles
-                                                  .textStyleBoldBodySmall,
-                                            ),
-                                          ))
-                                      .toList(),
+                                  items: snapshot.data!,
                                   validator: (string) {
-                                    if (string == null || string.isEmpty) {
+                                    if (view.locationController.text.isEmpty) {
                                       return 'Required';
                                     }
                                     return null;

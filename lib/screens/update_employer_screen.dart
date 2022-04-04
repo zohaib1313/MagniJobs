@@ -166,22 +166,7 @@ class _UpdateEmployerProfileScreenState
                             borderColor: AppColor.whiteColor,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Single",
-                                child: Text(
-                                  "Single",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Married",
-                                child: Text(
-                                  "Married",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
+                            items: ["Single", "Married"],
                             validator: (string) {
                               return null;
                             },
@@ -199,22 +184,7 @@ class _UpdateEmployerProfileScreenState
                             borderColor: AppColor.whiteColor,
                             fillColor: AppColor.whiteColor,
                             suffixIcon: 'assets/icons/drop_down_ic.svg',
-                            itemFuntion: [
-                              DropdownMenuItem(
-                                value: "Male",
-                                child: Text(
-                                  "Male",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                              DropdownMenuItem(
-                                value: "Female",
-                                child: Text(
-                                  "Female",
-                                  style: AppTextStyles.textStyleBoldBodySmall,
-                                ),
-                              ),
-                            ],
+                            items: const ["Male", "Female"],
                             validator: (string) {
                               return null;
                             },
