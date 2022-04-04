@@ -163,12 +163,16 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                   IgnorePointer()
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.end,
-                      children: const [
-                        Text('Verified'),
-                        SizedBox(
+                      children: [
+                        const Text('Verified'),
+                        const SizedBox(
                           width: 4,
                         ),
-                        Image.asset(''),
+                        Image.asset(
+                          'assets/images/green_certificate.png',
+                          width: 40,
+                          height: 40,
+                        ),
                       ],
                     ),
             ],

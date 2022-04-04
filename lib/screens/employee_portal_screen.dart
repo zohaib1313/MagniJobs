@@ -310,7 +310,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                           ?.candidateModel
                           ?.verified ??
                       false)
-                  ? Row(
+                  ? /*Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: const [
                         Text('Not Verified'),
@@ -322,17 +322,19 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                           color: Colors.red,
                         ),
                       ],
-                    )
+                    )*/
+                  IgnorePointer()
                   : Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        Text('Verified'),
-                        SizedBox(
+                        const Text('Verified'),
+                        const SizedBox(
                           width: 4,
                         ),
-                        Icon(
-                          Icons.verified_outlined,
-                          color: AppColor.gold,
+                        Image.asset(
+                          'assets/images/green_certificate.png',
+                          width: 40,
+                          height: 40,
                         ),
                       ],
                     ),
