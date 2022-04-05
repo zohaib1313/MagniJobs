@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:io';
 
 import 'package:dio/dio.dart';
@@ -8,11 +9,14 @@ import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
+import 'package:magnijobs_rnr/models/job_sub_type_model.dart';
+import 'package:magnijobs_rnr/models/job_type_model.dart';
 import 'package:path/path.dart';
 
 import '../models/signin_model.dart';
 import '../routes.dart';
 import '../utils/user_defaults.dart';
+import '../utils/utils.dart';
 
 class ApplicantSignUpViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
@@ -158,5 +162,65 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   void addCertificates() {
     print('adding');
     certificatesController.text = 'abc';
+  }
+
+  Jobtypes? selectedJobType;
+  Jobsubtypes? selectedJobSubType;
+
+  StreamController<List<Jobtypes?>> jobTypeStreamController =
+      StreamController.broadcast();
+
+  Stream<List<Jobtypes?>> getJobTypes() {
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.all_job_types,
+              body: {},
+            ),
+            create: () =>
+                APIResponse<JobTypeModel>(create: () => JobTypeModel()),
+            apiFunction: getJobTypes)
+        .then((response) {
+      if (response.response?.data != null) {
+        JobTypeModel? jobTypeModel = response.response!.data;
+        printWrapped(jobTypeModel.toString());
+        jobTypeStreamController.sink.add(jobTypeModel!.jobtypes!);
+      }
+    }).catchError((error) {});
+    return jobTypeStreamController.stream;
+  }
+
+  StreamController<List<Jobsubtypes?>> jobSubTypeStreamController =
+      StreamController.broadcast();
+
+  Stream<List<Jobsubtypes?>> getJobSubTypes() {
+    if (selectedJobType != null) {
+      String url = ApiConstants.baseUrl +
+          ApiConstants.all_job_subtypes +
+          "/" +
+          selectedJobType!.id!.toString();
+
+      var client = APIClient(isCache: false, baseUrl: url);
+      client
+          .request(
+              route: APIRoute(
+                APIType.all_job_subtypes,
+                body: {},
+              ),
+              create: () =>
+                  APIResponse<JobSubTypeModel>(create: () => JobSubTypeModel()),
+              apiFunction: getJobSubTypes)
+          .then((response) {
+        if (response.response?.data != null) {
+          JobSubTypeModel? jobSubTypeModel = response.response!.data;
+          printWrapped(jobSubTypeModel.toString());
+          jobSubTypeStreamController.sink.add(jobSubTypeModel!.jobsubtypes!);
+          selectedJobSubType = jobSubTypeModel.jobsubtypes![0];
+        }
+      }).catchError((error) {});
+    }
+
+    return jobSubTypeStreamController.stream;
   }
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
 import 'package:magnijobs_rnr/utils/app_constants.dart';
+import 'package:video_player/video_player.dart';
 
 import '../../styles.dart';
 
@@ -28,6 +29,7 @@ class _OnBoardingOurCompanyInfoState extends State<OnBoardingOurCompanyInfo> {
             Text("Our Company",
                 style: AppTextStyles.textStyleBoldTitleLarge
                     .copyWith(color: AppColor.whiteColor)),
+            space,
             Expanded(
               child: SingleChildScrollView(
                 physics: const BouncingScrollPhysics(),
@@ -50,6 +52,13 @@ class _OnBoardingOurCompanyInfoState extends State<OnBoardingOurCompanyInfo> {
                     space,
                     space,
                     space,
+                    VideoApp(),
+                    space,
+                    space,
+                    space,
+                    space,
+                    space,
+                    space,
                     space,
                     space,
                     space,
@@ -64,6 +73,52 @@ class _OnBoardingOurCompanyInfoState extends State<OnBoardingOurCompanyInfo> {
   }
 }
 
+class VideoApp extends StatefulWidget {
+  @override
+  _VideoAppState createState() => _VideoAppState();
+}
+
+class _VideoAppState extends State<VideoApp> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('assets/images/intro_video.mp4')
+      ..initialize().then((_) {
+        // Ensure the first frame is shown after the video is initialized, even before the play button has been pressed.
+        setState(() {});
+      });
+    //_controller.play();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        setState(() {
+          _controller.value.isPlaying
+              ? _controller.pause()
+              : _controller.play();
+        });
+      },
+      child: Center(
+        child: _controller.value.isInitialized
+            ? AspectRatio(
+                aspectRatio: _controller.value.aspectRatio,
+                child: VideoPlayer(_controller),
+              )
+            : const Center(child: CircularProgressIndicator()),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+}
 ///////////////For Clients//////////
 
 class OnBoardingForClients extends StatefulWidget {
@@ -249,3 +304,152 @@ for our everyday need''',
     );
   }
 }
+
+/*class VideoDetails extends StatefulWidget {
+  const VideoDetails({Key? key}) : super(key: key);
+
+  @override
+  State<VideoDetails> createState() => _VideoDetailsState();
+}
+
+class _VideoDetailsState extends State<VideoDetails> {
+  late InAppWebViewController webView;
+  InAppWebViewController? webViewController;
+  final GlobalKey webViewKey = GlobalKey();
+
+  final InAppWebViewGroupOptions _options = InAppWebViewGroupOptions(
+      crossPlatform: InAppWebViewOptions(
+        useShouldOverrideUrlLoading: true,
+        mediaPlaybackRequiresUserGesture: false,
+      ),
+      android: AndroidInAppWebViewOptions(
+        useHybridComposition: true,
+      ),
+      ios: IOSInAppWebViewOptions(
+        allowsInlineMediaPlayback: true,
+      ));
+
+  late PullToRefreshController pullToRefreshController;
+  String url =
+      "https://drive.google.com/file/d/1iZ25Op-mVmle2njuN3H9voHsOKwbwMFD/view";
+  double progress = 0;
+  final urlController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    pullToRefreshController = PullToRefreshController(
+      options: PullToRefreshOptions(
+        color: Colors.blue,
+      ),
+      onRefresh: () async {
+        if (Platform.isAndroid) {
+          webViewController?.reload();
+        } else if (Platform.isIOS) {
+          webViewController?.loadUrl(
+              urlRequest: URLRequest(url: await webViewController?.getUrl()));
+        }
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(children: <Widget>[
+      Expanded(
+        child: Stack(
+          children: [
+            InAppWebView(
+              key: webViewKey,
+              initialUrlRequest: URLRequest(
+                  url: Uri.parse(
+                      "https://drive.google.com/file/d/1iZ25Op-mVmle2njuN3H9voHsOKwbwMFD/view")),
+              initialOptions: _options,
+              pullToRefreshController: pullToRefreshController,
+              onWebViewCreated: (controller) {
+                webViewController = controller;
+              },
+              onLoadStart: (controller, url) {
+                setState(() {
+                  this.url = url.toString();
+                  urlController.text = this.url;
+                });
+              },
+              androidOnPermissionRequest:
+                  (controller, origin, resources) async {
+                return PermissionRequestResponse(
+                    resources: resources,
+                    action: PermissionRequestResponseAction.GRANT);
+              },
+              shouldOverrideUrlLoading: (controller, navigationAction) async {
+                // var uri = navigationAction.request.url!;
+
+                return NavigationActionPolicy.ALLOW;
+              },
+              onLoadStop: (controller, url) async {
+                pullToRefreshController.endRefreshing();
+                setState(() {
+                  this.url = url.toString();
+                  urlController.text = this.url;
+                });
+              },
+              onLoadError: (controller, url, code, message) {
+                pullToRefreshController.endRefreshing();
+              },
+              onProgressChanged: (controller, progress) {
+                if (progress == 100) {
+                  pullToRefreshController.endRefreshing();
+                }
+                setState(() {
+                  this.progress = progress / 100;
+                  urlController.text = this.url;
+                });
+              },
+              onUpdateVisitedHistory: (controller, url, androidIsReload) {
+                setState(() {
+                  this.url = url.toString();
+                  urlController.text = this.url;
+                });
+              },
+              onConsoleMessage: (controller, consoleMessage) {
+                print(consoleMessage);
+              },
+            ),
+            progress < 1.0
+                ? LinearProgressIndicator(value: progress)
+                : Container(),
+          ],
+        ),
+      ),
+      */ /* ButtonBar(
+        alignment: MainAxisAlignment.center,
+        children: <Widget>[
+          ElevatedButton(
+            child: Icon(Icons.arrow_back),
+            onPressed: () {
+              webViewController?.goBack();
+            },
+          ),
+          ElevatedButton(
+            child: Icon(Icons.arrow_forward),
+            onPressed: () {
+              webViewController?.goForward();
+            },
+          ),
+          ElevatedButton(
+            child: Icon(Icons.refresh),
+            onPressed: () {
+              webViewController?.reload();
+            },
+          ),
+        ],
+          ),*/ /*
+    ]);
+  }
+}*/

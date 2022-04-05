@@ -30,6 +30,7 @@ import 'package:magnijobs_rnr/view_models/delete_job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_portal_view_model.dart';
 import 'package:magnijobs_rnr/view_models/employer_signup_view_model.dart';
 import 'package:magnijobs_rnr/view_models/forgot_password_view_model.dart';
+import 'package:magnijobs_rnr/view_models/interested_applicant_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/jobseeker_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/my_profile_view_model.dart';
@@ -136,4 +137,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
       create: (_) => CountriesListViewModel()),
   ChangeNotifierProvider<ChatViewModel>(create: (_) => ChatViewModel()),
   ChangeNotifierProvider<AllChatViewModel>(create: (_) => AllChatViewModel()),
+  ChangeNotifierProvider<InterestedApplicantsViewModel>(
+      create: (_) => InterestedApplicantsViewModel()),
 ];

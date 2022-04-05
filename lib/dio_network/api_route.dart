@@ -286,7 +286,27 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.delete,
         );
-
+      case APIType.interested_applicants:
+        return RequestOptions(
+          path: ApiConstants.interested_applicants,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
+      case APIType.all_job_types:
+        return RequestOptions(
+          path: ApiConstants.all_job_types,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
+      case APIType.all_job_subtypes:
+        return RequestOptions(
+          path: '',
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
       case APIType.allLessons:
         return RequestOptions(
           path: ApiConstants.allLessons,

@@ -5,6 +5,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
+import 'package:magnijobs_rnr/models/job_type_model.dart';
 import 'package:magnijobs_rnr/models/signin_model.dart';
 import 'package:magnijobs_rnr/screens/verify_number/verify_number_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
@@ -14,6 +15,7 @@ import 'package:magnijobs_rnr/view_models/applicant_sign_up_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../models/countries_model.dart';
+import '../models/job_sub_type_model.dart';
 import '../routes.dart';
 import '../utils/app_alert_bottom_sheet.dart';
 import '../utils/user_defaults.dart';
@@ -158,7 +160,80 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                               }
                               return Center(
                                   child: Container(
-                                      child: CircularProgressIndicator()));
+                                      child:
+                                          const CircularProgressIndicator()));
+                            },
+                          ),
+                          space,
+                          StreamBuilder(
+                            stream: view.getJobTypes(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Jobtypes?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.selectedJobType = value;
+                                    view.getJobSubTypes();
+                                    setState(() {});
+                                  },
+                                  hintText: "Job Type",
+                                  labelText: "",
+                                  itemAsString: (item) {
+                                    return item.jobType ?? '';
+                                  },
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.alphaGrey,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  items: snapshot.data!,
+                                  validator: (string) {
+                                    /* if (view.locationController.text.isEmpty) {
+                                      return 'Required';
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return Center(
+                                  child: Container(
+                                      child:
+                                          const CircularProgressIndicator()));
+                            },
+                          ),
+                          space,
+                          StreamBuilder(
+                            stream: view.getJobSubTypes(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Jobsubtypes?>> snapshot) {
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.selectedJobSubType = value;
+                                  },
+                                  hintText: /*view.selectedJobSubType?.subtype ??*/
+                                      "Job Sub-Type",
+                                  labelText: "",
+                                  itemAsString: (item) {
+                                    return item.subtype ?? '';
+                                  },
+                                  value: view.selectedJobSubType,
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.alphaGrey,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  items: snapshot.data!,
+                                  validator: (string) {
+                                    /*  if (view.locationController.text.isEmpty) {
+                                      return 'select country';
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return Center(
+                                  child: Container(
+                                      child:
+                                          const CircularProgressIndicator()));
                             },
                           ),
                           space,

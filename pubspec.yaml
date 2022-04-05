@@ -56,7 +56,7 @@ dependencies:
   firebase_core :
   firebase_storage: ^10.2.9
   dropdown_search: ^2.0.1
-
+  video_player: ^2.3.0
 
 
 dev_dependencies:

@@ -6,9 +6,11 @@ import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/chat/all_chats_page.dart';
 import 'package:magnijobs_rnr/screens/choose_signin/choose_signin_screen.dart';
+import 'package:magnijobs_rnr/screens/interested_applicants_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
+import 'package:magnijobs_rnr/view_models/interested_applicant_view_model.dart';
 import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:provider/provider.dart';
@@ -67,6 +69,18 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             "assets/icons/ic_message.svg", "Chats", onTap: () {
                           Navigator.of(myContext!).pushNamed(AllChatPage.id);
                         }),
+                        if (UserDefaults.getEmployerUserSession() != null)
+                          getRowProfileItem("assets/icons/ic_edit_person.svg",
+                              "Interested Applicants", onTap: () {
+                            Provider.of<InterestedApplicantsViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .getInterestedApplicants(completion: () {
+                              Navigator.of(myContext!).push(MaterialPageRoute(
+                                  builder: (c) =>
+                                      InterestedApplicantsScreen()));
+                            });
+                          }),
                         getRowProfileItem("assets/icons/ic_change_password.svg",
                             "Change Password", onTap: () {
                           AppPopUps.displayTextInputDialog(

@@ -81,7 +81,8 @@ class _ChatScreenState extends State<ChatScreen> {
                   children: [
                     CircleAvatar(
                       radius: 20,
-                      child: Image.asset("assets/images/app_logo_img.png"),
+                      backgroundImage:
+                          Image.asset("assets/images/app_logo_img.png").image,
                     ),
                     SizedBox(
                       width: 35.w,
