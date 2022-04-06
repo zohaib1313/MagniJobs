@@ -12,9 +12,11 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../common_widgets/app_popups.dart';
 import '../../models/all_jobs_model.dart';
 import '../../profile_settting_screen.dart';
 import '../../utils/my_app_bar.dart';
+import '../../utils/user_defaults.dart';
 import '../../view_models/all_jobs_view_model.dart';
 import '../job_posted/job_posted_screen.dart';
 
@@ -51,77 +53,192 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
           ),
       child: SafeArea(
         child: Scaffold(
-          floatingActionButton: Container(
-            width: 500.w,
-            height: 80.h,
-            child: FloatingActionButton(
-                backgroundColor: AppColor.primaryBlueColor,
-                onPressed: () {
-                  Provider.of<AllJobsViewModel>(myContext!, listen: false)
-                    ..countryFilterJobSalaryController.clear()
-                    ..searchJobPostedController.clear()
-                    ..getMyJobs(completion: (List<Jobs> jobs) {
-                      Navigator.of(myContext!).push(MaterialPageRoute(
-                          builder: (context) => JobPostedScreen()));
-                    });
-                },
-                child: const Icon(Icons.arrow_forward)),
-          ),
-          appBar: myAppBar(title: "Country & Job", actions: [
-            MyAnimSearchBar(
-              width: MediaQuery.of(context).size.width,
-              onSuffixTap: () {
-                view.searchTextController.clear();
-              },
-              closeSearchOnSuffixTap: true,
-              textController: view.searchTextController,
+            floatingActionButton: Container(
+              width: 500.w,
+              height: 80.h,
+              child: FloatingActionButton(
+                  backgroundColor: AppColor.primaryBlueColor,
+                  onPressed: () {
+                    Provider.of<AllJobsViewModel>(myContext!, listen: false)
+                      ..countryFilterJobSalaryController.clear()
+                      ..searchJobPostedController.clear()
+                      ..getMyJobs(completion: (List<Jobs> jobs) {
+                        Navigator.of(myContext!).push(MaterialPageRoute(
+                            builder: (context) => JobPostedScreen()));
+                      });
+                  },
+                  child: const Icon(Icons.arrow_forward)),
             ),
-            Flexible(
-              child: InkWell(
-                onTap: () {
-                  Navigator.of(myContext!).push(MaterialPageRoute(
-                      builder: (context) => ProfileSettingScreen()));
+            appBar: myAppBar(title: "Country & Job", actions: [
+              MyAnimSearchBar(
+                width: MediaQuery.of(context).size.width,
+                onSuffixTap: () {
+                  view.searchTextController.clear();
                 },
-                child: const Padding(
-                  padding: EdgeInsets.all(18.0),
-                  child: SvgViewer(svgPath: "assets/icons/ic_settings.svg"),
-                ),
+                closeSearchOnSuffixTap: true,
+                textController: view.searchTextController,
               ),
-            )
-          ]),
-          backgroundColor: AppColor.alphaGrey,
-          // ignore: prefer_is_empty
-          body: (view.showingListOfCandidates.length) != 0
-              ? SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Container(
-                      //  height: MediaQuery.of(context).size.height,
-                      padding: EdgeInsets.only(
-                        left: 50.w,
-                        right: 50.w,
-                      ),
-                      decoration: BoxDecoration(
-                        color: AppColor.alphaGrey,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40.r),
-                            topRight: Radius.circular(40.r)),
-                      ),
-                      child: ListView.builder(
-                          itemCount: view.showingListOfCandidates.length,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return getJobSeekerWidget(
-                                view.showingListOfCandidates[index]);
-                          })),
-                )
-              : Center(
-                  child: Text(
-                    'No Candidate',
-                    style: AppTextStyles.textStyleBoldBodyMedium,
+              Flexible(
+                child: InkWell(
+                  onTap: () {
+                    Navigator.of(myContext!).push(MaterialPageRoute(
+                        builder: (context) => ProfileSettingScreen()));
+                  },
+                  child: const Padding(
+                    padding: EdgeInsets.all(18.0),
+                    child: SvgViewer(svgPath: "assets/icons/ic_settings.svg"),
                   ),
                 ),
-        ),
+              )
+            ]),
+            backgroundColor: AppColor.alphaGrey,
+            // ignore: prefer_is_empty
+            body: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColor.whiteColor,
+                      borderRadius: BorderRadius.circular(50.r)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 20, bottom: 20, left: 10, right: 10),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    view.filterOnVerified();
+                                  },
+                                  child: Text(
+                                    "Verified",
+                                    style:
+                                        AppTextStyles.textStyleBoldBodyMedium,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Icon(view.isVerifiedFiltered
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 40.w, right: 40.w),
+                        color: AppColor.alphaGrey,
+                        width: 2,
+                        height: 50.h,
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            view.isSortFiltered
+                                ? Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.arrow_upward,
+                                        size: 20,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_downward,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.arrow_downward,
+                                        size: 20,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_upward,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  view.filterJobsOnSort();
+                                },
+                                child: Text(
+                                  "Sort",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 40.w, right: 40.w),
+                        color: AppColor.alphaGrey,
+                        width: 2,
+                        height: 50.h,
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.filter_alt_rounded),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  showBottom();
+                                },
+                                child: Text(
+                                  "Filter",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                // ignore: prefer_is_empty
+                ((view.showingListOfCandidates.length) != 0)
+                    ? Expanded(
+                        child: SingleChildScrollView(
+                          physics: const BouncingScrollPhysics(),
+                          child: Container(
+                              //  height: MediaQuery.of(context).size.height,
+                              padding: EdgeInsets.only(
+                                left: 50.w,
+                                right: 50.w,
+                              ),
+                              decoration: BoxDecoration(
+                                color: AppColor.alphaGrey,
+                                borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(40.r),
+                                    topRight: Radius.circular(40.r)),
+                              ),
+                              child: ListView.builder(
+                                  itemCount:
+                                      view.showingListOfCandidates.length,
+                                  shrinkWrap: true,
+                                  physics: const NeverScrollableScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    return getJobSeekerWidget(
+                                        view.showingListOfCandidates[index]);
+                                  })),
+                        ),
+                      )
+                    : Expanded(
+                        child: Center(
+                          child: Text(
+                            'No Candidate',
+                            style: AppTextStyles.textStyleBoldBodyMedium,
+                          ),
+                        ),
+                      ),
+              ],
+            )),
       ),
     );
   }
@@ -131,7 +248,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
       decoration: BoxDecoration(
-        color: (candidate?.verified ?? 0) == 1
+        color: (candidate?.verified ?? "0") == "1"
             ? AppColor.gold
             : AppColor.whiteColor,
         borderRadius: BorderRadius.circular(50.r),
@@ -146,7 +263,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                 "Job Seeker",
                 style: AppTextStyles.textStyleBoldBodySmall,
               ),
-              (candidate?.verified ?? 0) != 1
+              (candidate?.verified ?? "0") != "1"
                   ? /* Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: const [
@@ -201,7 +318,8 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_timer.svg",
-                        text: candidate?.dob ?? ''),
+                        text: view.getNameOfJobTypeFromId(
+                            id: candidate?.job_type)),
                     SizedBox(height: 10.h),
                     rowInformation(
                         icon: "assets/icons/ic_person.svg",
@@ -271,6 +389,10 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                             candidate?.lastName ?? "-"),
                                         getBottomSheetRowInfo('Date of birth',
                                             candidate?.dob ?? "-"),
+                                        getBottomSheetRowInfo(
+                                            'Job Type',
+                                            (view.getNameOfJobTypeFromId(
+                                                id: candidate?.job_type))),
                                         getBottomSheetRowInfo('Nationality',
                                             candidate?.nationality ?? "-"),
                                         getBottomSheetRowInfo(
@@ -300,12 +422,13 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                         space,
                                         Row(
                                           children: [
-                                            Expanded(
+                                            /*     Expanded(
                                                 flex: 3,
                                                 child: rowInformation(
                                                     icon:
                                                         "assets/icons/ic_timer.svg",
-                                                    text: "29 years")),
+                                                    text: "29 years")),*/
+
                                             Expanded(
                                               child: Button(
                                                 cornerRadius: 25.r,
@@ -313,21 +436,55 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                                 buttonText: "Chat",
                                                 textColor: AppColor.whiteColor,
                                                 onTap: () {
-                                                  Navigator.of(myContext!).push(
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          ChatScreen(
-                                                        otherUserId: candidate!
-                                                            .id!
-                                                            .toString(),
-                                                        otherUserImage: '',
-                                                        otherUserName: candidate
-                                                            .firstName!,
-                                                        otherUserPhone:
-                                                            candidate.mobile!,
-                                                      ),
-                                                    ),
-                                                  );
+                                                  view.checkChatsFromFirebase(
+                                                      onComplete: (status) {
+                                                    if (status) {
+                                                      Navigator.of(myContext!)
+                                                          .push(
+                                                        MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              ChatScreen(
+                                                            otherUserId:
+                                                                candidate!.id!
+                                                                    .toString(),
+                                                            otherUserImage: '',
+                                                            otherUserName:
+                                                                candidate
+                                                                    .firstName!,
+                                                            otherUserPhone:
+                                                                candidate
+                                                                    .mobile!,
+                                                          ),
+                                                        ),
+                                                      );
+                                                    } else {
+                                                      AppPopUps
+                                                          .showThreeOptionsDialog(
+                                                              message:
+                                                                  'You chats with current subscribed package has reached to limit,delete chats or subscribe again',
+                                                              yesTitle:
+                                                                  'Delete Chats',
+                                                              onYes: () {
+                                                                Navigator.of(
+                                                                        myContext!)
+                                                                    .pop();
+                                                              },
+                                                              noTitle:
+                                                                  ('Subscribe to package'),
+                                                              onNo: () {
+                                                                Navigator.of(
+                                                                        myContext!)
+                                                                    .pop();
+                                                              },
+                                                              nutralTitle:
+                                                                  'Cancel',
+                                                              onNutral: () {
+                                                                Navigator.of(
+                                                                        myContext!)
+                                                                    .pop();
+                                                              });
+                                                    }
+                                                  });
                                                 },
                                               ),
                                             ),
@@ -349,16 +506,36 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                       buttonText: "Chat",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        Navigator.of(myContext!).push(
-                          MaterialPageRoute(
-                            builder: (context) => ChatScreen(
-                              otherUserId: candidate!.id!.toString(),
-                              otherUserImage: '',
-                              otherUserName: candidate.firstName!,
-                              otherUserPhone: candidate.mobile!,
-                            ),
-                          ),
-                        );
+                        view.checkChatsFromFirebase(onComplete: (status) {
+                          if (status) {
+                            Navigator.of(myContext!).push(
+                              MaterialPageRoute(
+                                builder: (context) => ChatScreen(
+                                  otherUserId: candidate!.id!.toString(),
+                                  otherUserImage: '',
+                                  otherUserName: candidate.firstName!,
+                                  otherUserPhone: candidate.mobile!,
+                                ),
+                              ),
+                            );
+                          } else {
+                            AppPopUps.showThreeOptionsDialog(
+                                message:
+                                    'You chats with current subscribed package has reached to limit,delete chats or subscribe again',
+                                yesTitle: 'Delete Chats',
+                                onYes: () {
+                                  Navigator.of(myContext!).pop();
+                                },
+                                noTitle: ('Subscribe to package'),
+                                onNo: () {
+                                  Navigator.of(myContext!).pop();
+                                },
+                                nutralTitle: 'Cancel',
+                                onNutral: () {
+                                  Navigator.of(myContext!).pop();
+                                });
+                          }
+                        });
                       },
                     ),
                   ],
@@ -405,5 +582,99 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
         ),
       ],
     );
+  }
+
+  void showBottom() {
+    BottomSheets().showBottomSheet(
+        context: context,
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Apply Filter",
+                    style: AppTextStyles.textStyleNormalBodyMedium,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.blackColor,
+                    ),
+                  )
+                ],
+              ),
+              space,
+              space,
+              MyDropDown(
+                onChange: (value) {
+                  view.filterLocation.text = value.id.toString();
+                  Navigator.of(context).pop();
+                  view.filterOnLocation();
+                },
+                hintText: "Location",
+                labelText: "",
+                itemAsString: (item) {
+                  return item.name ?? '';
+                },
+                leftPadding: 0,
+                value: view.filterLocation.text.isNotEmpty
+                    ? getCountryNameFromId(int.parse(view.filterLocation.text))
+                    : null,
+                rightPadding: 0,
+                labelColor: AppColor.redColor,
+                borderColor: AppColor.alphaGrey,
+                fillColor: AppColor.alphaGrey,
+                suffixIcon: "assets/icons/drop_down_ic.svg",
+                items: UserDefaults.getCountriesList()?.countries!,
+                validator: (string) {
+                  return null;
+                },
+              ),
+              space,
+              MyDropDown(
+                onChange: (value) {
+                  view.selectedJobSubType = value;
+                  Navigator.of(context).pop();
+                  view.filterOnJobSubType();
+                },
+                hintText: "Job SubType",
+                labelText: "",
+                itemAsString: (item) {
+                  return item.subtype ?? '';
+                },
+                leftPadding: 0,
+                value: view.selectedJobSubType,
+                rightPadding: 0,
+                labelColor: AppColor.redColor,
+                borderColor: AppColor.alphaGrey,
+                fillColor: AppColor.alphaGrey,
+                suffixIcon: "assets/icons/drop_down_ic.svg",
+                items: view.jobSubTypeList,
+                validator: (string) {
+                  return null;
+                },
+              ),
+              space,
+              space,
+              space,
+              Button(
+                buttonText: 'Clear Filter',
+                textColor: AppColor.whiteColor,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  view.clearFilter();
+                },
+              ),
+              space,
+            ],
+          ),
+        ));
   }
 }

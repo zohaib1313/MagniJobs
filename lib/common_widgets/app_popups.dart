@@ -390,45 +390,61 @@ class AppPopUps {
         builder: (context) {
           return AlertDialog(
             title: Text(
-              message,
+              'Alert',
               style: AppTextStyles.textStyleNormalBodyMedium,
             ),
-            content: Row(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
               children: [
-                Flexible(
-                  child: FlatButton(
-                    color: Colors.green,
-                    textColor: Colors.white,
-                    child: Text(yesTitle),
-                    onPressed: onYes ??
-                        () {
-                          Navigator.pop(context);
-                        },
-                  ),
+                Text(
+                  message,
+                  style: AppTextStyles.textStyleNormalBodyMedium,
                 ),
-                SizedBox(width: 20.w),
-                Flexible(
-                  child: FlatButton(
-                    color: Colors.red,
-                    textColor: Colors.white,
-                    child: Text(noTitle),
-                    onPressed: onNo ??
-                        () {
-                          Navigator.pop(context);
-                        },
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FlatButton(
+                        color: Colors.green,
+                        textColor: Colors.white,
+                        child: Text(yesTitle),
+                        onPressed: onYes ??
+                            () {
+                              Navigator.pop(context);
+                            },
+                      ),
+                    ),
+                    SizedBox(width: 20.w),
+                  ],
                 ),
-                SizedBox(width: 20.w),
-                Flexible(
-                  child: FlatButton(
-                    color: AppColor.primaryBlueColor,
-                    textColor: Colors.white,
-                    child: Text(nutralTitle),
-                    onPressed: onNutral ??
-                        () {
-                          Navigator.pop(context);
-                        },
-                  ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FlatButton(
+                        color: Colors.red,
+                        textColor: Colors.white,
+                        child: Text(noTitle),
+                        onPressed: onNo ??
+                            () {
+                              Navigator.pop(context);
+                            },
+                      ),
+                    ),
+                  ],
+                ),
+                Row(
+                  children: [
+                    Expanded(
+                      child: FlatButton(
+                        color: AppColor.primaryBlueColor,
+                        textColor: Colors.white,
+                        child: Text(nutralTitle),
+                        onPressed: onNutral ??
+                            () {
+                              Navigator.pop(context);
+                            },
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),

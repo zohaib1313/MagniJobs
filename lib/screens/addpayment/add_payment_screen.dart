@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
-import 'package:magnijobs_rnr/screens/sign_in/sign_in_screen.dart';
 import 'package:provider/provider.dart';
 
 import '../../routes.dart';
@@ -172,15 +171,15 @@ class _OnBoardingForApplicantState extends State<AddPaymentScreen> {
                             color: AppColor.whiteColor,
                             onTap: () {
                               if (view.formKey.currentState!.validate()) {
-                                view.subscribeToPlan(completion: () {
-                                  Navigator.of(myContext!).push(
-                                    MaterialPageRoute(
-                                      builder: (context) => SigInScreen(
-                                        userType: "employer",
-                                      ),
-                                    ),
-                                  );
-                                });
+                                // view.subscribeToPlan(completion: () {
+                                //   Navigator.of(myContext!).push(
+                                //     MaterialPageRoute(
+                                //       builder: (context) => SigInScreen(
+                                //         userType: "employer",
+                                //       ),
+                                //     ),
+                                //   );
+                                // });
                               }
                             },
                           ),

@@ -13,9 +13,9 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/job_type_model.dart';
 import '../../profile_settting_screen.dart';
 import '../../routes.dart';
-import '../../utils/app_alert_bottom_sheet.dart';
 import '../../view_models/all_packges_view_model.dart';
 import '../../view_models/country_and_job_view_model.dart';
 import '../country_and_job/country_and_job_screen.dart';
@@ -133,13 +133,12 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                 },
                               );
                             }
-                            return Center(
-                                child: Container(
-                                    child: CircularProgressIndicator()));
+                            return const Center(
+                                child: CircularProgressIndicator());
                           },
                         ),
                         space,
-                        StreamBuilder(
+                        /* StreamBuilder(
                           stream: Provider.of<CompanyProfileViewModel>(
                                   myContext!,
                                   listen: false)
@@ -172,45 +171,56 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                     child: CircularProgressIndicator()));
                           },
                         ),
-
-                        /* MyTextField(
-                          fillColor: AppColor.whiteColor,
-                          textColor: AppColor.blackColor,
-                          hintColor: AppColor.blackColor,
-                          labelColor: AppColor.blackColor,
-                          hintText: "search job",
-                          controller: view.queryEditingController,
-                          labelText: "Jobs",
-                          validator: (string) {
-                            if (string == null || string.isEmpty) {
-                              return 'Enter Value';
+*/
+                        StreamBuilder(
+                          stream: Provider.of<CountryAndJobViewModel>(
+                                  myContext!,
+                                  listen: false)
+                              .getJobTypes(),
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Jobtypes?>> snapshot) {
+                            if (snapshot.hasData) {
+                              return MyDropDown(
+                                onChange: (value) {
+                                  Provider.of<CountryAndJobViewModel>(
+                                          myContext!,
+                                          listen: false)
+                                      .selectedJobType = value;
+                                  Provider.of<CountryAndJobViewModel>(
+                                          myContext!,
+                                          listen: false)
+                                      .getJobSubTypes();
+                                },
+                                hintText: "Jobs",
+                                labelText: "",
+                                itemAsString: (item) {
+                                  return item.jobType ?? '';
+                                },
+                                labelColor: AppColor.redColor,
+                                borderColor: AppColor.alphaGrey,
+                                fillColor: AppColor.whiteColor,
+                                value: Provider.of<CountryAndJobViewModel>(
+                                        myContext!,
+                                        listen: false)
+                                    .selectedJobType,
+                                suffixIcon: "assets/icons/drop_down_ic.svg",
+                                items: snapshot.data!,
+                                validator: (string) {
+                                  if (Provider.of<CountryAndJobViewModel>(
+                                              myContext!,
+                                              listen: false)
+                                          .selectedJobType ==
+                                      null) {
+                                    return 'Required';
+                                  }
+                                  return null;
+                                },
+                              );
                             }
-                            return null;
+                            return const Center(
+                                child: CircularProgressIndicator());
                           },
-                        ),*/
-                        /* MyDropDown(
-                          onChange: (value) {
-                            view.queryEditingController.text = value ?? "";
-                          },
-                          hintText: "Search Job",
-                          labelText: "",
-                          labelColor: AppColor.redColor,
-                          borderColor: AppColor.alphaGrey,
-                          fillColor: AppColor.whiteColor,
-                          suffixIcon: "assets/icons/drop_down_ic.svg",
-                          itemFuntion: [
-                            DropdownMenuItem(
-                              value: "Nurse",
-                              child: Text(
-                                "Nurse",
-                                style: AppTextStyles.textStyleBoldBodySmall,
-                              ),
-                            ),
-                          ],
-                          validator: (string) {
-                            return null;
-                          },
-                        ),*/
+                        ),
                         space,
                         space,
                       ],
@@ -228,7 +238,10 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
                           if (view.selectedCountryId.isNotEmpty &&
-                              view.queryEditingController.text.isNotEmpty) {
+                              Provider.of<CountryAndJobViewModel>(myContext!,
+                                          listen: false)
+                                      .selectedJobType !=
+                                  null) {
                             Provider.of<CountryAndJobViewModel>(myContext!,
                                     listen: false)
                                 .getAllCandidates(completion: () {
@@ -248,8 +261,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          view.getSubscriptions(onComplete: (status) {
-                            if (status) {
+                          view.getSubscriptions(onCompleteA: (status) {
+                            if (status != -1) {
                               Navigator.of(myContext!).push(
                                 MaterialPageRoute(
                                   builder: (context) => JobPostScreen(
@@ -261,10 +274,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                             } else {
                               AppPopUps.showAlertDialog(
                                   message:
-                                      'You are not subscribed to any plan, kindly subscribe to post a job',
+                                      'You are not subscribed to any package or package has been consumed, kindly subscribe to post a job',
                                   onSubmit: () {
                                     Navigator.of(myContext!).pop();
-
                                     Provider.of<AllPackagesAndPaymentViewModel>(
                                             myContext!,
                                             listen: false)
@@ -279,7 +291,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                       ),
                       space,
                       space,
-                      Button(
+                      /* Button(
                         buttonText: 'Preferred Locations',
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
@@ -469,7 +481,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                                 ),
                               ));
                         },
-                      ),
+                      ),*/
                       space,
                       space,
                     ],

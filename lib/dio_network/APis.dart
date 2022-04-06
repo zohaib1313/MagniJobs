@@ -38,7 +38,7 @@ enum APIType {
   cancelApplication,
   allLessons,
   bookWithTutor,
-  subScribeToPlan,
+
   get_stripe_key,
   create_payment_intent,
   confirm_subs_payment,
@@ -47,7 +47,8 @@ enum APIType {
   cancel_lesson,
   interested_applicants,
   all_job_types,
-  all_job_subtypes
+  all_job_subtypes,
+  count_jobs
 }
 
 class ApiConstants {
@@ -91,7 +92,6 @@ class ApiConstants {
   static const cancelApplication = "cancel-application";
   static const allLessons = "all-lessons";
   static const bookWithTutor = "book-lesson";
-  static const subScribeToPlan = "subscribe-plan";
   static const get_stripe_key = "get-stripe-key";
   static const create_payment_intent = "make-stripe-intent";
   static const confirm_subs_payment = "subscribe-plan";
@@ -102,6 +102,8 @@ class ApiConstants {
   static const all_job_subtypes = "all-job-subtypes";
 
   static const interested_applicants = "interested-applicants";
+
+  static const count_jobs = "count-jobs";
 
   static var profilePicsBaseUrl =
       'http://magnijobs.applypressure.co.uk/profile_pics/';

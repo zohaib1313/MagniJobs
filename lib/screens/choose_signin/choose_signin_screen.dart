@@ -199,7 +199,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                   buttonText: "NMC OSCE",
                   leftPadding: 200.w,
                   rightPading: 200.w,
-                  textColor: AppColor.whiteColor,
+                  textColor: AppColor.whiteColor, //
                   onTap: () {
                     Navigator.of(myContext!).push(MaterialPageRoute(
                         builder: (contet) => WebViewExample(

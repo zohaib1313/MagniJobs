@@ -239,11 +239,15 @@ class CandidateModel {
   String? updatedAt;
   String? deletedAt;
   bool? verified;
+  String? job_type;
+  String? subtype;
 
   CandidateModel(
       {this.id,
       this.userId,
       this.address,
+      this.job_type,
+      this.subtype,
       this.location,
       this.dob,
       this.nationality,
@@ -297,6 +301,9 @@ class CandidateModel {
     preferredLocation3 = json['preferred_location3'];
     preferredLocation4 = json['preferred_location4'];
     preferredLocation5 = json['preferred_location5'];
+    preferredLocation5 = json['preferred_location5'];
+    job_type = json['job_type'];
+    subtype = json['subtype'];
   }
 
   Map<String, dynamic> toJson() {
@@ -330,6 +337,9 @@ class CandidateModel {
     data['preferred_location3'] = this.preferredLocation3;
     data['preferred_location4'] = this.preferredLocation4;
     data['preferred_location5'] = this.preferredLocation5;
+
+    data['job_type'] = this.job_type;
+    data['subtype'] = this.subtype;
 
     return data;
   }

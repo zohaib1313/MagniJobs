@@ -10,7 +10,7 @@ import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
 extension MyIterable<E> on Iterable<E> {
-  Iterable<E> sortedBy(Comparable key(E e)) =>
+  Iterable<E> sortedBy(Comparable Function(E e) key) =>
       toList()..sort((a, b) => key(a).compareTo(key(b)));
 }
 
@@ -30,6 +30,8 @@ class AllJobsViewModel extends ChangeNotifier {
 
   TextEditingController searchJobPostedController = TextEditingController();
 
+  TextEditingController filterLocation = TextEditingController();
+
   set toogle(bool value) {
     _toogle = value;
     notifyListeners();
@@ -37,15 +39,6 @@ class AllJobsViewModel extends ChangeNotifier {
 
   void filterJobsOnDate() {
     AppPopUps().showProgressDialog(context: myContext);
-    /* filteredJobsOnEmployerId.clear();
-    for (var element in alJobs) {
-      int aDate = DateTime.parse(element.createdAt ?? '').microsecondsSinceEpoch;
-      int bDate = DateTime.parse(element.createdAt ?? '').microsecondsSinceEpoch;
-
-      aDate.compareTo(bDate)
-
-    }*/
-
     printWrapped("filtering ");
     filteredJobs.sort((a, b) {
       num aDate = DateTime.parse(a.createdAt ?? '').microsecondsSinceEpoch;
@@ -270,5 +263,40 @@ class AllJobsViewModel extends ChangeNotifier {
     } else {
       filteredJobs.addAll(jobs);
     }
+  }
+
+  void filterOnVerified() {
+    AppPopUps().showProgressDialog(context: myContext);
+    printWrapped("filtering ");
+    filteredJobs.sort((a, b) {
+      return isRecentFilterd
+          ? (a.verified ?? 0).compareTo(b.verified ?? 0)
+          : (b.verified ?? 0).compareTo(a.verified ?? 0);
+    });
+
+    /*   showingListOfCandidates =
+        showingListOfCandidates.where((i) => ((i.verified ?? 0) == 1)).toList();*/
+    isRecentFilterd = !isRecentFilterd;
+    AppPopUps().dissmissDialog();
+    notifyListeners();
+  }
+
+  void filterJobOnLocation() {
+    /*   showingListOfCandidates.sort((a, b) {
+      return isRecentFilterd
+          ? (a.verified ?? 0).compareTo(b.verified ?? 0)
+          : (b.verified ?? 0).compareTo(a.verified ?? 0);
+    });*/
+
+    if (filterLocation.text.isNotEmpty) {
+      filteredJobs = filteredJobs
+          .where((i) => (((i.country ?? 0).toString()) == filterLocation.text))
+          .toList();
+    } else {
+      filteredJobs = alJobs;
+    }
+
+    AppPopUps().dissmissDialog();
+    notifyListeners();
   }
 }

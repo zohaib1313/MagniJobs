@@ -14,6 +14,7 @@ import 'package:provider/provider.dart';
 
 import '../common_widgets/app_popups.dart';
 import '../utils/my_app_bar.dart';
+import '../utils/user_defaults.dart';
 
 class AllJobScreen extends StatefulWidget {
   AllJobScreen({Key? key, allApplications}) : super(key: key);
@@ -69,20 +70,134 @@ class _AllJobScreenState extends State<AllJobScreen> {
                   topLeft: Radius.circular(40.r),
                   topRight: Radius.circular(40.r)),
             ),
-            child: view.filteredJobs.isEmpty
-                ? const Center(
-                    child: Text(
-                        'No Job Found related to selected country and search'),
-                  )
-                : ListView.builder(
-                    physics: const BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    // itemCount: 3,
-                    itemCount: view.filteredJobs.length,
-                    itemBuilder: (context, index) {
-                      return getJobInforCard(view.filteredJobs[index]);
-                    },
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(
+                      color: AppColor.whiteColor,
+                      borderRadius: BorderRadius.circular(50.r)),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          children: [
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.only(
+                                    top: 20, bottom: 20, left: 10, right: 10),
+                                child: GestureDetector(
+                                  onTap: () {
+                                    view.filterOnVerified();
+                                  },
+                                  child: Text(
+                                    "Verified",
+                                    style:
+                                        AppTextStyles.textStyleBoldBodyMedium,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Icon(view.isRecentFilterd
+                                ? Icons.keyboard_arrow_up
+                                : Icons.keyboard_arrow_down),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 40.w, right: 40.w),
+                        color: AppColor.alphaGrey,
+                        width: 2,
+                        height: 50.h,
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            view.isSortFiltered
+                                ? Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.arrow_upward,
+                                        size: 20,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_downward,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  )
+                                : Row(
+                                    children: const [
+                                      Icon(
+                                        Icons.arrow_downward,
+                                        size: 20,
+                                      ),
+                                      Icon(
+                                        Icons.arrow_upward,
+                                        size: 20,
+                                      ),
+                                    ],
+                                  ),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  view.filterJobsOnSort();
+                                },
+                                child: Text(
+                                  "Sort",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        margin: EdgeInsets.only(left: 40.w, right: 40.w),
+                        color: AppColor.alphaGrey,
+                        width: 2,
+                        height: 50.h,
+                      ),
+                      Expanded(
+                        child: Row(
+                          children: [
+                            const Icon(Icons.filter_alt_rounded),
+                            Expanded(
+                              child: GestureDetector(
+                                onTap: () {
+                                  showBottom();
+                                },
+                                child: Text(
+                                  "Filter",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
                   ),
+                ),
+                view.filteredJobs.isEmpty
+                    ? const Expanded(
+                        child: Center(
+                          child: Text(
+                              'No Job Found related to selected country and search'),
+                        ),
+                      )
+                    : Expanded(
+                        child: ListView.builder(
+                          physics: const BouncingScrollPhysics(),
+                          shrinkWrap: true,
+                          // itemCount: 3,
+                          itemCount: view.filteredJobs.length,
+                          itemBuilder: (context, index) {
+                            return getJobInforCard(view.filteredJobs[index]);
+                          },
+                        ),
+                      ),
+              ],
+            ),
           ),
         ),
       ),
@@ -94,7 +209,9 @@ class _AllJobScreenState extends State<AllJobScreen> {
       padding: EdgeInsets.all(20.h),
       margin: EdgeInsets.all(20.h),
       decoration: BoxDecoration(
-        color: AppColor.whiteColor,
+        color: ((job.verified ?? 0) == 1)
+            ? AppColor.greenColor.withOpacity(0.5)
+            : AppColor.whiteColor,
         borderRadius: BorderRadius.circular(50.r),
       ),
       child: Column(
@@ -108,6 +225,7 @@ class _AllJobScreenState extends State<AllJobScreen> {
           Text(
             job.poster ?? "",
             overflow: TextOverflow.ellipsis,
+            maxLines: 1,
             style: AppTextStyles.textStyleBoldSubTitleLarge
                 .copyWith(color: AppColor.primaryBlueColor),
           ),
@@ -179,10 +297,21 @@ class _AllJobScreenState extends State<AllJobScreen> {
                                       space,
                                       ExpandAbleTile(
                                           model: ExpandableTileModel(
+                                              title: "Job",
+                                              message: job.job ?? "",
+                                              isExpanded: false)),
+                                      space,
+                                      ExpandAbleTile(
+                                          model: ExpandableTileModel(
+                                              title: "Location",
+                                              message: job.location ?? "",
+                                              isExpanded: false)),
+                                      space,
+                                      ExpandAbleTile(
+                                          model: ExpandableTileModel(
                                               title: "Qualifications",
                                               message: job.qualification ?? "",
                                               isExpanded: false)),
-                                      space,
                                       space,
                                       ExpandAbleTile(
                                           model: ExpandableTileModel(
@@ -250,7 +379,12 @@ class _AllJobScreenState extends State<AllJobScreen> {
         ),
         SizedBox(width: 50.w),
         Flexible(
-            child: Text(text, style: AppTextStyles.textStyleNormalBodyMedium)),
+            child: Text(
+          text,
+          overflow: TextOverflow.ellipsis,
+          style: AppTextStyles.textStyleNormalBodyMedium,
+          maxLines: 1,
+        )),
       ],
     );
   }
@@ -278,5 +412,83 @@ class _AllJobScreenState extends State<AllJobScreen> {
         ),
       ],
     );
+  }
+
+  void showBottom() {
+    BottomSheets().showBottomSheet(
+        context: context,
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Apply Filter",
+                    style: AppTextStyles.textStyleNormalBodyMedium,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.blackColor,
+                    ),
+                  )
+                ],
+              ),
+              space,
+              space,
+              MyDropDown(
+                onChange: (value) {
+                  view.filterLocation.text = value.id.toString();
+                },
+                hintText: "Location",
+                labelText: "",
+                itemAsString: (item) {
+                  return item.name ?? '';
+                },
+                leftPadding: 0,
+                value: view.filterLocation.text.isNotEmpty
+                    ? getCountryNameFromId(int.parse(view.filterLocation.text))
+                    : null,
+                rightPadding: 0,
+                labelColor: AppColor.redColor,
+                borderColor: AppColor.alphaGrey,
+                fillColor: AppColor.alphaGrey,
+                suffixIcon: "assets/icons/drop_down_ic.svg",
+                items: UserDefaults.getCountriesList()?.countries!,
+                validator: (string) {
+                  return null;
+                },
+              ),
+              space,
+              space,
+              space,
+              Button(
+                buttonText: 'Apply',
+                textColor: AppColor.whiteColor,
+                onTap: () {
+                  //  Navigator.of(context).pop();
+                  view.filterJobOnLocation();
+                },
+              ),
+              space,
+              Button(
+                buttonText: 'Clear Filter',
+                textColor: AppColor.whiteColor,
+                onTap: () {
+                  view.filterLocation.clear();
+                  // Navigator.of(context).pop();
+                  view.filterJobOnLocation();
+                },
+              ),
+              space,
+            ],
+          ),
+        ));
   }
 }

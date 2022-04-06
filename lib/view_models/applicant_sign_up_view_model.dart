@@ -103,6 +103,8 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
       "certifications": certificatesController.text,
       "exams": examsController.text,
       "license": licenseController.text,
+      "job_type": selectedJobType?.id ?? 0,
+      "subType": selectedJobSubType?.id,
       "national_id": await MultipartFile.fromFile(
         nationalIdImage!.path,
         filename: basename(nationalIdImage!.path),
@@ -184,9 +186,11 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
         .then((response) {
       if (response.response?.data != null) {
         JobTypeModel? jobTypeModel = response.response!.data;
-        printWrapped(jobTypeModel.toString());
+
         jobTypeStreamController.sink.add(jobTypeModel!.jobtypes!);
+        // view.selectedJobType = snapshot.data![0];
         selectedJobType = jobTypeModel.jobtypes![0];
+        getJobSubTypes();
       }
     }).catchError((error) {});
     return jobTypeStreamController.stream;

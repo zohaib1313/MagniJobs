@@ -89,12 +89,14 @@ class Jobs {
   String? updatedAt;
   String? deletedAt;
   String? due_date;
+  int? verified;
   dynamic country;
 
   Jobs(
       {this.id,
       this.poster,
       this.employer,
+      this.verified,
       this.job,
       this.location,
       this.salary,
@@ -120,6 +122,7 @@ class Jobs {
     deletedAt = json['deleted_at'];
     country = json['country'];
     due_date = json['due_date'];
+    verified = json['verified'];
   }
 
   Map<String, dynamic> toJson() {
@@ -137,6 +140,8 @@ class Jobs {
     data['deleted_at'] = this.deletedAt;
     data['country'] = this.country;
     data['due_date'] = this.due_date;
+    data['verified'] = this.verified;
+
     return data;
   }
 

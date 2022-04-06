@@ -164,6 +164,71 @@ class _OnBoardingForClientsState extends State<OnBoardingForClients> {
                             isExpanded: false)),
                     space,
                     ExpandAbleTile(
+                        expandedWidgetChild: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Sign Up',
+                              style: AppTextStyles.textStyleBoldBodyMedium
+                                  .copyWith(color: AppColor.whiteColor),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              child: Image.asset('assets/images/sign_up.jpeg'),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Sign In',
+                              style: AppTextStyles.textStyleBoldBodyMedium
+                                  .copyWith(color: AppColor.whiteColor),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              child: Image.asset('assets/images/sign_in.jpeg'),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Job Posting',
+                              style: AppTextStyles.textStyleBoldBodyMedium
+                                  .copyWith(color: AppColor.whiteColor),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              child: Image.asset('assets/images/post_job.jpeg'),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            Text(
+                              'Accessing Country and Job',
+                              style: AppTextStyles.textStyleBoldBodyMedium
+                                  .copyWith(color: AppColor.whiteColor),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                            SizedBox(
+                              child: Image.asset('assets/images/post_job.jpeg'),
+                            ),
+                            const SizedBox(
+                              height: 10,
+                            ),
+                          ],
+                        ),
                         model: ExpandableTileModel(
                             title: "How to Navigate",
                             message:

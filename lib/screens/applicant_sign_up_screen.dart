@@ -170,13 +170,10 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<Jobtypes?>> snapshot) {
                               if (snapshot.hasData) {
-                                view.getJobSubTypes();
                                 return MyDropDown(
                                   onChange: (value) {
                                     view.selectedJobType = value;
-                                    setState(() {
-                                      view.getJobSubTypes();
-                                    });
+                                    view.getJobSubTypes();
                                   },
                                   hintText: "Job Type",
                                   labelText: "",
@@ -190,9 +187,9 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                   suffixIcon: "assets/icons/drop_down_ic.svg",
                                   items: snapshot.data!,
                                   validator: (string) {
-                                    /* if (view.locationController.text.isEmpty) {
+                                    if (view.selectedJobType == null) {
                                       return 'Required';
-                                    }*/
+                                    }
                                     return null;
                                   },
                                 );
@@ -518,7 +515,8 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                   textColor: AppColor.whiteColor,
                   onTap: () async {
                     if (view.formKey.currentState!.validate()) {
-                      if (view.nationalIdImage != null) {
+                      if (view.nationalIdImage != null &&
+                          view.selectedJobSubType != null) {
                         if (view.termsConditionAccepted) {
                           view.registerApplicant(
                               completion: (CandidateSignInModel? model) {

@@ -293,6 +293,15 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.get,
         );
+
+      case APIType.count_jobs:
+        return RequestOptions(
+          path: ApiConstants.count_jobs,
+          headers: headers,
+          data: body,
+          method: APIMethod.get,
+        );
+
       case APIType.all_job_types:
         return RequestOptions(
           path: ApiConstants.all_job_types,
@@ -321,13 +330,13 @@ class APIRoute implements APIRouteConfigurable {
           data: body,
           method: APIMethod.post,
         );
-      case APIType.subScribeToPlan:
+      /* case APIType.subScribeToPlan:
         return RequestOptions(
           path: ApiConstants.subScribeToPlan,
           headers: headers,
           data: body,
           method: APIMethod.post,
-        );
+        );*/
       case APIType.my_subscriptions:
         return RequestOptions(
           path: ApiConstants.my_subscriptions,

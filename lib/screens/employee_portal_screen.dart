@@ -160,7 +160,7 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                             },
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
-                            fillColor: AppColor.alphaGrey,
+                            fillColor: AppColor.whiteColor,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
                             items: snapshot.data!,
                             validator: (string) {
@@ -215,26 +215,6 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                       },
                     ),
                     space,
-                    /* Provider.of<EmployerPortalViewModel>(myContext!,
-                                listen: true)
-                            .showQueryField
-                        ? MyTextField(
-                            fillColor: AppColor.whiteColor,
-                            textColor: AppColor.blackColor,
-                            hintColor: AppColor.blackColor,
-                            labelColor: AppColor.blackColor,
-                            hintText: "search job",
-                            controller: view.queryEditingController,
-                            labelText: "Jobs",
-                            validator: (string) {
-                              if (string == null || string.isEmpty) {
-                                return 'Enter Value';
-                              }
-                              return null;
-                            },
-                          )
-                        : Container(),
-                    space,*/
                     Button(
                       leftPadding: 200.w,
                       rightPading: 200.w,

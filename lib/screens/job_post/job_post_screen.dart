@@ -145,12 +145,14 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                     },
                                     hintText: "Country",
                                     labelText: "",
+                                    leftPadding: 0,
+                                    rightPadding: 0,
                                     itemAsString: (item) {
                                       return item.name ?? '';
                                     },
                                     labelColor: AppColor.redColor,
                                     borderColor: AppColor.alphaGrey,
-                                    fillColor: AppColor.alphaGrey,
+                                    fillColor: AppColor.whiteColor,
                                     suffixIcon: "assets/icons/drop_down_ic.svg",
                                     items: snapshot.data!,
                                     validator: (string) {
@@ -162,9 +164,8 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                     },
                                   );
                                 }
-                                return Center(
-                                    child: Container(
-                                        child: CircularProgressIndicator()));
+                                return const Center(
+                                    child: CircularProgressIndicator());
                               },
                             ),
                             space,

@@ -89,4 +89,109 @@ We do not guarantee, represent, or warrant that your use of our service will be 
 In no case shall MAGNIJOBS PLATFORM LIMITED, our directors, officers, employees, affiliates, endorsers, formulators, content contributors, agents, contractors, interns, suppliers, service providers or licensors be liable for any injury, loss, claim, or any direct, indirect, incidental, punitive, special, or consequential damages of any kind, including, without limitation lost profits, lost revenue, lost savings, loss of data, replacement costs, or any similar damages, whether based in contract, tort (including negligence), strict liability or otherwise, arising from your use of any of the service or any products procured using the service, or for any other claim related in any way to your use of the service or any product, including, but not limited to, any errors or omissions in any content, or any loss or damage of any kind incurred as a result of the use of the service or any content (or product) posted, transmitted, or otherwise made available via the service, even if advised of their possibility. Because some states or jurisdictions do not allow the exclusion or the limitation of liability for consequential or incidental damages, in such states or jurisdictions, our liability shall be limited to the maximum extent permitted by law.
 
 ''';
+
+  static var otherDisclaimer = '''*Data Protection Policy*\n
+1. Data Protection Principles: MAGNIJOBS is committed to processing the personal
+  data of both clients and applicants in accordance with its responsibilities under the
+  GDPR.
+  Article 5 of the GDPR requires that personal data shall be:
+  ● Processed lawfully, fairly, and in a transparent manner in relation to
+  individuals;
+  ● Collected for specified, explicit, and legitimate purposes and not further
+  processed in a manner that is incompatible with those purposes; further
+  processing for archiving purposes in the public interest, scientific, or historical
+  research purposes or statistical purposes shall not be considered to be
+  incompatible with the initial purposes;
+  ● Adequate, relevant, and limited to what is necessary in relation to the purposes
+  for which they are processed;
+  ● Accurate and, where necessary, kept up to date; every reasonable step must be
+  taken to ensure that personal data that are inaccurate, having regard to the
+  purposes for which they are processed, are erased, or rectified without delay;
+  ● Kept in a form which permits identification of data subjects for no longer than
+  is necessary for the purposes for which the personal data are processed;
+  personal data may be stored for longer periods insofar as the personal data will
+  be processed solely for archiving purposes in the public interest, scientific, or
+  historical research purposes or statistical purposes subject to implementation
+  of the appropriate technical and organizational measures required by the
+  GDPR in order to safeguard the rights and freedoms of individuals; and
+  ● Processed in a manner that ensures appropriate security of the personal data,
+  including protection against unauthorized or unlawful processing and against
+  accidental loss, destruction, or damage, using appropriate technical or
+  organizational measures.
+2. *General Provisions:*
+  ● This policy applies to all personal data processed by MAGNIJOBS
+  ● MAGNIJOBS shall take responsibility for its ongoing compliance with this
+  policy.
+  ● This policy shall be reviewed at least annually.
+  ● MAGNIJOBS shall register with the Informaiton Commissioner’s Office as an
+  organization that processes personal data.
+  ● MAGNIJOBS shall not share any personal information of any client or
+  applicant with any third party without the express written consent of the
+  applicant or client.
+  ● Both clients and applicants on the MAGNIJOBS App must consent to the
+  accessing of personal information during the job search and recruitment
+  process.
+3. *Lawful, Fair, and Transparent Processing:*
+  ● To ensure that its processing of data is lawful, fair, and transparent,
+  MAGNIJOBS shall maintain a Register of Systems.
+  ● The Register of Systems shall be reviewed at least annually.
+  ● Individuals have the right to access their personal data and any such requests
+  made to Magnijobs shall be dealt with in a timely manner.
+4. *Lawful Purposes:*
+  ● All data processed by MAGNIJOBS must be done on one of the following
+  lawful bases: consent, contract, legal obligation, vital interests, public task, or
+  legitimate interests.
+  ● MAGNIJOBS shall note the appropriate lawful basis in the Register of
+  Systems.
+  ● Where consent is relied upon as a lawful basis for processing data, evidence of
+  opt-in consent shall be kept with the personal data.
+  ● Where communications are sent to individuals based on their consent, the
+  option for the individual to revoke their consent should be clearly available
+  and systems should be in place to ensure such revocation is reflected
+  accurately in MAGNIJOBS’ systems.
+5. *Data Minimization:*
+  MAGNIJOBS shall ensure that all personal data collected is
+  adequate, relevant, and limited to what is necessary in relation to the purposes for
+  which the personal data is processed.
+6. *Accuracy:* 
+  MAGNIJOBS shall take reasonable steps to ensure that all personal data is
+  accurate. Where necessary for the lawful basis on which data is processed, steps shall
+  be put in place to ensure that personal data is kept up to date.
+7. *Archiving Removal:*
+  To ensure that personal data is kept for no longer than
+  necessary, MAGNIJOBS shall put in place an archiving policy for each area in which
+  personal data is processed and review this process annually. The archiving policy
+  shall consider what data should must be retained, for how long, and why.
+8. *Security:*
+  MAGNIJOBS shall ensure that personal data is stored securely using
+  modern software that is kept up to date. Access to personal fata shall be limited to
+  personnel who need access and appropriate security should be in place to avoid
+  unauthorized sharing of information. When personal data is deleted, this should be
+  done so that the date is irrecoverable. Appropriate back-up and disaster recovery
+  solutions shall be in place.
+9. *Breach:* 
+  In the event of a breach of security leading to the accidental or unlawful
+  destruction, loss, alteration, unauthorized disclosure of, or access to, personal data,
+  MAGNIJOBS shall promptly assess the risk to people’s rights and freedoms and if
+  appropriate, report this breach to the ICO.''';
+
+  static String nonRefundPolicy =
+      '''We do not guarantee, represent, or warrant that your use of our service will be uninterrupted,
+timely, secure, or error-free. We do not warrant that the results that may be obtained from the
+use of the service will be accurate or reliable. You agree that from time to time we may
+remove the service for indefinite periods of time or cancel the service at any time, without
+notice to you. You expressly agree that your use of, or inability to use, the service is at your
+sole risk. The service and all products and services delivered to you through the service are
+(except as expressly stated by us) provided ‘as is’ and ‘as available’ for your use, without any
+representation, warranties or conditions of any kind, either express or implied, including all
+implied warranties or conditions of merchantability, merchantable quality, fitness for a
+particular purpose, durability, title, and non-infringement. There is a no-refund policy, so all
+users are advised to make a firm decision as to whether or not they want to purchase the
+package in question''';
+
+  static String NonDisclouserAgrement =
+      '''The client agrees that it will not attempt to contact any applicants outside of the App and will
+not ask for any contact information from the candidate(s). The client agrees that it will
+request the applicant for any and all documentation and references and that it will contact the
+candidate to set up an interview through the App.''';
 }

@@ -64,13 +64,13 @@ class AllPackagesAndPaymentViewModel extends ChangeNotifier {
     nameUsedOnCardController.clear();
   }
 
-  ///todo  ///in progress
+  /*///todo  ///in progress
   void subscribeToPlan({completion}) {
     var body = {
       "expires_on": "2022-04-20",
       "employer": "Oral Kings",
-      "package_id": "2",
-      "amount": "144",
+      "package_id": (selectedPaymentMethod?.id ?? 0).toString(),
+      "amount": (selectedPaymentMethod?.price ?? "0").toString(),
       "pay_method": "Stripe",
       "payment_reference": "py_97438564756",
       "notes": ""
@@ -99,5 +99,5 @@ class AllPackagesAndPaymentViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
-  }
+  }*/
 }

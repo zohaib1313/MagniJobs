@@ -4,6 +4,8 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/expandable_tile_model.dart';
+import 'package:magnijobs_rnr/utils/app_constants.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/view_models/all_packges_view_model.dart';
 import 'package:provider/provider.dart';
 import 'package:simple_rich_text/simple_rich_text.dart';
@@ -220,8 +222,8 @@ You agree not to use the App in any unlawful manner, for any unlawful, or crimin
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                          SimpleRichText(
+                                            AppConstants.NonDisclouserAgrement,
                                             style: AppTextStyles
                                                 .textStyleNormalBodySmall
                                                 .copyWith(
@@ -297,8 +299,8 @@ You agree not to use the App in any unlawful manner, for any unlawful, or crimin
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                          SimpleRichText(
+                                            AppConstants.nonRefundPolicy,
                                             style: AppTextStyles
                                                 .textStyleNormalBodySmall
                                                 .copyWith(
@@ -372,8 +374,8 @@ You agree not to use the App in any unlawful manner, for any unlawful, or crimin
                                         crossAxisAlignment:
                                             CrossAxisAlignment.start,
                                         children: [
-                                          Text(
-                                            "Lorem Ipsum is simply dummy text of the printing and typesetting in industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500when an unknown printer took a galley of type and scrambled it to make a type or",
+                                          SimpleRichText(
+                                            AppConstants.otherDisclaimer,
                                             style: AppTextStyles
                                                 .textStyleNormalBodySmall
                                                 .copyWith(
@@ -478,7 +480,7 @@ You agree not to use the App in any unlawful manner, for any unlawful, or crimin
     }
 
     await StripeRepo().payForMySubscription(packageId!).then((response) {
-      //print(response);
+      print(response);
       paymentIntentData = response.data;
     });
 
@@ -512,14 +514,17 @@ You agree not to use the App in any unlawful manner, for any unlawful, or crimin
       setState(() {
         _updatePayment(paymentIntentData['id']);
         paymentIntentData.clear();
+        Navigator.of(myContext!).pop();
 
-        Navigator.of(myContext!).push(
-          MaterialPageRoute(
-            builder: (context) => SigInScreen(
-              userType: "employer",
+        if (UserDefaults.getEmployerUserSession() == null) {
+          Navigator.of(myContext!).push(
+            MaterialPageRoute(
+              builder: (context) => SigInScreen(
+                userType: "employer",
+              ),
             ),
-          ),
-        );
+          );
+        }
       });
     } catch (e) {
       AppPopUps.showAlertDialog(message: 'Failed to make the payment.');
@@ -533,18 +538,19 @@ You agree not to use the App in any unlawful manner, for any unlawful, or crimin
       });
     }
 
-    await StripeRepo.confirmSubscriptionPayment(view.selectedPaymentMethod?.id,
-            view.selectedPaymentMethod?.price, paymentID)
-        .then((response) {
-      AppPopUps.showAlertDialog(message: 'Subscription payment received.');
+    StripeRepo.confirmSubscriptionPayment(view.selectedPaymentMethod?.id,
+        view.selectedPaymentMethod?.price, paymentID, completion: (status) {
+      if (status) {
+        AppPopUps.showAlertDialog(message: 'Subscription payment received.');
+      } else {
+        AppPopUps.showAlertDialog(message: 'Subscription to package failed.');
+      }
+
+      if (mounted) {
+        setState(() {
+          isInProgress = false;
+        });
+      }
     });
-
-    setState(() {});
-
-    if (mounted) {
-      setState(() {
-        isInProgress = false;
-      });
-    }
   }
 }

@@ -43,24 +43,51 @@ class StripeRepo {
   }
 
   static Future<dynamic> confirmSubscriptionPayment(
-      int? packageID, String? price, String paymentId) async {
-    Map<String, dynamic> data = Map<String, dynamic>();
+      int? packageID, String? price, String paymentId,
+      {completion}) async {
+    Map<String, dynamic> data = <String, dynamic>{};
     data['package_id'] = packageID;
     data['amount'] = price;
-    data['payment_method'] = 'Stripe';
+    data['pay_method'] = 'Stripe';
     data['payment_reference'] = paymentId;
 
-    return await NetworkService()
-        .post(
-            url: ApiConstants.baseUrl + ApiConstants.confirm_subs_payment,
-            body: data)
-        .then((response) {
+    var response = await Dio().post(
+        ApiConstants.baseUrl + ApiConstants.confirm_subs_payment,
+        data: data,
+        options: Options(
+            followRedirects: false,
+            validateStatus: (status) => true,
+            headers: {
+              'Content-Type': 'application/json; charset=UTF-8',
+              'Accept': 'application/json',
+              'Authorization': 'Bearer ${UserDefaults.getToken() ?? ""}'
+            }));
+
+    printWrapped("responseeeexxxxx");
+    // var result = json.decode(response.data);
+    //  printWrapped(result.toString());
+    if (response.statusCode == 200 /*&& result['status'] == true*/) {
+      completion(true);
+    } else {
+      completion(false);
+    }
+
+    /* NetworkService().post(
+        url: ApiConstants.baseUrl + ApiConstants.confirm_subs_payment,
+        body: data,
+        headers: {
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Accept': 'application/json',
+          'Authorization': 'Bearer ${UserDefaults.getToken() ?? ""}'
+        }).then((response) {
+      printWrapped("responseeeexxxxx");
+      printWrapped(response.toString());
       if (response.statusCode == 200) {
         var encodedOrder = json.decode(response.body);
         return encodedOrder;
       } else {
         return [];
       }
-    });
+    });*/
   }
 }

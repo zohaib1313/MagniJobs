@@ -46,7 +46,7 @@ class Candidates {
   String? email;
   String? mobile;
   String? address;
-  int? verified;
+  String? verified;
   int? location;
   String? dob;
   String? nationality;
@@ -56,6 +56,8 @@ class Candidates {
   String? exams;
   String? workExperience;
   String? license;
+  String? job_type;
+  String? subtype;
 
   Candidates(
       {this.id,
@@ -72,6 +74,8 @@ class Candidates {
       this.maritalStatus,
       this.certifications,
       this.exams,
+      this.job_type,
+      this.subtype,
       this.workExperience,
       this.license});
 
@@ -92,6 +96,8 @@ class Candidates {
     exams = json['exams'];
     workExperience = json['work_experience'];
     license = json['license'];
+    job_type = json['job_type'];
+    subtype = json['subtype'];
   }
 
   Map<String, dynamic> toJson() {
@@ -112,6 +118,8 @@ class Candidates {
     data['exams'] = this.exams;
     data['work_experience'] = this.workExperience;
     data['license'] = this.license;
+    data['job_type'] = this.job_type;
+    data['subtype'] = this.subtype;
     return data;
   }
 }

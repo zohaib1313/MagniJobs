@@ -11,6 +11,7 @@ import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/all_jobs_model.dart';
+import 'package:magnijobs_rnr/models/count_job_model.dart';
 import 'package:magnijobs_rnr/models/countries_model.dart';
 import 'package:magnijobs_rnr/models/my_subscription_model.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
@@ -28,7 +29,6 @@ class CompanyProfileViewModel extends ChangeNotifier {
       StreamController.broadcast();
 
   String _selectedCountryId = '';
-  TextEditingController queryEditingController = TextEditingController();
 
   String get selectedCountryId => _selectedCountryId;
 
@@ -86,7 +86,6 @@ class CompanyProfileViewModel extends ChangeNotifier {
 
   void resetState() {
     _selectedCountryId = '';
-    queryEditingController.clear();
     pereferdLocation1.clear();
     pereferdLocation2.clear();
     pereferdLocation3.clear();
@@ -177,7 +176,8 @@ class CompanyProfileViewModel extends ChangeNotifier {
     });
   }
 
-  void getSubscriptions({onComplete}) {
+  int? lastSubPackageId = -1;
+  void getSubscriptions({onCompleteA}) {
     AppPopUps().showProgressDialog(context: myContext);
 
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
@@ -189,14 +189,56 @@ class CompanyProfileViewModel extends ChangeNotifier {
             ),
             create: () => APIResponse<MySubScriptionModel>(
                 create: () => MySubScriptionModel()),
-            apiFunction: loadCountries)
+            apiFunction: getSubscriptions)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      if (response.response?.data?.subscriptions != null) {
+        if (response.response!.data!.subscriptions!.isEmpty) {
+          onCompleteA(-1);
+        } else {
+          int lastId = response.response!.data!.subscriptions!.last.id ?? -1;
+          lastSubPackageId = lastId;
+          _countMyJob(onComplete: (statuss) {
+            if (statuss) {
+              onCompleteA(lastSubPackageId);
+            } else {
+              onCompleteA(-1);
+            }
+          });
+        }
+      }
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+    });
+  }
+
+  void _countMyJob({onComplete}) {
+    AppPopUps().showProgressDialog(context: myContext);
+
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.count_jobs,
+              body: {},
+            ),
+            create: () =>
+                APIResponse<CountJobModel>(create: () => CountJobModel()),
+            apiFunction: _countMyJob)
         .then((response) {
       AppPopUps().dissmissDialog();
 
-      if (response.response!.data!.subscriptions!.isEmpty) {
-        onComplete(false);
-      } else {
+      if (response.response?.data?.elegibility == true) {
         onComplete(true);
+      } else {
+        onComplete(false);
       }
     }).catchError((error) {
       print("error=  ${error.toString()}");
