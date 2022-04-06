@@ -186,6 +186,7 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
         JobTypeModel? jobTypeModel = response.response!.data;
         printWrapped(jobTypeModel.toString());
         jobTypeStreamController.sink.add(jobTypeModel!.jobtypes!);
+        selectedJobType = jobTypeModel.jobtypes![0];
       }
     }).catchError((error) {});
     return jobTypeStreamController.stream;

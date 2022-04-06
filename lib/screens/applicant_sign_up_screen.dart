@@ -170,11 +170,13 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                             builder: (BuildContext context,
                                 AsyncSnapshot<List<Jobtypes?>> snapshot) {
                               if (snapshot.hasData) {
+                                view.getJobSubTypes();
                                 return MyDropDown(
                                   onChange: (value) {
                                     view.selectedJobType = value;
-                                    view.getJobSubTypes();
-                                    setState(() {});
+                                    setState(() {
+                                      view.getJobSubTypes();
+                                    });
                                   },
                                   hintText: "Job Type",
                                   labelText: "",
@@ -184,6 +186,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                   labelColor: AppColor.redColor,
                                   borderColor: AppColor.alphaGrey,
                                   fillColor: AppColor.alphaGrey,
+                                  value: view.selectedJobType,
                                   suffixIcon: "assets/icons/drop_down_ic.svg",
                                   items: snapshot.data!,
                                   validator: (string) {
