@@ -261,8 +261,8 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          view.getSubscriptions(onCompleteA: (status) {
-                            if (status != -1) {
+                          view.countMyJob(onComplete: (status) {
+                            if (status) {
                               Navigator.of(myContext!).push(
                                 MaterialPageRoute(
                                   builder: (context) => JobPostScreen(
@@ -495,7 +495,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     );
   }
 
-  getListOfJobs(AsyncSnapshot<List<Jobs?>> snapshot) {
+/*  getListOfJobs(AsyncSnapshot<List<Jobs?>> snapshot) {
     List<Jobs> list = [];
     list.add(Jobs(job: "Other", id: -1));
 
@@ -504,10 +504,9 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
     }
 
     return list;
-  }
+  }*/
 
   imageEditWidget() {
-    print("vvvv");
     return GestureDetector(
       onTap: () {
         view.getFile(onCompleteA: () {
@@ -577,7 +576,7 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
             ),
             space,
             Text(
-              UserDefaults.getCandidateUserSession()?.user?.firstName ?? "",
+              UserDefaults.getEmployerUserSession()?.user?.firstName ?? "",
               style: AppTextStyles.textStyleNormalBodySmall
                   .copyWith(color: AppColor.blackColor),
             ),

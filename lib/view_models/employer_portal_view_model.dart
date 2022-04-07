@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:magnijobs_rnr/models/job_type_model.dart';
 
 class EmployerPortalViewModel extends ChangeNotifier {
-  TextEditingController queryEditingController = TextEditingController();
   String? selectedCountryId;
 
   bool _showQueryField = false;
 
   bool get showQueryField => _showQueryField;
+
+  Jobtypes? selctedJobType;
 
   set showQueryField(bool value) {
     _showQueryField = value;
@@ -14,7 +16,6 @@ class EmployerPortalViewModel extends ChangeNotifier {
   }
 
   void resetState() {
-    queryEditingController.clear();
     selectedCountryId = null;
   }
 }

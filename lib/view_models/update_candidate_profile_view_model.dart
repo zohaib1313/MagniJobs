@@ -11,6 +11,7 @@ import 'package:magnijobs_rnr/dio_network/api_client.dart';
 import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
+import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:path/path.dart';
 
 import '../models/signin_model.dart';
@@ -141,7 +142,10 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
       "preferred_location3": pereferdLocation3.text,
       "preferred_location4": pereferdLocation4.text,
       "preferred_location5": pereferdLocation5.text,
-      'profile': profilePicImage?.path != null
+      "job_type":
+          UserDefaults.getCandidateUserSession()?.candidateModel?.job_type ??
+              "null",
+      'avatar': profilePicImage?.path != null
           ? await MultipartFile.fromFile(
               profilePicImage!.path,
               filename: basename(profilePicImage!.path),
@@ -162,6 +166,8 @@ class UpdateCandidateProfileViewModel extends ChangeNotifier {
       AppPopUps().dissmissDialog();
       await UserDefaults.saveCandidateUserSession(
           response.response!.data!, UserDefaults.getUserType() ?? '');
+
+      printWrapped(UserDefaults.getCandidateUserSession()?.user?.profile ?? '');
       onComplete();
     }).catchError((error) {
       print("error=  ${error.toString()}");

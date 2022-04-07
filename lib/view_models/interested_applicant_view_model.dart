@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
@@ -8,6 +10,7 @@ import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/models/get_jobseeker_profile.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 
+import '../models/job_type_model.dart';
 import '../routes.dart';
 
 class InterestedApplicantsViewModel extends ChangeNotifier {
@@ -109,6 +112,112 @@ class InterestedApplicantsViewModel extends ChangeNotifier {
         }
       }
     }
+    notifyListeners();
+  }
+
+  bool isVerifiedFiltered = false;
+  bool isSortFiltered = false;
+
+  TextEditingController filterLocation = TextEditingController();
+
+  Jobtypes? selectedJobType;
+  List<Jobtypes?> jobTypeList = [];
+  StreamController<List<Jobtypes?>> jobTypeStreamController =
+      StreamController.broadcast();
+
+  Stream<List<Jobtypes?>> getJobTypes() {
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.all_job_types,
+              body: {},
+            ),
+            create: () =>
+                APIResponse<JobTypeModel>(create: () => JobTypeModel()),
+            apiFunction: getJobTypes)
+        .then((response) {
+      if (response.response?.data != null) {
+        JobTypeModel? jobTypeModel = response.response!.data;
+
+        jobTypeStreamController.sink.add(jobTypeModel!.jobtypes!);
+        jobTypeList = jobTypeModel.jobtypes ?? [];
+      }
+    }).catchError((error) {});
+    return jobTypeStreamController.stream;
+  }
+
+  void filterJobsOnSort() {
+    AppPopUps().showProgressDialog(context: myContext);
+
+    showingListOfCandidates.sort((a, b) {
+      String aName = a.firstName ?? '';
+      String bName = b.firstName ?? '';
+
+      return isSortFiltered ? aName.compareTo(bName) : bName.compareTo(aName);
+    });
+    isSortFiltered = !isSortFiltered;
+    AppPopUps().dissmissDialog();
+
+    notifyListeners();
+  }
+
+  void filterOnLocation() {
+    AppPopUps().showProgressDialog(context: myContext);
+    printWrapped("filtering ");
+
+    if (filterLocation.text.isNotEmpty) {
+      print(filterLocation.text);
+
+      showingListOfCandidates = _allCandidatesList.where((i) {
+        print("xxxxx ${i.location}");
+        return (((i.location ?? 0).toString()) == filterLocation.text);
+      }).toList();
+    } else {
+      showingListOfCandidates = _allCandidatesList;
+    }
+
+    AppPopUps().dissmissDialog();
+    notifyListeners();
+  }
+
+  void filterOnVerified() {
+    AppPopUps().showProgressDialog(context: myContext);
+    printWrapped("filtering ");
+    showingListOfCandidates.sort((a, b) {
+      return isVerifiedFiltered
+          ? (a.verified ?? "0").compareTo(b.verified ?? "0")
+          : (b.verified ?? "0").compareTo(a.verified ?? "0");
+    });
+
+    /*   showingListOfCandidates =
+        showingListOfCandidates.where((i) => ((i.verified ?? 0) == 1)).toList();*/
+    isVerifiedFiltered = !isVerifiedFiltered;
+    AppPopUps().dissmissDialog();
+    notifyListeners();
+  }
+
+  void filterJobOnJobType() {
+    AppPopUps().showProgressDialog(context: myContext);
+    printWrapped("filtering ");
+
+    if (selectedJobType != null) {
+      showingListOfCandidates = _allCandidatesList.where((i) {
+        return (((i.job_type ?? "-1").toString()) ==
+            (selectedJobType?.id ?? 0).toString());
+      }).toList();
+    } else {
+      showingListOfCandidates = _allCandidatesList;
+    }
+
+    AppPopUps().dissmissDialog();
+    notifyListeners();
+  }
+
+  void clearFilter() {
+    filterLocation.clear();
+    selectedJobType = null;
+    showingListOfCandidates = _allCandidatesList;
     notifyListeners();
   }
 }

@@ -5,14 +5,12 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:magnijobs_rnr/common_widgets/common_widgets.dart';
 import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/routes.dart';
-import 'package:magnijobs_rnr/screens/chat/chat_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/app_alert_bottom_sheet.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/country_and_job_view_model.dart';
 import 'package:provider/provider.dart';
 
-import '../../common_widgets/app_popups.dart';
 import '../../models/all_jobs_model.dart';
 import '../../profile_settting_screen.dart';
 import '../../utils/my_app_bar.dart';
@@ -436,55 +434,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                                                 buttonText: "Chat",
                                                 textColor: AppColor.whiteColor,
                                                 onTap: () {
-                                                  view.checkChatsFromFirebase(
-                                                      onComplete: (status) {
-                                                    if (status) {
-                                                      Navigator.of(myContext!)
-                                                          .push(
-                                                        MaterialPageRoute(
-                                                          builder: (context) =>
-                                                              ChatScreen(
-                                                            otherUserId:
-                                                                candidate!.id!
-                                                                    .toString(),
-                                                            otherUserImage: '',
-                                                            otherUserName:
-                                                                candidate
-                                                                    .firstName!,
-                                                            otherUserPhone:
-                                                                candidate
-                                                                    .mobile!,
-                                                          ),
-                                                        ),
-                                                      );
-                                                    } else {
-                                                      AppPopUps
-                                                          .showThreeOptionsDialog(
-                                                              message:
-                                                                  'You chats with current subscribed package has reached to limit,delete chats or subscribe again',
-                                                              yesTitle:
-                                                                  'Delete Chats',
-                                                              onYes: () {
-                                                                Navigator.of(
-                                                                        myContext!)
-                                                                    .pop();
-                                                              },
-                                                              noTitle:
-                                                                  ('Subscribe to package'),
-                                                              onNo: () {
-                                                                Navigator.of(
-                                                                        myContext!)
-                                                                    .pop();
-                                                              },
-                                                              nutralTitle:
-                                                                  'Cancel',
-                                                              onNutral: () {
-                                                                Navigator.of(
-                                                                        myContext!)
-                                                                    .pop();
-                                                              });
-                                                    }
-                                                  });
+                                                  view.chatAction(candidate);
                                                 },
                                               ),
                                             ),
@@ -506,36 +456,7 @@ class _CountryAndJobScreenState extends State<CountryAndJobScreen> {
                       buttonText: "Chat",
                       textColor: AppColor.whiteColor,
                       onTap: () {
-                        view.checkChatsFromFirebase(onComplete: (status) {
-                          if (status) {
-                            Navigator.of(myContext!).push(
-                              MaterialPageRoute(
-                                builder: (context) => ChatScreen(
-                                  otherUserId: candidate!.id!.toString(),
-                                  otherUserImage: '',
-                                  otherUserName: candidate.firstName!,
-                                  otherUserPhone: candidate.mobile!,
-                                ),
-                              ),
-                            );
-                          } else {
-                            AppPopUps.showThreeOptionsDialog(
-                                message:
-                                    'You chats with current subscribed package has reached to limit,delete chats or subscribe again',
-                                yesTitle: 'Delete Chats',
-                                onYes: () {
-                                  Navigator.of(myContext!).pop();
-                                },
-                                noTitle: ('Subscribe to package'),
-                                onNo: () {
-                                  Navigator.of(myContext!).pop();
-                                },
-                                nutralTitle: 'Cancel',
-                                onNutral: () {
-                                  Navigator.of(myContext!).pop();
-                                });
-                          }
-                        });
+                        view.chatAction(candidate);
                       },
                     ),
                   ],

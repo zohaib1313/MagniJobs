@@ -90,7 +90,7 @@ class UpdateTutorProfileViewModel extends ChangeNotifier {
       "mobile": mobileController.text,
       "address": addressController.text,
       "company": companyController.text,
-      'profile': profilePic?.path != null
+      'avatar': profilePic?.path != null
           ? await MultipartFile.fromFile(
               profilePic!.path,
               filename: basename(profilePic!.path),

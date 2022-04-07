@@ -173,7 +173,7 @@ class User {
     emailVerifiedAt = json['email_verified_at'];
     utype = json['utype'];
     otp = json['otp'];
-    profile = json['profile'];
+    profile = json['avatar'];
     verified = json['verified'];
     phoneVerifiedAt = json['phone_verified_at'];
     verification = json['verification'];
@@ -193,7 +193,7 @@ class User {
     data['email_verified_at'] = this.emailVerifiedAt;
     data['utype'] = this.utype;
     data['otp'] = this.otp;
-    data['profile'] = this.profile;
+    data['avatar'] = this.profile;
     data['verified'] = this.verified;
     data['phone_verified_at'] = this.phoneVerifiedAt;
     data['verification'] = this.verification;
@@ -238,7 +238,7 @@ class CandidateModel {
   String? createdAt;
   String? updatedAt;
   String? deletedAt;
-  bool? verified;
+  dynamic verified;
   String? job_type;
   String? subtype;
 

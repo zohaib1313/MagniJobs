@@ -116,7 +116,7 @@ class _VerifyNumberScreenState extends State<VerifyNumberScreen> {
           color: AppColor.primaryBlueDarkColor,
           onTap: () {
             ///todo
-            //Navigator.of(myContext!).pop(true);
+            // Navigator.of(myContext!).pop(true);
 
             if (view.phonenumberController.text.isNotEmpty) {
               view.checkMyNumber(completion: () {

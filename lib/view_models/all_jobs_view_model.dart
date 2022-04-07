@@ -85,6 +85,7 @@ class AllJobsViewModel extends ChangeNotifier {
       filteredJobs.clear();
       alJobs = response.response?.data?.jobs?.jobs ?? [];
       filteredJobs.addAll(alJobs);
+      filterOnVerified();
       completion(alJobs);
     }).catchError((error) {
       print("error=  ${error.toString()}");
@@ -236,7 +237,6 @@ class AllJobsViewModel extends ChangeNotifier {
       getAppliedFilterJob(alJobs);
       completion(alJobs);
     }).catchError((error) {
-      print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();
       AppPopUps().showErrorPopUp(
           title: 'Error',
@@ -281,6 +281,13 @@ class AllJobsViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  void clearFilters() {
+    AppPopUps().dissmissDialog();
+    filterLocation.clear();
+    filteredJobs = alJobs;
+    notifyListeners();
+  }
+
   void filterJobOnLocation() {
     /*   showingListOfCandidates.sort((a, b) {
       return isRecentFilterd
@@ -289,7 +296,7 @@ class AllJobsViewModel extends ChangeNotifier {
     });*/
 
     if (filterLocation.text.isNotEmpty) {
-      filteredJobs = filteredJobs
+      filteredJobs = alJobs
           .where((i) => (((i.country ?? 0).toString()) == filterLocation.text))
           .toList();
     } else {

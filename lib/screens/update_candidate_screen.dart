@@ -243,7 +243,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                           space,
                           MyDropDown(
                             onChange: (value) {
-                              view.pereferdLocation1.text = value.toString();
+                              view.pereferdLocation1.text = value.id.toString();
                             },
                             hintText: getCountryNameFromId(
                                   (int.parse(view.pereferdLocation1.text)),
@@ -277,7 +277,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                           space,
                           MyDropDown(
                             onChange: (value) {
-                              view.pereferdLocation2.text = value.toString();
+                              view.pereferdLocation2.text = value.id.toString();
                             },
                             hintText: getCountryNameFromId(
                                   (int.parse(view.pereferdLocation2.text)),
@@ -311,7 +311,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                           space,
                           MyDropDown(
                             onChange: (value) {
-                              view.pereferdLocation3.text = value.toString();
+                              view.pereferdLocation3.text = value.id.toString();
                             },
                             hintText: getCountryNameFromId(
                                   (int.parse(view.pereferdLocation3.text)),
@@ -345,7 +345,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                           space,
                           MyDropDown(
                             onChange: (value) {
-                              view.pereferdLocation4.text = value.toString();
+                              view.pereferdLocation4.text = value.id.toString();
                             },
                             hintText: getCountryNameFromId(
                                   (int.parse(view.pereferdLocation4.text)),
@@ -379,7 +379,7 @@ class _UpdateCandidateScreenState extends State<UpdateCandidateScreen> {
                           space,
                           MyDropDown(
                             onChange: (value) {
-                              view.pereferdLocation5.text = value.toString();
+                              view.pereferdLocation5.text = value.id.toString();
                             },
                             hintText: getCountryNameFromId(
                                   (int.parse(view.pereferdLocation5.text)),

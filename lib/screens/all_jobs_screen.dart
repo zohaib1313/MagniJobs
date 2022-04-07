@@ -445,6 +445,7 @@ class _AllJobScreenState extends State<AllJobScreen> {
               MyDropDown(
                 onChange: (value) {
                   view.filterLocation.text = value.id.toString();
+                  view.filterJobOnLocation();
                 },
                 hintText: "Location",
                 labelText: "",
@@ -468,22 +469,12 @@ class _AllJobScreenState extends State<AllJobScreen> {
               space,
               space,
               space,
-              Button(
-                buttonText: 'Apply',
-                textColor: AppColor.whiteColor,
-                onTap: () {
-                  //  Navigator.of(context).pop();
-                  view.filterJobOnLocation();
-                },
-              ),
               space,
               Button(
                 buttonText: 'Clear Filter',
                 textColor: AppColor.whiteColor,
                 onTap: () {
-                  view.filterLocation.clear();
-                  // Navigator.of(context).pop();
-                  view.filterJobOnLocation();
+                  view.clearFilters();
                 },
               ),
               space,

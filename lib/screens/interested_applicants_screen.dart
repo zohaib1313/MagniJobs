@@ -12,6 +12,7 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../../utils/my_app_bar.dart';
+import '../utils/user_defaults.dart';
 import '../view_models/interested_applicant_view_model.dart';
 
 class InterestedApplicantsScreen extends StatefulWidget {
@@ -33,6 +34,7 @@ class _InterestedApplicantsScreenState
   void initState() {
     super.initState();
 
+    view.getJobTypes();
     view.searchTextController.addListener(() {
       view.searchFromList();
     });
@@ -89,36 +91,149 @@ class _InterestedApplicantsScreenState
           ]),
           backgroundColor: AppColor.alphaGrey,
           // ignore: prefer_is_empty
-          body: (view.showingListOfCandidates.length) != 0
-              ? SingleChildScrollView(
-                  physics: const BouncingScrollPhysics(),
-                  child: Container(
-                      //  height: MediaQuery.of(context).size.height,
-                      padding: EdgeInsets.only(
-                        left: 50.w,
-                        right: 50.w,
+          body: Column(
+            children: [
+              Container(
+                decoration: BoxDecoration(
+                    color: AppColor.whiteColor,
+                    borderRadius: BorderRadius.circular(50.r)),
+                child: Row(
+                  children: [
+                    Expanded(
+                      child: Row(
+                        children: [
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.only(
+                                  top: 20, bottom: 20, left: 10, right: 10),
+                              child: GestureDetector(
+                                onTap: () {
+                                  view.filterOnVerified();
+                                },
+                                child: Text(
+                                  "Verified",
+                                  style: AppTextStyles.textStyleBoldBodyMedium,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Icon(view.isVerifiedFiltered
+                              ? Icons.keyboard_arrow_up
+                              : Icons.keyboard_arrow_down),
+                        ],
                       ),
-                      decoration: BoxDecoration(
-                        color: AppColor.alphaGrey,
-                        borderRadius: BorderRadius.only(
-                            topLeft: Radius.circular(40.r),
-                            topRight: Radius.circular(40.r)),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 40.w, right: 40.w),
+                      color: AppColor.alphaGrey,
+                      width: 2,
+                      height: 50.h,
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          view.isSortFiltered
+                              ? Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.arrow_upward,
+                                      size: 20,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_downward,
+                                      size: 20,
+                                    ),
+                                  ],
+                                )
+                              : Row(
+                                  children: const [
+                                    Icon(
+                                      Icons.arrow_downward,
+                                      size: 20,
+                                    ),
+                                    Icon(
+                                      Icons.arrow_upward,
+                                      size: 20,
+                                    ),
+                                  ],
+                                ),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                view.filterJobsOnSort();
+                              },
+                              child: Text(
+                                "Sort",
+                                style: AppTextStyles.textStyleBoldBodyMedium,
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
-                      child: ListView.builder(
-                          itemCount: view.showingListOfCandidates.length,
-                          shrinkWrap: true,
-                          physics: const NeverScrollableScrollPhysics(),
-                          itemBuilder: (context, index) {
-                            return getJobSeekerWidget(
-                                view.showingListOfCandidates[index]);
-                          })),
-                )
-              : Center(
-                  child: Text(
-                    'No Candidate',
-                    style: AppTextStyles.textStyleBoldBodyMedium,
-                  ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 40.w, right: 40.w),
+                      color: AppColor.alphaGrey,
+                      width: 2,
+                      height: 50.h,
+                    ),
+                    Expanded(
+                      child: Row(
+                        children: [
+                          const Icon(Icons.filter_alt_rounded),
+                          Expanded(
+                            child: GestureDetector(
+                              onTap: () {
+                                showBottom();
+                              },
+                              child: Text(
+                                "Filter",
+                                style: AppTextStyles.textStyleBoldBodyMedium,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
                 ),
+              ),
+              (view.showingListOfCandidates.isNotEmpty)
+                  ? Expanded(
+                      child: SingleChildScrollView(
+                        physics: const BouncingScrollPhysics(),
+                        child: Container(
+                            //  height: MediaQuery.of(context).size.height,
+                            padding: EdgeInsets.only(
+                              left: 50.w,
+                              right: 50.w,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppColor.alphaGrey,
+                              borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(40.r),
+                                  topRight: Radius.circular(40.r)),
+                            ),
+                            child: ListView.builder(
+                                itemCount: view.showingListOfCandidates.length,
+                                shrinkWrap: true,
+                                physics: const NeverScrollableScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  return getJobSeekerWidget(
+                                      view.showingListOfCandidates[index]);
+                                })),
+                      ),
+                    )
+                  : Expanded(
+                      child: Center(
+                        child: Text(
+                          'No Candidate',
+                          style: AppTextStyles.textStyleBoldBodyMedium,
+                        ),
+                      ),
+                    ),
+            ],
+          ),
         ),
       ),
     );
@@ -403,5 +518,99 @@ class _InterestedApplicantsScreenState
         ),
       ],
     );
+  }
+
+  void showBottom() {
+    BottomSheets().showBottomSheet(
+        context: context,
+        child: Padding(
+          padding: const EdgeInsets.all(18.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Apply Filter",
+                    style: AppTextStyles.textStyleNormalBodyMedium,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                    },
+                    child: const Icon(
+                      Icons.cancel,
+                      color: AppColor.blackColor,
+                    ),
+                  )
+                ],
+              ),
+              space,
+              space,
+              MyDropDown(
+                onChange: (value) {
+                  view.filterLocation.text = value.id.toString();
+                  Navigator.of(context).pop();
+                  view.filterOnLocation();
+                },
+                hintText: "Location",
+                labelText: "",
+                itemAsString: (item) {
+                  return item.name ?? '';
+                },
+                leftPadding: 0,
+                value: view.filterLocation.text.isNotEmpty
+                    ? getCountryNameFromId(int.parse(view.filterLocation.text))
+                    : null,
+                rightPadding: 0,
+                labelColor: AppColor.redColor,
+                borderColor: AppColor.alphaGrey,
+                fillColor: AppColor.alphaGrey,
+                suffixIcon: "assets/icons/drop_down_ic.svg",
+                items: UserDefaults.getCountriesList()?.countries!,
+                validator: (string) {
+                  return null;
+                },
+              ),
+              space,
+              MyDropDown(
+                onChange: (value) {
+                  view.selectedJobType = value;
+                  Navigator.of(context).pop();
+                  view.filterJobOnJobType();
+                },
+                hintText: "Job Type",
+                labelText: "",
+                itemAsString: (item) {
+                  return item.jobType ?? '';
+                },
+                leftPadding: 0,
+                value: view.selectedJobType,
+                rightPadding: 0,
+                labelColor: AppColor.redColor,
+                borderColor: AppColor.alphaGrey,
+                fillColor: AppColor.alphaGrey,
+                suffixIcon: "assets/icons/drop_down_ic.svg",
+                items: view.jobTypeList,
+                validator: (string) {
+                  return null;
+                },
+              ),
+              space,
+              space,
+              space,
+              Button(
+                buttonText: 'Clear Filter',
+                textColor: AppColor.whiteColor,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  view.clearFilter();
+                },
+              ),
+              space,
+            ],
+          ),
+        ));
   }
 }

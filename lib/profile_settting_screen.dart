@@ -69,7 +69,9 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                             "assets/icons/ic_message.svg", "Chats", onTap: () {
                           Navigator.of(myContext!).pushNamed(AllChatPage.id);
                         }),
-                        if (UserDefaults.getEmployerUserSession() != null)
+                        if (UserDefaults.getEmployerUserSession()
+                                ?.employerModel !=
+                            null)
                           getRowProfileItem("assets/icons/ic_edit_person.svg",
                               "Interested Applicants", onTap: () {
                             Provider.of<InterestedApplicantsViewModel>(

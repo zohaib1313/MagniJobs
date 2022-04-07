@@ -1,6 +1,8 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
 import 'package:magnijobs_rnr/dio_network/APis.dart';
 import 'package:magnijobs_rnr/dio_network/api_client.dart';
@@ -8,12 +10,18 @@ import 'package:magnijobs_rnr/dio_network/api_response.dart';
 import 'package:magnijobs_rnr/dio_network/api_route.dart';
 import 'package:magnijobs_rnr/models/country_and_job_model.dart';
 import 'package:magnijobs_rnr/models/get_jobseeker_profile.dart';
+import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
+import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:provider/provider.dart';
 
 import '../models/job_sub_type_model.dart';
 import '../models/job_type_model.dart';
+import '../models/my_subscription_model.dart';
 import '../routes.dart';
+import '../screens/chat/all_chats_page.dart';
+import '../screens/chat/chat_screen.dart';
+import 'all_packges_view_model.dart';
 import 'company_profile_view_model.dart';
 
 class CountryAndJobViewModel extends ChangeNotifier {
@@ -24,7 +32,7 @@ class CountryAndJobViewModel extends ChangeNotifier {
 
   List<Jobtypes?> jobTypeList = [];
 
-  bool isVerifiedFiltered = true;
+  bool isVerifiedFiltered = false;
   bool isSortFiltered = false;
 
   TextEditingController filterLocation = TextEditingController();
@@ -282,7 +290,121 @@ class CountryAndJobViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void checkChatsFromFirebase({onComplete}) {
-    onComplete(true);
+  void _checkChatsFromFirebase({onComplete}) async {
+    AppPopUps().showProgressDialog(context: myContext);
+
+    DocumentSnapshot<Map<String, dynamic>> s = await FirebaseFirestore.instance
+        .collection('Messages')
+        .doc(UserDefaults.getCurrentUserId())
+        .get();
+
+    int chatCountsInFirebase = s.data()?.length ?? 0;
+    printWrapped("chat counts in firebase =$chatCountsInFirebase");
+
+    _getSubscriptions(onCompleteA: (lastPackageId) {
+      printWrapped("my subscribed package =$lastPackageId");
+
+      _getEligibilityOfChatOnPacakgeId(
+          id: lastPackageId,
+          countsInFirebase: chatCountsInFirebase,
+          onStatus: (statuss) {
+            onComplete(statuss);
+          });
+    });
+  }
+
+  _getEligibilityOfChatOnPacakgeId(
+      {required int id, required int countsInFirebase, onStatus}) {
+    switch (id) {
+      case 1: //10 contacts
+        onStatus(countsInFirebase <= 10);
+        break;
+
+      case 2: //20 Saved Contacts
+        onStatus(countsInFirebase <= 20);
+
+        break;
+      case 3: //50 Saved Contacts
+        onStatus(countsInFirebase <= 50);
+
+        break;
+      case 4: //50 Saved Contacts
+        onStatus(countsInFirebase <= 50);
+
+        break;
+    }
+  }
+
+  void _getSubscriptions({onCompleteA}) {
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.my_subscriptions,
+              body: {},
+            ),
+            create: () => APIResponse<MySubScriptionModel>(
+                create: () => MySubScriptionModel()),
+            apiFunction: _getSubscriptions)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+      if (response.response?.data?.subscriptions != null) {
+        if (response.response!.data!.subscriptions!.isEmpty) {
+          onCompleteA(-1);
+        } else {
+          int lastId = int.parse(
+              (response.response?.data?.subscriptions?.last.packageId ?? "-1"));
+          onCompleteA(lastId);
+        }
+      }
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+    });
+  }
+
+  void chatAction(Candidates? candidate) {
+    _checkChatsFromFirebase(onComplete: (status) {
+      if (status) {
+        Navigator.of(myContext!).push(
+          MaterialPageRoute(
+            builder: (context) => ChatScreen(
+              otherUserId: candidate!.id!.toString(),
+              otherUserImage: '',
+              otherUserName: candidate.firstName!,
+              otherUserPhone: candidate.mobile!,
+            ),
+          ),
+        );
+      } else {
+        AppPopUps.showThreeOptionsDialog(
+            message:
+                'You chats with current subscribed package has reached to limit,delete chats or subscribe again',
+            yesTitle: 'Delete Chats',
+            onYes: () {
+              Navigator.of(myContext!).pop();
+              Navigator.of(myContext!).pushNamed(AllChatPage.id);
+            },
+            noTitle: ('Subscribe to package'),
+            onNo: () {
+              Navigator.of(myContext!).pop();
+              Provider.of<AllPackagesAndPaymentViewModel>(myContext!,
+                      listen: false)
+                  .getAllPackages(completion: () async {
+                await Navigator.of(myContext!).pushNamed(PackagesScreen.id);
+              });
+            },
+            nutralTitle: 'Cancel',
+            onNutral: () {
+              Navigator.of(myContext!).pop();
+            });
+      }
+    });
   }
 }

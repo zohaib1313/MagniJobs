@@ -18,7 +18,9 @@ import 'package:provider/provider.dart';
 
 import '../models/all_jobs_model.dart';
 import '../models/countries_model.dart';
+import '../models/job_type_model.dart';
 import '../view_models/company_profile_view_model.dart';
+import '../view_models/country_and_job_view_model.dart';
 import 'all_jobs_screen.dart';
 import 'attendie_profile_screen.dart';
 
@@ -178,40 +180,39 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                     ),
                     space,
                     StreamBuilder(
-                      stream: Provider.of<CompanyProfileViewModel>(myContext!,
+                      stream: Provider.of<CountryAndJobViewModel>(myContext!,
                               listen: false)
-                          .loadJobs(),
+                          .getJobTypes(),
                       builder: (BuildContext context,
-                          AsyncSnapshot<List<Jobs?>> snapshot) {
+                          AsyncSnapshot<List<Jobtypes?>> snapshot) {
                         if (snapshot.hasData) {
                           return MyDropDown(
                             onChange: (value) {
-                              if (value.id.toString() != '-1') {
-                                view.showQueryField = false;
-                                view.queryEditingController.text =
-                                    value.job ?? "";
-                              } else {
-                                view.showQueryField = true;
-                              }
+                              view.selctedJobType = value;
                             },
                             hintText: "Jobs",
                             labelText: "",
-                            itemAsString: (a) {
-                              return a.job ?? '';
+                            itemAsString: (item) {
+                              return item.jobType ?? '';
                             },
                             labelColor: AppColor.redColor,
                             borderColor: AppColor.alphaGrey,
                             fillColor: AppColor.whiteColor,
+                            value: Provider.of<CountryAndJobViewModel>(
+                                    myContext!,
+                                    listen: false)
+                                .selectedJobType,
                             suffixIcon: "assets/icons/drop_down_ic.svg",
-                            items: getListOfJobs(snapshot),
+                            items: snapshot.data!,
                             validator: (string) {
+                              if (view.selctedJobType == null) {
+                                return 'Required';
+                              }
                               return null;
                             },
                           );
                         }
-                        return Center(
-                            child:
-                                Container(child: CircularProgressIndicator()));
+                        return const Center(child: CircularProgressIndicator());
                       },
                     ),
                     space,
@@ -231,13 +232,12 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
                                     builder: (context) => AllJobScreen()));
                               },
                             );
-                          } else if (view
-                              .queryEditingController.text.isNotEmpty) {
+                          } else if (view.selctedJobType != null) {
                             Provider.of<AllJobsViewModel>(myContext!,
                                     listen: false)
                                 .getJobBasedOnCountry(
                               countryId: view.selectedCountryId ?? '',
-                              query: view.queryEditingController.text,
+                              query: view.selctedJobType?.jobType ?? '',
                               completion: (allJobs) {
                                 Navigator.of(context).push(MaterialPageRoute(
                                     builder: (context) => AllJobScreen()));
@@ -286,10 +286,11 @@ class _EmployeePortalScreenState extends State<EmployeePortalScreen> {
           children: [
             Padding(
               padding: const EdgeInsets.only(right: 18.0),
-              child: !(UserDefaults.getCandidateUserSession()
-                          ?.candidateModel
-                          ?.verified ??
-                      false)
+              child: !((UserDefaults.getCandidateUserSession()
+                              ?.candidateModel
+                              ?.verified ??
+                          "0") ==
+                      '1')
                   ? /*Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: const [

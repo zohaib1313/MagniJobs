@@ -57,8 +57,8 @@ class _AllChatPageState extends State<AllChatPage> {
                     Expanded(
                       child: Container(
                         padding: EdgeInsets.only(
-                          left: 50.w,
-                          right: 50.w,
+                          left: 20.w,
+                          right: 20.w,
                         ),
                         decoration: BoxDecoration(
                           color: AppColor.alphaGrey,
@@ -89,49 +89,117 @@ class _AllChatPageState extends State<AllChatPage> {
                               }
                               Map<String, dynamic> mMap =
                                   snapshot.data!.data() as Map<String, dynamic>;
+
                               // e.value['name']
                               return ListView(
                                   children: mMap.entries
-                                      .map((e) => InkWell(
-                                            onTap: () {
-                                              Navigator.of(myContext!).push(
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ChatScreen(
-                                                    otherUserId: e.value['id'],
-                                                    otherUserImage:
-                                                        e.value['image'],
-                                                    otherUserName:
-                                                        e.value['name'],
-                                                    otherUserPhone:
-                                                        e.value['mobile'],
-                                                  ),
-                                                ),
+                                      .toList()
+                                      .reversed
+                                      .map((e) => Dismissible(
+                                            direction:
+                                                DismissDirection.startToEnd,
+                                            confirmDismiss: (DismissDirection
+                                                direction) async {
+                                              return await showDialog(
+                                                context: context,
+                                                builder:
+                                                    (BuildContext context) {
+                                                  return AlertDialog(
+                                                    title:
+                                                        const Text("Confirm"),
+                                                    content: const Text(
+                                                        "Are you sure you wish to delete this item?"),
+                                                    actions: <Widget>[
+                                                      FlatButton(
+                                                        onPressed: () {
+                                                          view.deleteChat(
+                                                              userId:
+                                                                  currentUserId ??
+                                                                      '',
+                                                              docId:
+                                                                  e.value['id'],
+                                                              onComplete:
+                                                                  (status) {
+                                                                return Navigator.of(
+                                                                        context)
+                                                                    .pop(
+                                                                        status);
+                                                              });
+                                                        },
+                                                        child: const Text(
+                                                            "DELETE"),
+                                                      ),
+                                                      FlatButton(
+                                                        onPressed: () =>
+                                                            Navigator.of(
+                                                                    context)
+                                                                .pop(false),
+                                                        child: const Text(
+                                                            "CANCEL"),
+                                                      ),
+                                                    ],
+                                                  );
+                                                },
                                               );
                                             },
-                                            child: Card(
-                                              child: Padding(
-                                                padding:
-                                                    const EdgeInsets.all(8.0),
-                                                child: ListTile(
-                                                  title: Text(e.value['name']),
-                                                  trailing: Text(view
-                                                      .readTimestamp(int.parse(
-                                                          e.value['time']))),
-                                                  subtitle: Text(
-                                                      e.value['lastMessage']),
-                                                  leading: CircleAvatar(
-                                                    radius: 30,
-                                                    backgroundImage: e.value[
-                                                                'image'] !=
-                                                            ""
-                                                        ? Image.network(ApiConstants
-                                                                    .employer_logos +
-                                                                e.value[
-                                                                    'image'])
-                                                            .image
-                                                        : const AssetImage(
-                                                            'assets/images/place_your_image.png'),
+                                            background: Container(
+                                              padding: const EdgeInsets.only(
+                                                  left: 28.0),
+                                              alignment: AlignmentDirectional
+                                                  .centerStart,
+                                              color: Colors.red,
+                                              child: const Icon(
+                                                Icons.delete_forever,
+                                                color: Colors.white,
+                                              ),
+                                            ),
+                                            resizeDuration: const Duration(
+                                                milliseconds: 200),
+                                            key: UniqueKey(),
+                                            child: InkWell(
+                                              onTap: () {
+                                                Navigator.of(myContext!).push(
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ChatScreen(
+                                                      otherUserId:
+                                                          e.value['id'],
+                                                      otherUserImage:
+                                                          e.value['image'],
+                                                      otherUserName:
+                                                          e.value['name'],
+                                                      otherUserPhone:
+                                                          e.value['mobile'],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                              child: Card(
+                                                child: Padding(
+                                                  padding:
+                                                      const EdgeInsets.all(8.0),
+                                                  child: ListTile(
+                                                    title:
+                                                        Text(e.value['name']),
+                                                    trailing: Text(
+                                                        view.readTimestamp(
+                                                            int.parse(e.value[
+                                                                'time']))),
+                                                    subtitle: Text(
+                                                        e.value['lastMessage']),
+                                                    leading: CircleAvatar(
+                                                      radius: 30,
+                                                      backgroundImage: e.value[
+                                                                  'image'] !=
+                                                              ""
+                                                          ? Image.network(ApiConstants
+                                                                      .employer_logos +
+                                                                  e.value[
+                                                                      'image'])
+                                                              .image
+                                                          : const AssetImage(
+                                                              'assets/images/place_your_image.png'),
+                                                    ),
                                                   ),
                                                 ),
                                               ),

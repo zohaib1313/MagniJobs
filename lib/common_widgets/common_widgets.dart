@@ -331,6 +331,7 @@ class _MyDropDownState extends State<MyDropDown> {
       ),
       child: DropdownSearch<dynamic>(
         showSearchBox: true,
+        // showClearButton: true,
         selectedItem: widget.value,
         itemAsString: widget.itemAsString,
         label: widget.hintText ?? widget.labelText,
