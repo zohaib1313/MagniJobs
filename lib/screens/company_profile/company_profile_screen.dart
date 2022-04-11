@@ -14,6 +14,7 @@ import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:provider/provider.dart';
 
 import '../../models/job_type_model.dart';
+import '../../models/my_subscription_model.dart';
 import '../../profile_settting_screen.dart';
 import '../../routes.dart';
 import '../../view_models/all_packges_view_model.dart';
@@ -237,21 +238,44 @@ class _CompanyProfileScreenState extends State<CompanyProfileScreen> {
                         textColor: AppColor.whiteColor,
                         color: AppColor.primaryBlueDarkColor,
                         onTap: () {
-                          if (view.selectedCountryId.isNotEmpty &&
-                              Provider.of<CountryAndJobViewModel>(myContext!,
-                                          listen: false)
-                                      .selectedJobType !=
-                                  null) {
-                            Provider.of<CountryAndJobViewModel>(myContext!,
-                                    listen: false)
-                                .getAllCandidates(completion: () {
-                              Navigator.of(myContext!).push(MaterialPageRoute(
-                                  builder: (c) => CountryAndJobScreen()));
-                            });
-                          } else {
-                            AppPopUps.showAlertDialog(
-                                message: 'Enter all fields');
-                          }
+                          view.getSubscriptions(
+                              onCompleteA: (Subscriptions? mySubScription) {
+                            print(mySubScription?.id.toString());
+                            if ((mySubScription?.packageId ?? "-1") == "4") {
+                              if (view.selectedCountryId.isNotEmpty &&
+                                  Provider.of<CountryAndJobViewModel>(
+                                              myContext!,
+                                              listen: false)
+                                          .selectedJobType !=
+                                      null) {
+                                Provider.of<CountryAndJobViewModel>(myContext!,
+                                        listen: false)
+                                    .getAllCandidates(completion: () {
+                                  Navigator.of(myContext!).push(
+                                      MaterialPageRoute(
+                                          builder: (c) =>
+                                              CountryAndJobScreen()));
+                                });
+                              } else {
+                                AppPopUps.showAlertDialog(
+                                    message: 'Enter all fields');
+                              }
+                            } else {
+                              AppPopUps.showAlertDialog(
+                                  message:
+                                      'This feature is only for exclusive subscribers ,do you want to change subscription?',
+                                  onSubmit: () {
+                                    Navigator.of(myContext!).pop();
+                                    Provider.of<AllPackagesAndPaymentViewModel>(
+                                            myContext!,
+                                            listen: false)
+                                        .getAllPackages(completion: () {
+                                      Navigator.of(myContext!)
+                                          .pushNamed(PackagesScreen.id);
+                                    });
+                                  });
+                            }
+                          });
                         },
                       ),
                       space,

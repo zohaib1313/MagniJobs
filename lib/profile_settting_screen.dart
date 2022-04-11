@@ -11,6 +11,7 @@ import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:magnijobs_rnr/view_models/interested_applicant_view_model.dart';
+import 'package:magnijobs_rnr/view_models/my_subscription_view_model.dart';
 import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +19,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import 'common_widgets/app_popups.dart';
 import 'forgot_password_enter_mail_screen.dart';
+import 'screens/subscribed_page_info_page.dart';
 
 class ProfileSettingScreen extends StatefulWidget {
   ProfileSettingScreen({Key? key}) : super(key: key);
@@ -72,17 +74,40 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                         if (UserDefaults.getEmployerUserSession()
                                 ?.employerModel !=
                             null)
-                          getRowProfileItem("assets/icons/ic_edit_person.svg",
-                              "Interested Applicants", onTap: () {
-                            Provider.of<InterestedApplicantsViewModel>(
-                                    myContext!,
-                                    listen: false)
-                                .getInterestedApplicants(completion: () {
-                              Navigator.of(myContext!).push(MaterialPageRoute(
-                                  builder: (c) =>
-                                      InterestedApplicantsScreen()));
-                            });
-                          }),
+                          Column(
+                            children: [
+                              getRowProfileItem(
+                                  "assets/icons/ic_edit_person.svg",
+                                  "Interested Applicants", onTap: () {
+                                Provider.of<InterestedApplicantsViewModel>(
+                                        myContext!,
+                                        listen: false)
+                                    .getInterestedApplicants(completion: () {
+                                  Navigator.of(myContext!).push(
+                                      MaterialPageRoute(
+                                          builder: (c) =>
+                                              InterestedApplicantsScreen()));
+                                });
+                              }),
+                              getRowProfileItem("assets/icons/ic_payment_.svg",
+                                  "Subscriptions", onTap: () {
+                                Provider.of<MySubscriptionViewModel>(myContext!,
+                                        listen: false)
+                                    .getSubscriptions(onCompleteA: () {
+                                  Navigator.of(myContext!)
+                                      .pushNamed(SubScribedPackageInfoPage.id);
+                                });
+
+                                /* Provider.of<AllPackagesAndPaymentViewModel>(
+                                        myContext!,
+                                        listen: false)
+                                    .getAllPackages(completion: () {
+                                  Navigator.of(myContext!)
+                                      .pushNamed(PackagesScreen.id);
+                                });*/
+                              }),
+                            ],
+                          ),
                         getRowProfileItem("assets/icons/ic_change_password.svg",
                             "Change Password", onTap: () {
                           AppPopUps.displayTextInputDialog(
@@ -126,13 +151,6 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                                 message: 'Failed to launch mail');
                           }
                         }),
-
-                        /*   getRowProfileItem("assets/icons/ic_notifications.svg",
-                            "Notifications"),
-                        getRowProfileItem(
-                            "assets/icons/ic_settings.svg", "Privacy Settings"),
-                        getRowProfileItem(
-                            "assets/icons/ic_payment_.svg", "Payment"),*/
                         SizedBox(
                           height: 10.h,
                         ),
@@ -142,10 +160,12 @@ class _ProfileSettingScreenState extends State<ProfileSettingScreen> {
                                     listen: false)
                                 .logout(onComplete: () {
                               UserDefaults().clearAll();
-                              Navigator.of(context).pushReplacement(
+
+                              Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ChooseSignInScreen()));
+                                          ChooseSignInScreen()),
+                                  (Route<dynamic> route) => false);
                             });
                           },
                           child: Row(

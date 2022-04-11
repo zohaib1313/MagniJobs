@@ -41,10 +41,12 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
               // freeze: true,
               controlsMargin: EdgeInsets.all(10),
               onDone: () {
-                Navigator.of(myContext!).pushNamed(ChooseSignInScreen.id);
+                Navigator.of(myContext!)
+                    .pushReplacementNamed(ChooseSignInScreen.id);
               },
               onSkip: () {
-                Navigator.of(myContext!).pushNamed(ChooseSignInScreen.id);
+                Navigator.of(myContext!)
+                    .pushReplacementNamed(ChooseSignInScreen.id);
               },
               showSkipButton: true,
               skip: Text(

@@ -18,6 +18,7 @@ import 'package:magnijobs_rnr/utils/utils.dart';
 import 'package:path/path.dart';
 
 import '../common_widgets/app_popups.dart';
+import '../models/my_subscription_model.dart';
 import '../models/signin_model.dart';
 import '../routes.dart';
 
@@ -39,6 +40,46 @@ class CompanyProfileViewModel extends ChangeNotifier {
 
   set selectedCountryId(String value) {
     _selectedCountryId = value;
+  }
+
+  Subscriptions? mySubScription;
+
+  void getSubscriptions({onCompleteA}) {
+    AppPopUps().showProgressDialog(context: myContext!);
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.my_subscriptions,
+              body: {},
+            ),
+            create: () => APIResponse<MySubScriptionModel>(
+                create: () => MySubScriptionModel()),
+            apiFunction: getSubscriptions)
+        .then((response) {
+      AppPopUps().dissmissDialog();
+
+      if (response.response?.data?.subscriptions != null) {
+        if (response.response!.data!.subscriptions!.isNotEmpty) {
+          mySubScription = response.response!.data!.subscriptions!.last;
+          onCompleteA(mySubScription);
+        } else {
+          onCompleteA(null);
+        }
+      } else {
+        onCompleteA(null);
+      }
+    }).catchError((error) {
+      print("error=  ${error.toString()}");
+      AppPopUps().dissmissDialog();
+
+      AppPopUps().showErrorPopUp(
+          title: 'Error',
+          error: error.toString(),
+          onButtonPressed: () {
+            Navigator.of(myContext!).pop();
+          });
+    });
   }
 
   Stream<List<Countries?>> loadCountries() {
@@ -197,14 +238,16 @@ class CompanyProfileViewModel extends ChangeNotifier {
         onComplete(false);
       }
     }).catchError((error) {
-      print("error=  ${error.toString()}");
+      /* print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();
       AppPopUps().showErrorPopUp(
           title: 'Error',
           error: error.toString(),
           onButtonPressed: () {
             Navigator.of(myContext!).pop();
-          });
+          });*/
+      AppPopUps().dissmissDialog();
+      onComplete(false);
     });
   }
 

@@ -190,7 +190,7 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                   onTap: () {
                     Navigator.of(myContext!).push(MaterialPageRoute(
                         builder: (contet) => WebViewExample(
-                            "http://rnrnursing.applypressure.co.uk/healthworker-learning-program-for-senior-carer/")));
+                            "http://magnijobs.com/healthworker-learning-program-for-senior-carer/")));
                   },
                 ),
                 SizedBox(height: 5.h),
@@ -202,8 +202,8 @@ class _ChooseSignInScreenState extends State<ChooseSignInScreen> {
                   textColor: AppColor.whiteColor, //
                   onTap: () {
                     Navigator.of(myContext!).push(MaterialPageRoute(
-                        builder: (contet) => WebViewExample(
-                            "http://rnrnursing.applypressure.co.uk/nmc-osce/")));
+                        builder: (contet) =>
+                            WebViewExample("http://magnijobs.com/nmc-osce/")));
                   },
                 ),
                 SizedBox(height: 5.h),

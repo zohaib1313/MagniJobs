@@ -10,6 +10,7 @@ import 'package:magnijobs_rnr/screens/employer_signup/employer_signup_screen.dar
 import 'package:magnijobs_rnr/screens/on_boarding/onboardin_screen.dart';
 import 'package:magnijobs_rnr/screens/packages_/packages_screen.dart';
 import 'package:magnijobs_rnr/screens/splash_screen.dart';
+import 'package:magnijobs_rnr/screens/subscribed_page_info_page.dart';
 import 'package:magnijobs_rnr/screens/tutor_profile_screen.dart';
 import 'package:magnijobs_rnr/screens/update_candidate_screen.dart';
 import 'package:magnijobs_rnr/screens/update_employer_screen.dart';
@@ -34,6 +35,7 @@ import 'package:magnijobs_rnr/view_models/interested_applicant_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:magnijobs_rnr/view_models/jobseeker_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/my_profile_view_model.dart';
+import 'package:magnijobs_rnr/view_models/my_subscription_view_model.dart';
 import 'package:magnijobs_rnr/view_models/profile_settings_view_model.dart';
 import 'package:magnijobs_rnr/view_models/sigin_screen_view_model.dart';
 import 'package:magnijobs_rnr/view_models/splash_screen_view_model.dart';
@@ -72,6 +74,7 @@ final Map<String, Widget Function(BuildContext)> routes = {
   AttendieCandidateProfileScreen.id: (context) =>
       AttendieCandidateProfileScreen(),
   AllChatPage.id: (context) => const AllChatPage(),
+  SubScribedPackageInfoPage.id: (context) => SubScribedPackageInfoPage(),
 };
 
 final List<ChangeNotifierProvider<dynamic>> multiProviders = [
@@ -139,4 +142,6 @@ final List<ChangeNotifierProvider<dynamic>> multiProviders = [
   ChangeNotifierProvider<AllChatViewModel>(create: (_) => AllChatViewModel()),
   ChangeNotifierProvider<InterestedApplicantsViewModel>(
       create: (_) => InterestedApplicantsViewModel()),
+  ChangeNotifierProvider<MySubscriptionViewModel>(
+      create: (_) => MySubscriptionViewModel()),
 ];

@@ -443,7 +443,7 @@ class _SigInScreenState extends State<SigInScreen> {
           if (UserDefaults.getEmployerUserSession()?.employerModel != null) {
             Navigator.of(myContext!).pop();
             Navigator.of(myContext!)
-                .pushReplacementNamed(CompanyProfileScreen.id);
+                .pushNamedAndRemoveUntil(CompanyProfileScreen.id, (_) => false);
           } else {
             AppPopUps.showAlertDialog(
                 message: 'Not Employer User',
@@ -458,7 +458,7 @@ class _SigInScreenState extends State<SigInScreen> {
           if (UserDefaults.getCandidateUserSession()?.candidateModel != null) {
             Navigator.of(myContext!).pop();
             Navigator.of(myContext!)
-                .pushReplacementNamed(EmployeePortalScreen.id);
+                .pushNamedAndRemoveUntil(EmployeePortalScreen.id, (_) => false);
           } else {
             AppPopUps.showAlertDialog(
                 message: 'Not Applicant User',
@@ -473,7 +473,7 @@ class _SigInScreenState extends State<SigInScreen> {
           if (UserDefaults.getTutorUserSession()?.tutorModel != null) {
             Navigator.of(myContext!).pop();
             Navigator.of(myContext!)
-                .pushReplacementNamed(TutorProfileScreen.id);
+                .pushNamedAndRemoveUntil(TutorProfileScreen.id, (_) => false);
           } else {
             AppPopUps.showAlertDialog(
                 message: 'Not Tutor User',
@@ -487,8 +487,8 @@ class _SigInScreenState extends State<SigInScreen> {
         case 'attendie':
           if (UserDefaults.getCandidateUserSession()?.candidateModel != null) {
             Navigator.of(myContext!).pop();
-            Navigator.of(myContext!)
-                .pushReplacementNamed(AttendieCandidateProfileScreen.id);
+            Navigator.of(myContext!).pushNamedAndRemoveUntil(
+                AttendieCandidateProfileScreen.id, (_) => false);
           } else {
             AppPopUps.showAlertDialog(
                 message: 'Not Attendie User',

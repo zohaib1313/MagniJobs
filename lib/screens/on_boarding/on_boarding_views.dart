@@ -344,14 +344,20 @@ finding jobs fitting their skills as soon as possible ''',
                     ExpandAbleTile(
                         model: ExpandableTileModel(
                             title: "Free to Use",
-                            message:
-                                '''The APP is free to use for all Job Seekers. Just sign up, sign in, then you’re ready to
-explore. There will be free access to exam tutors as well. Tutors like for example but
-not limited to IELTS FOR UKVI, OET, CBT, NCLEX and other exams necessary for
-a job application abroad.
-The APP will cater as a site for other service providers which include Emergency
-Loan, Recruitment Companies, Food Delivery, Groceries and other useful websites
-for our everyday need''',
+                            message: '''
+  The APP is free to use for all Job Seekers.Just 
+  sign up, sign in, then you’re ready to explore.
+  
+  There will be free access to exam tutors as well.
+  Tutors like for example but not limited to IELTS 
+  FOR UKVI, OET, CBT, NCLEX and other exams 
+  necessary for a job application abroad.
+  
+  The APP will cater as a site for other 
+  service providers which include Emergency
+  Loan, Recruitment Companies, Food Delivery,
+  Groceries and other useful websites
+  for our everyday need''',
                             isExpanded: false)),
                     space,
                     space,

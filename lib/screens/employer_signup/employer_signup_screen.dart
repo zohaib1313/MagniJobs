@@ -407,7 +407,7 @@ class _EmployerSignUpScreenState extends State<EmployerSignUpScreen> {
         if (UserDefaults.getEmployerUserSession()?.employerModel != null) {
           Navigator.of(myContext!).pop();
           Navigator.of(myContext!)
-              .pushReplacementNamed(CompanyProfileScreen.id);
+              .pushNamedAndRemoveUntil(CompanyProfileScreen.id, (_) => false);
         } else {
           AppPopUps.showAlertDialog(
               message: 'Not Employer User',

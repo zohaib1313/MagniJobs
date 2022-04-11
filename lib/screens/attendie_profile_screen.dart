@@ -174,10 +174,11 @@ class _AttendieCandidateProfileScreenState
                             Provider.of<ProfileSettingViewModel>(myContext!,
                                     listen: false)
                                 .logout(onComplete: () {
-                              Navigator.of(context).pushReplacement(
+                              Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
                                       builder: (context) =>
-                                          ChooseSignInScreen()));
+                                          ChooseSignInScreen()),
+                                  (Route<dynamic> route) => false);
                             });
                           },
                           child: Row(

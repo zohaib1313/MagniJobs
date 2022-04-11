@@ -316,6 +316,9 @@ class CountryAndJobViewModel extends ChangeNotifier {
   _getEligibilityOfChatOnPacakgeId(
       {required int id, required int countsInFirebase, onStatus}) {
     switch (id) {
+      case -1: //10 contacts
+        onStatus(false);
+        break;
       case 1: //10 contacts
         onStatus(countsInFirebase <= 10);
         break;
@@ -358,6 +361,7 @@ class CountryAndJobViewModel extends ChangeNotifier {
         }
       }
     }).catchError((error) {
+      onCompleteA(-1);
       print("error=  ${error.toString()}");
       AppPopUps().dissmissDialog();
       AppPopUps().showErrorPopUp(
