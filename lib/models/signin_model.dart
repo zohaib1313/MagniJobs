@@ -137,7 +137,7 @@ class User {
   String? emailVerifiedAt;
   String? utype;
   String? otp;
-  int? verified;
+  String? verified;
   String? phoneVerifiedAt;
   String? verification;
   String? createdAt;

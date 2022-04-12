@@ -11,6 +11,8 @@ import 'package:magnijobs_rnr/view_models/company_profile_view_model.dart';
 import 'package:magnijobs_rnr/view_models/job_post_view_model.dart';
 import 'package:provider/provider.dart';
 
+import '../../models/job_sub_type_model.dart';
+import '../../models/job_type_model.dart';
 import '../../routes.dart';
 
 class JobPostScreen extends StatefulWidget {
@@ -169,7 +171,7 @@ class _JobPostScreenState extends State<JobPostScreen> {
                               },
                             ),
                             space,
-                            MyTextField(
+                            /*     MyTextField(
                               leftPadding: 0,
                               rightPadding: 0,
                               fillColor: AppColor.whiteColor,
@@ -181,7 +183,102 @@ class _JobPostScreenState extends State<JobPostScreen> {
                                 }
                                 return null;
                               },
+                            ),*/
+
+                            StreamBuilder(
+                              stream: view.getJobTypes(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<List<Jobtypes?>> snapshot) {
+                                if (snapshot.connectionState ==
+                                    ConnectionState.waiting) {
+                                  return Center(
+                                      child: Container(
+                                          child:
+                                              const CircularProgressIndicator()));
+                                }
+
+                                if (snapshot.hasData) {
+                                  return MyDropDown(
+                                    onChange: (value) {
+                                      view.selectedJobType = value;
+                                      view.getJobSubTypes();
+                                      setState(() {});
+                                    },
+                                    hintText: "Job Type",
+                                    labelText: "",
+                                    itemAsString: (item) {
+                                      return item.jobType ?? '';
+                                    },
+                                    labelColor: AppColor.redColor,
+                                    borderColor: AppColor.alphaGrey,
+                                    fillColor: AppColor.whiteColor,
+                                    leftPadding: 0,
+                                    rightPadding: 0,
+                                    value: view.selectedJobType,
+                                    suffixIcon: "assets/icons/drop_down_ic.svg",
+                                    items: snapshot.data!,
+                                    validator: (string) {
+                                      /* if (view.selectedJobType == null) {
+                                      return 'Required';
+                                    }*/
+                                      return null;
+                                    },
+                                  );
+                                }
+                                return const IgnorePointer();
+                              },
                             ),
+                            if (view.selectedJobType != null)
+                              Column(
+                                children: [
+                                  space,
+                                  StreamBuilder(
+                                    stream: view.getJobSubTypes(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<List<Jobsubtypes?>>
+                                            snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                            child: Container(
+                                                child:
+                                                    const CircularProgressIndicator()));
+                                      }
+
+                                      if (snapshot.hasData) {
+                                        return MyDropDown(
+                                          onChange: (value) {
+                                            view.selectedJobSubType = value;
+                                          },
+                                          hintText: /*view.selectedJobSubType?.subtype ??*/
+                                              "Job Sub-Type",
+                                          labelText: "",
+                                          itemAsString: (item) {
+                                            return item.subtype ?? '';
+                                          },
+                                          value: view.selectedJobSubType,
+                                          labelColor: AppColor.redColor,
+                                          leftPadding: 0,
+                                          rightPadding: 0,
+                                          borderColor: AppColor.alphaGrey,
+                                          fillColor: AppColor.whiteColor,
+                                          suffixIcon:
+                                              "assets/icons/drop_down_ic.svg",
+                                          items: snapshot.data!,
+                                          validator: (string) {
+                                            /*  if (view.locationController.text.isEmpty) {
+                                          return 'select country';
+                                        }*/
+                                            return null;
+                                          },
+                                        );
+                                      }
+
+                                      return const IgnorePointer();
+                                    },
+                                  ),
+                                ],
+                              ),
                             space,
                             MyTextField(
                               leftPadding: 0,

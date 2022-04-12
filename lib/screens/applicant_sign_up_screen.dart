@@ -256,6 +256,97 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                               ],
                             ),
                           space,
+                          StreamBuilder(
+                            stream: view.getJobTypes2(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Jobtypes?>> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: Container(
+                                        child:
+                                            const CircularProgressIndicator()));
+                              }
+
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.selectedJobType2 = value;
+                                    view.getJobSubTypes();
+                                    setState(() {});
+                                  },
+                                  hintText: "Job Type",
+                                  labelText: "",
+                                  itemAsString: (item) {
+                                    return item.jobType ?? '';
+                                  },
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.alphaGrey,
+                                  value: view.selectedJobType2,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  items: snapshot.data!,
+                                  validator: (string) {
+                                    /* if (view.selectedJobType2 == null) {
+                                      return 'Required';
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const IgnorePointer();
+                            },
+                          ),
+                          if (view.selectedJobType2 != null)
+                            Column(
+                              children: [
+                                space,
+                                StreamBuilder(
+                                  stream: view.getJobSubTypes2(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<Jobsubtypes?>>
+                                          snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          child: Container(
+                                              child:
+                                                  const CircularProgressIndicator()));
+                                    }
+
+                                    if (snapshot.hasData) {
+                                      return MyDropDown(
+                                        onChange: (value) {
+                                          view.selectedJobSubType2 = value;
+                                        },
+                                        hintText: /*view.selectedJobSubType?.subtype ??*/
+                                            "Job Sub-Type",
+                                        labelText: "",
+                                        itemAsString: (item) {
+                                          return item.subtype ?? '';
+                                        },
+                                        value: view.selectedJobSubType2,
+                                        labelColor: AppColor.redColor,
+                                        borderColor: AppColor.alphaGrey,
+                                        fillColor: AppColor.alphaGrey,
+                                        suffixIcon:
+                                            "assets/icons/drop_down_ic.svg",
+                                        items: snapshot.data!,
+                                        validator: (string) {
+                                          /*  if (view.locationController.text.isEmpty) {
+                                          return 'select country';
+                                        }*/
+                                          return null;
+                                        },
+                                      );
+                                    }
+
+                                    return const IgnorePointer();
+                                  },
+                                ),
+                              ],
+                            ),
+                          space,
                           InkWell(
                             onTap: () {
                               showDatePickerDialog(

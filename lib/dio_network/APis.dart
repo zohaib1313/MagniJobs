@@ -52,7 +52,9 @@ enum APIType {
 }
 
 class ApiConstants {
-  static const baseUrl = "http://magnijobs.applypressure.co.uk/api/";
+  // static const baseUrl = "http://magnijobs.applypressure.co.uk/api/";
+  static const baseUrl = "http://app.magnijobs.com/api/";
+
   static const loginUser = 'login';
   static const get_all_jobs = "all-jobs";
   static const check_my_phone_number = "check-number/";
@@ -105,8 +107,11 @@ class ApiConstants {
 
   static const count_jobs = "count-jobs";
 
-  static var profilePicsBaseUrl =
+/*  static var profilePicsBaseUrl =
       'http://magnijobs.applypressure.co.uk/profile_pics/';
   static var employer_logos =
-      'http://magnijobs.applypressure.co.uk/employer_logos/';
+      'http://magnijobs.applypressure.co.uk/employer_logos/';*/
+
+  static var profilePicsBaseUrl = 'http://app.magnijobs.com/profile_pics/';
+  static var employer_logos = 'http://app.magnijobs.com/employer_logos/';
 }

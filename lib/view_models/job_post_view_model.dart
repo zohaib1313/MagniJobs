@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:intl/intl.dart';
 import 'package:magnijobs_rnr/common_widgets/app_popups.dart';
@@ -10,17 +12,27 @@ import 'package:magnijobs_rnr/models/post_job.dart';
 import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
 
+import '../models/job_sub_type_model.dart';
+import '../models/job_type_model.dart';
+
 class JobPostViewModel extends ChangeNotifier {
   final formKey = GlobalKey<FormState>();
   String _selectedCountryId = '';
 
   String get selectedCountryId => _selectedCountryId;
 
+  Jobtypes? selectedJobType;
+
+  StreamController<List<Jobtypes?>> jobTypeStreamController =
+      StreamController.broadcast();
+  StreamController<List<Jobsubtypes?>> jobSubTypeStreamController =
+      StreamController.broadcast();
+  Jobsubtypes? selectedJobSubType;
+
   set selectedCountryId(String value) {
     _selectedCountryId = value;
   }
 
-  TextEditingController jobController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   TextEditingController salaryController = TextEditingController();
   TextEditingController qualificationController = TextEditingController();
@@ -42,7 +54,7 @@ class JobPostViewModel extends ChangeNotifier {
   postJob({completion}) async {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
-      "job": jobController.text,
+      "job": selectedJobType?.jobType ?? "null",
       "location": locationController.text,
       'country': selectedCountryId,
       "salary": salaryController.text,
@@ -119,7 +131,7 @@ class JobPostViewModel extends ChangeNotifier {
       String? dueDate = '',
       String? jobDesc}) {
     selectedCountryId = '';
-    jobController.text = job ?? '';
+    getJobTypes(jobType: job);
     locationController.text = location ?? '';
     salaryController.text = salary ?? '';
     qualificationController.text = qulification ?? '';
@@ -132,7 +144,8 @@ class JobPostViewModel extends ChangeNotifier {
   void updateJobs({completion, required int id}) {
     AppPopUps().showProgressDialog(context: myContext);
     Map<String, dynamic> body = {
-      "job": jobController.text,
+      "job": selectedJobType?.jobType ?? 'null',
+      "subtype": selectedJobSubType?.jobType ?? 'null',
       "location": locationController.text,
       'country': selectedCountryId,
       "salary": salaryController.text,
@@ -167,5 +180,65 @@ class JobPostViewModel extends ChangeNotifier {
           });
       return Future.value(null);
     });
+  }
+
+  Stream<List<Jobtypes?>> getJobTypes({String? jobType}) {
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.all_job_types,
+              body: {},
+            ),
+            create: () =>
+                APIResponse<JobTypeModel>(create: () => JobTypeModel()),
+            apiFunction: getJobTypes)
+        .then((response) {
+      if (response.response?.data != null) {
+        JobTypeModel? jobTypeModel = response.response!.data;
+        jobTypeStreamController.sink.add(jobTypeModel!.jobtypes!);
+
+        if (jobType != null) {
+          jobTypeModel.jobtypes?.forEach((element) {
+            if ((element.jobType ?? 'nn') == (jobType)) {
+              selectedJobType = element;
+            }
+          });
+        }
+
+        getJobSubTypes();
+      }
+    }).catchError((error) {});
+    return jobTypeStreamController.stream;
+  }
+
+  Stream<List<Jobsubtypes?>> getJobSubTypes() {
+    if (selectedJobType != null) {
+      String url = ApiConstants.baseUrl +
+          ApiConstants.all_job_subtypes +
+          "/" +
+          selectedJobType!.id!.toString();
+
+      var client = APIClient(isCache: false, baseUrl: url);
+      client
+          .request(
+              route: APIRoute(
+                APIType.all_job_subtypes,
+                body: {},
+              ),
+              create: () =>
+                  APIResponse<JobSubTypeModel>(create: () => JobSubTypeModel()),
+              apiFunction: getJobSubTypes)
+          .then((response) {
+        if (response.response?.data != null) {
+          JobSubTypeModel? jobSubTypeModel = response.response!.data;
+
+          jobSubTypeStreamController.sink.add(jobSubTypeModel!.jobsubtypes!);
+          selectedJobSubType = jobSubTypeModel.jobsubtypes![0];
+        }
+      }).catchError((error) {});
+    }
+
+    return jobSubTypeStreamController.stream;
   }
 }

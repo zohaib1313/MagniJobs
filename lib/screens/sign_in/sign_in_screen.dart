@@ -293,7 +293,7 @@ class _SigInScreenState extends State<SigInScreen> {
       case "employer":
         view.signInEmployerUser(widget.userType,
             completion: (EmployerSignInModel? user) async {
-          if ((user?.user?.verified ?? 0) != 0) {
+          if ((user?.user?.verified ?? "0") != "0") {
             if (user != null) {
               await UserDefaults.saveEmployerUserSession(user, widget.userType);
               view.resetState();
@@ -327,7 +327,7 @@ class _SigInScreenState extends State<SigInScreen> {
       case "applicant": //candidate //attendie
         view.signInCandidateUser(widget.userType,
             completion: (CandidateSignInModel? user) async {
-          if ((user?.user?.verified ?? 0) != 0) {
+          if ((user?.user?.verified ?? "0") != "0") {
             if (user != null) {
               await UserDefaults.saveCandidateUserSession(
                   user, widget.userType);
@@ -362,7 +362,7 @@ class _SigInScreenState extends State<SigInScreen> {
       case "tutor":
         view.signInTutorUser(widget.userType,
             completion: (TutorSignInModel? user) async {
-          if ((user?.user?.verified ?? 0) != 0) {
+          if ((user?.user?.verified ?? "0") != "0") {
             if (user != null) {
               await UserDefaults.saveTutorSignInModel(user, widget.userType);
               view.resetState();
@@ -395,7 +395,7 @@ class _SigInScreenState extends State<SigInScreen> {
       case "attendie": //candidate //candidate //applicant
         view.signInCandidateUser(widget.userType,
             completion: (CandidateSignInModel? user) async {
-          if ((user?.user?.verified ?? 0) != 0) {
+          if ((user?.user?.verified ?? "0") != "0") {
             if (user != null) {
               await UserDefaults.saveCandidateUserSession(
                   user, widget.userType);
