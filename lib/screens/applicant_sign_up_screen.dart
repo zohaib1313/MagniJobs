@@ -255,6 +255,8 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                 ),
                               ],
                             ),
+
+                          ///////////////2////////////
                           space,
                           StreamBuilder(
                             stream: view.getJobTypes2(),
@@ -272,7 +274,7 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                 return MyDropDown(
                                   onChange: (value) {
                                     view.selectedJobType2 = value;
-                                    view.getJobSubTypes();
+                                    view.getJobSubTypes2();
                                     setState(() {});
                                   },
                                   hintText: "Job Type",
@@ -346,6 +348,100 @@ class _ApplicantSignUpState extends State<ApplicantSignUp> {
                                 ),
                               ],
                             ),
+
+                          //////////////3////////////
+                          space,
+                          StreamBuilder(
+                            stream: view.getJobTypes3(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<List<Jobtypes?>> snapshot) {
+                              if (snapshot.connectionState ==
+                                  ConnectionState.waiting) {
+                                return Center(
+                                    child: Container(
+                                        child:
+                                            const CircularProgressIndicator()));
+                              }
+
+                              if (snapshot.hasData) {
+                                return MyDropDown(
+                                  onChange: (value) {
+                                    view.selectedJobType3 = value;
+                                    view.getJobSubTypes3();
+                                    setState(() {});
+                                  },
+                                  hintText: "Job Type",
+                                  labelText: "",
+                                  itemAsString: (item) {
+                                    return item.jobType ?? '';
+                                  },
+                                  labelColor: AppColor.redColor,
+                                  borderColor: AppColor.alphaGrey,
+                                  fillColor: AppColor.alphaGrey,
+                                  value: view.selectedJobType3,
+                                  suffixIcon: "assets/icons/drop_down_ic.svg",
+                                  items: snapshot.data!,
+                                  validator: (string) {
+                                    /* if (view.selectedJobType2 == null) {
+                                      return 'Required';
+                                    }*/
+                                    return null;
+                                  },
+                                );
+                              }
+                              return const IgnorePointer();
+                            },
+                          ),
+                          if (view.selectedJobType3 != null)
+                            Column(
+                              children: [
+                                space,
+                                StreamBuilder(
+                                  stream: view.getJobSubTypes3(),
+                                  builder: (BuildContext context,
+                                      AsyncSnapshot<List<Jobsubtypes?>>
+                                          snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
+                                      return Center(
+                                          child: Container(
+                                              child:
+                                                  const CircularProgressIndicator()));
+                                    }
+
+                                    if (snapshot.hasData) {
+                                      return MyDropDown(
+                                        onChange: (value) {
+                                          view.selectedJobSubType3 = value;
+                                        },
+                                        hintText: /*view.selectedJobSubType?.subtype ??*/
+                                            "Job Sub-Type",
+                                        labelText: "",
+                                        itemAsString: (item) {
+                                          return item.subtype ?? '';
+                                        },
+                                        value: view.selectedJobSubType3,
+                                        labelColor: AppColor.redColor,
+                                        borderColor: AppColor.alphaGrey,
+                                        fillColor: AppColor.alphaGrey,
+                                        suffixIcon:
+                                            "assets/icons/drop_down_ic.svg",
+                                        items: snapshot.data!,
+                                        validator: (string) {
+                                          /*  if (view.locationController.text.isEmpty) {
+                                          return 'select country';
+                                        }*/
+                                          return null;
+                                        },
+                                      );
+                                    }
+
+                                    return const IgnorePointer();
+                                  },
+                                ),
+                              ],
+                            ),
+
                           space,
                           InkWell(
                             onTap: () {

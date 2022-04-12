@@ -213,6 +213,7 @@ class JobPostViewModel extends ChangeNotifier {
   }
 
   Stream<List<Jobsubtypes?>> getJobSubTypes() {
+    selectedJobSubType = null;
     if (selectedJobType != null) {
       String url = ApiConstants.baseUrl +
           ApiConstants.all_job_subtypes +

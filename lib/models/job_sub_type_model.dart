@@ -35,9 +35,9 @@ class JobSubTypeModel implements Decodable {
 }
 
 class Jobsubtypes {
-  int? id;
+  String? id;
   String? jobType;
-  int? typeId;
+  String? typeId;
   String? subtype;
 
   Jobsubtypes({this.id, this.jobType, this.typeId, this.subtype});

@@ -166,21 +166,13 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
     certificatesController.text = 'abc';
   }
 
+/////////////1////////////////
   Jobtypes? selectedJobType;
   Jobsubtypes? selectedJobSubType;
-  Jobtypes? selectedJobType2;
-  Jobsubtypes? selectedJobSubType2;
   StreamController<List<Jobtypes?>> jobTypeStreamController =
-      StreamController.broadcast();
-
-  StreamController<List<Jobtypes?>> jobTypeStreamController2 =
-      StreamController.broadcast();
-
-  StreamController<List<Jobsubtypes?>> jobSubTypeStreamController2 =
       StreamController.broadcast();
   StreamController<List<Jobsubtypes?>> jobSubTypeStreamController =
       StreamController.broadcast();
-
   Stream<List<Jobtypes?>> getJobTypes() {
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -206,6 +198,7 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   }
 
   Stream<List<Jobsubtypes?>> getJobSubTypes() {
+    selectedJobSubType = null;
     if (selectedJobType != null) {
       String url = ApiConstants.baseUrl +
           ApiConstants.all_job_subtypes +
@@ -229,12 +222,21 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
           jobSubTypeStreamController.sink.add(jobSubTypeModel!.jobsubtypes!);
           selectedJobSubType = jobSubTypeModel.jobsubtypes![0];
         }
-      }).catchError((error) {});
+      }).catchError((error) {
+        printWrapped("errrrrr ${error}");
+      });
     }
 
     return jobSubTypeStreamController.stream;
   }
 
+/////////////2/////////////////
+  Jobtypes? selectedJobType2;
+  Jobsubtypes? selectedJobSubType2;
+  StreamController<List<Jobtypes?>> jobTypeStreamController2 =
+      StreamController.broadcast();
+  StreamController<List<Jobsubtypes?>> jobSubTypeStreamController2 =
+      StreamController.broadcast();
   Stream<List<Jobtypes?>> getJobTypes2() {
     var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
     client
@@ -260,6 +262,7 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
   }
 
   Stream<List<Jobsubtypes?>> getJobSubTypes2() {
+    selectedJobSubType2 = null;
     if (selectedJobType2 != null) {
       String url = ApiConstants.baseUrl +
           ApiConstants.all_job_subtypes +
@@ -287,5 +290,67 @@ class ApplicantSignUpViewModel extends ChangeNotifier {
     }
 
     return jobSubTypeStreamController2.stream;
+  }
+  ////////////////3///////////////////
+
+  Jobtypes? selectedJobType3;
+  Jobsubtypes? selectedJobSubType3;
+  StreamController<List<Jobtypes?>> jobTypeStreamController3 =
+      StreamController.broadcast();
+  StreamController<List<Jobsubtypes?>> jobSubTypeStreamController3 =
+      StreamController.broadcast();
+  Stream<List<Jobtypes?>> getJobTypes3() {
+    var client = APIClient(isCache: false, baseUrl: ApiConstants.baseUrl);
+    client
+        .request(
+            route: APIRoute(
+              APIType.all_job_types,
+              body: {},
+            ),
+            create: () =>
+                APIResponse<JobTypeModel>(create: () => JobTypeModel()),
+            apiFunction: getJobTypes)
+        .then((response) {
+      if (response.response?.data != null) {
+        JobTypeModel? jobTypeModel = response.response!.data;
+
+        jobTypeStreamController3.sink.add(jobTypeModel!.jobtypes!);
+        // view.selectedJobType = snapshot.data![0];
+        // selectedJobType = jobTypeModel.jobtypes![0];
+        getJobSubTypes3();
+      }
+    }).catchError((error) {});
+    return jobTypeStreamController3.stream;
+  }
+
+  Stream<List<Jobsubtypes?>> getJobSubTypes3() {
+    selectedJobSubType3 = null;
+    if (selectedJobType3 != null) {
+      String url = ApiConstants.baseUrl +
+          ApiConstants.all_job_subtypes +
+          "/" +
+          selectedJobType3!.id!.toString();
+
+      var client = APIClient(isCache: false, baseUrl: url);
+      client
+          .request(
+              route: APIRoute(
+                APIType.all_job_subtypes,
+                body: {},
+              ),
+              create: () =>
+                  APIResponse<JobSubTypeModel>(create: () => JobSubTypeModel()),
+              apiFunction: getJobSubTypes)
+          .then((response) {
+        if (response.response?.data != null) {
+          JobSubTypeModel? jobSubTypeModel = response.response!.data;
+          printWrapped(jobSubTypeModel.toString());
+          jobSubTypeStreamController3.sink.add(jobSubTypeModel!.jobsubtypes!);
+          selectedJobSubType3 = jobSubTypeModel.jobsubtypes![0];
+        }
+      }).catchError((error) {});
+    }
+
+    return jobSubTypeStreamController3.stream;
   }
 }

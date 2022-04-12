@@ -82,7 +82,7 @@ class CountryAndJobViewModel extends ChangeNotifier {
     if (selectedJobSubType != null) {
       showingListOfCandidates = _allCandidatesList.where((i) {
         return (((i.subtype ?? "-1").toString()) ==
-            (selectedJobSubType?.id ?? 0).toString());
+            (selectedJobSubType?.id ?? "0").toString());
       }).toList();
     } else {
       showingListOfCandidates = _allCandidatesList;
