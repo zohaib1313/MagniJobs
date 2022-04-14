@@ -36,6 +36,7 @@ class _OnBoardingForApplicantState extends State<PackagesScreen> {
   bool isNonRefundAccepted = false;
 
   bool isOtherDisclaimerAccepted = false;
+  bool isSubscriptionDisclaimerAccepted = false;
 
   @override
   void initState() {
@@ -333,6 +334,84 @@ You agree not to use the App in any unlawful manner, for any unlawful, or crimin
                                                           null,
                                                           size: 15.0,
                                                         ),
+                                                ),
+                                                SizedBox(
+                                                  width: 50.w,
+                                                ),
+                                                Text(
+                                                  "Agree",
+                                                  style: AppTextStyles
+                                                      .textStyleNormalBodySmall
+                                                      .copyWith(
+                                                          color: AppColor
+                                                              .whiteColor),
+                                                )
+                                              ],
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        space,
+                        ExpandAbleTile(
+                          model: ExpandableTileModel(
+                              title: "Subscription Terms and Conditions",
+                              isExpanded: false),
+                          expandedWidgetChild: Column(
+                            children: [
+                              Padding(
+                                padding: const EdgeInsets.only(bottom: 8.0),
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          SimpleRichText(
+                                            AppConstants.subscriptionDisclaimer,
+                                            style: AppTextStyles
+                                                .textStyleNormalBodySmall
+                                                .copyWith(
+                                                    color: AppColor.whiteColor),
+                                          ),
+                                          space,
+                                          InkWell(
+                                            onTap: () {
+                                              isSubscriptionDisclaimerAccepted =
+                                                  !isSubscriptionDisclaimerAccepted;
+                                              setState(() {});
+                                            },
+                                            child: Row(
+                                              children: [
+                                                Container(
+                                                  padding: EdgeInsets.all(8.r),
+                                                  decoration: BoxDecoration(
+                                                    color: AppColor.whiteColor,
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            4),
+                                                  ),
+                                                  child:
+                                                      isSubscriptionDisclaimerAccepted
+                                                          ? const Icon(
+                                                              Icons.check,
+                                                              size: 15.0,
+                                                              color:
+                                                                  Colors.black,
+                                                            )
+                                                          : const Icon(
+                                                              null,
+                                                              size: 15.0,
+                                                            ),
                                                 ),
                                                 SizedBox(
                                                   width: 50.w,

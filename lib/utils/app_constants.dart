@@ -175,6 +175,47 @@ In no case shall MAGNIJOBS PLATFORM LIMITED, our directors, officers, employees,
   MAGNIJOBS shall promptly assess the risk to people’s rights and freedoms and if
   appropriate, report this breach to the ICO.''';
 
+  static var subscriptionDisclaimer =
+      '''1.	Scope and Use of the Subscription: The subscription grants the Customer (being the legal entity that has taken out the subscription) the right to use MAGNIJOBS APP, as well as its system and services. The subscription may not be used by other people or organizations. 
+
+2.	Acceptance of the Subscription: The subscription terms for the Services are accepted by the Customer by signing the document. The formal quote with these terms and conditions will constitute the “Agreement.”
+
+3.	Duration and Termination of the Subscription: The monthly subscription runs from the date the Customer signs the formal quote up to 30 days. The subscription will then be automatically renewed unless terminated by the Customer. There’s NO minimum subscription period.
+
+
+4.	Upgrading the Subscription: If the Customer subscribes, it has the option to cancel payment at any time or continue with the subscription. Either way, there’s a NO REFUND POLICY.
+
+If the customer decides at any time to UPGRADE its subscription, then they must pay for the new subscription, and they will not receive a refund from the previous subscription if they upgrade it before the previous subscription ends. If the customer upgrades their membership, the upgrade will take over the current membership, even if there are days remaining for the previous membership. 
+
+5.	Price and Payment Terms: The charges are listed on the formal quote. MAGNIJOBS guarantees that no price increases will be introduced for the Services ordered at the time of commencement of the subscription other than those due to increases in the retail price index or increases introduced by the cloud computing supplier. 
+
+The monthly payment will be deducted from the registered card payment. It will continue to run payment monthly until terminated by the Subscriber.
+
+6.	Operating Stability: MAGNIJOBS APP aims to provide the highest possible degree of operating stability but is not responsible for any breakdown caused by factors beyond its control. Such breakdown includes, but is not limited to, power failures, errors occurring in modem equipment, ADSL connections, telecommunications connections, or similar events. In all events, MAGNIJOBS aims to re-establish normal operations as quickly as possible.
+
+7.	Maintenance of the System: MAGNIJOBS is entitled to make operational changes to the System for improvements or otherwise (for example by developing or updating software) without giving the Customer prior notice. In some circumstances, it may be necessary to suspend access to the Services. Notice of such a suspension will be given to the Customer in advance. MAGNIJOBS will not be responsible for any consequences of such a suspension where notice has been given.  
+
+8.	Rights: The System remains the full property of MAGNIJOBS.  Individually customized software relating to the Services also remains the property of MAGNIJOBS unless otherwise stipulated. MAGNIJOBS may at any time transfer its rights and obligations under this agreement to any economic affiliate, subsidiary, or business unit, or any of their affiliated companies or divisions. Except as provided above, the rights and obligations under this agreement may not be transferred to any third party without the written consent of the other party.
+
+9.	Liability: MAGNIJOBS has taken reasonable measures to ensure that the Services are virus-free, but no warranty is given that the Services are free from infection from viruses, etc., and MAGNIJOBS shall have no liability if this is not the case. To the extent permitted by law, MAGNIJOBS disclaims all warranties with respect to the Services, either express or implied, including but not limited to any implied warranties of suitability or fitness for any particular purpose. 
+
+MAGNIJOBS shall not be liable to the Customer for any loss or damage caused (including business interruption) arising directly or indirectly.
+
+10.	Data Processing Agreement, Privacy Policy, and Confidentiality: The Data Processing Agreement at MAGNIJOBS is part of the Agreement and sets out contractual provisions to ensure the protection and security of data passed from the Customer for processing. 
+
+MAGNIJOBS has taken the necessary technical and organizational security measures to prevent information saved by the Service from being accidentally or illegally destroyed, lost, or wasted and to prevent such information from falling into the hands of any unauthorized party, being misused, or otherwise treated in a way contrary to MAGNIJOBS’s privacy policy. 
+
+MAGNIJOBS is bound by secrecy in respect of any information received about the Customer and will not disclose such information to any third party except where it is required to do so by any court or regulatory authority and then only to the extent necessary. 
+
+11.	Marketing:  MAGNIJOBS shall be entitled to refer to the Customer and the Services provided in its marketing, including a brief description of such services.
+
+12.	System Changes and Feature Updates: MAGNIJOBS informs its users of its platform about system changes, feature updates, and other technical news by e-mail. Therefore, all registered users on the MAGNIJOBS platform accept that they are added to the technical newsletter mailing list.
+
+13.	Entire Agreement: These terms together with the signed formal quote contain the entire agreement between the Parties and supersede all previous correspondence or communications whether written or oral. MAGNIJOBS may amend these Terms as required from time to time provided that MAGNIJOBS will give Customers no less than 7 days’ written notice of such amendments and all such amendments will apply to the next renewal of the subscription. 
+
+Disputes: These Terms shall be governed by and construed in accordance with the laws of the United Kingdom, and the Courts within the United Kingdom shall have exclusive jurisdiction to determine any dispute concerning these Terms or the subject matter of these Terms. 
+''';
+
   static String nonRefundPolicy =
       '''We do not guarantee, represent, or warrant that your use of our service will be uninterrupted,
 timely, secure, or error-free. We do not warrant that the results that may be obtained from the
