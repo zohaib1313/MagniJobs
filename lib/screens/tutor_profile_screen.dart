@@ -7,6 +7,7 @@ import 'package:magnijobs_rnr/routes.dart';
 import 'package:magnijobs_rnr/screens/attendie_calender.dart';
 import 'package:magnijobs_rnr/screens/tutor_bookings_job_history_screen.dart';
 import 'package:magnijobs_rnr/screens/tutor_calender_screen.dart';
+import 'package:magnijobs_rnr/screens/tutuor_create_new_lesson_screen.dart';
 import 'package:magnijobs_rnr/screens/update_tutor_screen.dart';
 import 'package:magnijobs_rnr/styles.dart';
 import 'package:magnijobs_rnr/utils/user_defaults.dart';
@@ -121,7 +122,16 @@ class _TutorProfileScreenState extends State<TutorProfileScreen> {
                               "assets/icons/ic_heart_filled.svg", "Favourite"),
                           getRowProfileItem(
                               "assets/icons/ic_location_black.svg", "Address"),*/
-
+                          getRowProfileItem(
+                              "assets/icons/ic_file.svg", "Create a lesson",
+                              onTap: () {
+                            Navigator.of(myContext!).push(
+                              MaterialPageRoute(
+                                builder: (context) =>
+                                    const TutorCreateNewLessonScreen(),
+                              ),
+                            );
+                          }),
                           getRowProfileItem(
                               "assets/icons/ic_calender.svg", "Add a lesson",
                               onTap: () {
